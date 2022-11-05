@@ -68,10 +68,12 @@ class _LoginViewState extends State<LoginView> {
                     tools.log('Authentication error: ${e.code}');
                 }
               }
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                '/notes/',
-                (route) => false,
-              );
+              if (mounted) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/notes/',
+                  (route) => false,
+                );
+              }
             },
             child: const Text('Log in'),
           ),
