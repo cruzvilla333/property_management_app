@@ -28,11 +28,11 @@ class AuthService implements AuthProvider {
   Future<void> logOut() => provider.logOut();
 
   @override
-  Future<AuthUser> login({
+  Future<AuthUser> logIn({
     required String email,
     required String password,
   }) =>
-      provider.login(
+      provider.logIn(
         email: email,
         password: password,
       );

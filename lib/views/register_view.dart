@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:training_note_app/constants/routes.dart';
+import 'package:training_note_app/constants/routes_tools.dart';
 import 'package:training_note_app/services/auth/auth_service.dart';
+import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/utilities/show_error_dialog.dart';
 
 class RegisterView extends StatefulWidget {
@@ -53,26 +55,23 @@ class _RegisterViewState extends State<RegisterView> {
             ),
             TextButton(
               onPressed: () async {
-                try {
-                  await AuthService.firebase().createUser(
-                    email: _email.text,
-                    password: _password.text,
-                  );
-                  await AuthService.firebase().sendEmailVerification();
-                  if (mounted) {
-                    Navigator.of(context).pushNamed(verifyEmailRoute);
-                  }
-                } catch (e) {
-                  showErrorDialog(context, e.toString());
-                }
+                await tryFirebaseRegister(
+                  email: _email.text,
+                  password: _password.text,
+                  context: context,
+                );
+                shiftPage(
+                  context: context,
+                  route: verifyEmailRoute,
+                );
               },
               child: const Text('Register'),
             ),
             TextButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    loginRoute,
-                    (route) => false,
+                  moveToPage(
+                    context: context,
+                    route: loginRoute,
                   );
                 },
                 child: const Text('Already registered?'))

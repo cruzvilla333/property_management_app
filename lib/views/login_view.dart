@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:training_note_app/constants/routes.dart';
-import 'package:training_note_app/services/auth/auth_service.dart';
-import 'package:training_note_app/utilities/show_error_dialog.dart';
+import 'package:training_note_app/constants/routes_tools.dart';
+import 'package:training_note_app/services/auth/auth_tools.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -50,28 +50,22 @@ class _LoginViewState extends State<LoginView> {
           ),
           TextButton(
             onPressed: () async {
-              try {
-                final user = await AuthService.firebase().login(
+              final user = await tryFirebaseLogIn(
                   email: _email.text,
                   password: _password.text,
-                );
-                if (mounted) {
-                  Navigator.of(context).pushNamedAndRemoveUntil(
-                    user.isEmailVerified() ? notesRoute : verifyEmailRoute,
-                    (route) => false,
-                  );
-                }
-              } catch (e) {
-                showErrorDialog(context, e.toString());
-              }
+                  context: context);
+              moveToPage(
+                context: context,
+                route: user.isEmailVerified() ? notesRoute : verifyEmailRoute,
+              );
             },
             child: const Text('Log in'),
           ),
           TextButton(
               onPressed: () {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  registerRoute,
-                  (route) => false,
+                moveToPage(
+                  context: context,
+                  route: registerRoute,
                 );
               },
               child: const Text("Sing up"))
