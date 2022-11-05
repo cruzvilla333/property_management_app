@@ -1,5 +1,5 @@
-import '../main.dart';
 import '../views/login_view.dart';
+import '../views/notes_view.dart';
 import '../views/register_view.dart';
 import '../views/verify_email_view.dart';
 
