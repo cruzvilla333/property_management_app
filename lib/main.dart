@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:training_note_app/constants/routes.dart';
 import 'package:training_note_app/views/login_view.dart';
-import 'package:training_note_app/views/register_view.dart';
 import 'package:training_note_app/views/verify_email_view.dart';
 import 'firebase_options.dart';
 import 'dart:developer' as tools show log;
@@ -17,11 +16,7 @@ void main() {
         primarySwatch: Colors.blue,
       ),
       home: const HomePage(),
-      routes: {
-        loginRoute: (context) => const LoginView(),
-        registerRoute: (context) => const RegisterView(),
-        notesRoute: (context) => const NotesView(),
-      },
+      routes: routes,
     ),
   );
 }
@@ -43,7 +38,7 @@ class HomePage extends StatelessWidget {
               if (user.emailVerified) {
                 return const NotesView();
               } else {
-                return const VerifyEmailView();
+                return const LoginView();
               }
             } else {
               return const LoginView();

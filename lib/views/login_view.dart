@@ -53,16 +53,19 @@ class _LoginViewState extends State<LoginView> {
           ),
           TextButton(
             onPressed: () async {
-              final email = _email.text;
-              final password = _password.text;
               try {
-                final userCredential = await FirebaseAuth.instance
-                    .signInWithEmailAndPassword(
-                        email: email, password: password);
-                tools.log(userCredential.toString());
-                if (mounted) {
+                final userInstance = FirebaseAuth.instance;
+                await userInstance.signInWithEmailAndPassword(
+                    email: _email.text, password: _password.text);
+                if (userInstance.currentUser?.emailVerified == true &&
+                    mounted) {
                   Navigator.of(context).pushNamedAndRemoveUntil(
                     notesRoute,
+                    (route) => false,
+                  );
+                } else {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    verifyEmailRoute,
                     (route) => false,
                   );
                 }
