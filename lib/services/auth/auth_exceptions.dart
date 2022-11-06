@@ -52,3 +52,11 @@ class UserNotLoggedInAuthException implements Exception {
     return 'User not logged in';
   }
 }
+
+final Map<String, Exception> exceptions = {
+  'user-not-found': UserNotFoundAuthException(),
+  'wrong-password': WrongPasswordAuthException(),
+  'invalid-email': InvalidEmailAuthException(),
+  'weak-password': WeakPasswordAuthException(),
+  'email-already-in-use': EmailAlreadyInUseAuthException(),
+};

@@ -20,19 +20,10 @@ class FirebaseAuthProvider implements AuthProvider {
       if (user != null) {
         return user;
       } else {
-        throw UserNotLoggedInAuthException;
+        throw UserNotLoggedInAuthException();
       }
     } on FirebaseAuthException catch (e) {
-      switch (e.code) {
-        case 'weak-password':
-          throw WeakPasswordAuthException();
-        case 'email-already-in-use':
-          throw EmailAlreadyInUseAuthException();
-        case 'invalid-email':
-          throw InvalidEmailAuthException();
-        default:
-          throw GenericAuthException();
-      }
+      throw exceptions[e.code] ?? GenericAuthException();
     } catch (_) {
       throw GenericAuthException();
     }
@@ -73,16 +64,7 @@ class FirebaseAuthProvider implements AuthProvider {
         throw UserNotLoggedInAuthException;
       }
     } on FirebaseAuthException catch (e) {
-      switch (e.code) {
-        case 'user-not-found':
-          throw UserNotFoundAuthException();
-        case 'wrong-password':
-          throw WrongPasswordAuthException();
-        case 'invalid-email':
-          throw InvalidEmailAuthException();
-        default:
-          throw GenericAuthException();
-      }
+      throw exceptions[e.code] ?? GenericAuthException();
     } catch (_) {
       throw GenericAuthException();
     }

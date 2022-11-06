@@ -56,7 +56,7 @@ class _LoginViewState extends State<LoginView> {
                   context: context);
               moveToPage(
                 context: context,
-                route: user.isEmailVerified() ? notesRoute : verifyEmailRoute,
+                route: user.isEmailVerified ? notesRoute : verifyEmailRoute,
               );
             },
             child: const Text('Log in'),
