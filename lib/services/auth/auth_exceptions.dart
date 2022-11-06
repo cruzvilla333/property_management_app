@@ -2,39 +2,29 @@
 
 class UserNotFoundAuthException implements Exception {
   @override
-  String toString() {
-    return 'User not found';
-  }
+  String toString() => 'User not found';
 }
 
 class WrongPasswordAuthException implements Exception {
   @override
-  String toString() {
-    return 'Wrong password';
-  }
+  String toString() => 'Wrong password';
 }
 
 // Register exception
 
 class WeakPasswordAuthException implements Exception {
   @override
-  String toString() {
-    return 'Weak password';
-  }
+  String toString() => 'Weak password';
 }
 
 class EmailAlreadyInUseAuthException implements Exception {
   @override
-  String toString() {
-    return 'Email already in use';
-  }
+  String toString() => 'Email already in use';
 }
 
 class InvalidEmailAuthException implements Exception {
   @override
-  String toString() {
-    return 'Invalid email';
-  }
+  String toString() => 'Invalid email';
 }
 
 //Generic exceptions
@@ -48,9 +38,7 @@ class GenericAuthException implements Exception {
 
 class UserNotLoggedInAuthException implements Exception {
   @override
-  String toString() {
-    return 'User not logged in';
-  }
+  String toString() => 'User not logged in';
 }
 
 final Map<String, Exception> exceptions = {

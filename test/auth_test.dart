@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:test/test.dart';
 import 'package:training_note_app/services/auth/auth_exceptions.dart';
 import 'package:training_note_app/services/auth/auth_provider.dart';
