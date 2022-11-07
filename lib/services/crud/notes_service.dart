@@ -9,9 +9,27 @@ import 'crud_exceptions.dart';
 
 class NotesService {
   Database? _db;
+
   List<DatabaseNote> _notes = [];
+
+  static final NotesService _shared = NotesService._sharedInstance();
+  NotesService._sharedInstance();
+
+  factory NotesService() => _shared;
+
   final _notesStreamController =
       StreamController<List<DatabaseNote>>.broadcast();
+
+  Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream;
+
+  Future<Database> ensureDbIsOpen() async {
+    try {
+      await open();
+    } on DatabaseAlreadyOpenException {
+      return _getDatabaseOrThrow();
+    }
+    return _db!;
+  }
 
   Future<DatabaseUser> getOrCreateUser({required String email}) async {
     try {
@@ -33,7 +51,7 @@ class NotesService {
     required DatabaseNote note,
     required String text,
   }) async {
-    final db = _getDatabaseOrThrow();
+    final db = await ensureDbIsOpen();
     await getNote(id: note.id);
 
     final updateCount = await db.update(
@@ -54,14 +72,14 @@ class NotesService {
   }
 
   Future<List<DatabaseNote>> getAllNotes() async {
-    final db = _getDatabaseOrThrow();
+    final db = await ensureDbIsOpen();
     final notes = await db.query(noteTable);
     if (notes.isEmpty) throw CouldNotFindNotesException();
     return notes.map((e) => DatabaseNote.fromRow(e)).toList();
   }
 
   Future<DatabaseNote> getNote({required int id}) async {
-    final db = _getDatabaseOrThrow();
+    final db = await ensureDbIsOpen();
     final notes = await db.query(
       noteTable,
       limit: 1,
@@ -79,7 +97,7 @@ class NotesService {
   }
 
   Future<int> deleteAllNotes() async {
-    final db = _getDatabaseOrThrow();
+    final db = await ensureDbIsOpen();
     final numberOfDeletions = await db.delete(noteTable);
     _notes = [];
     _notesStreamController.add(_notes);
@@ -87,7 +105,7 @@ class NotesService {
   }
 
   Future<void> deleteNote({required int id}) async {
-    final db = _getDatabaseOrThrow();
+    final db = await ensureDbIsOpen();
 
     final deleteCount = await db.delete(
       noteTable,
@@ -103,7 +121,7 @@ class NotesService {
   }
 
   Future<DatabaseNote> createNote({required DatabaseUser owner}) async {
-    final db = _getDatabaseOrThrow();
+    final db = await ensureDbIsOpen();
 
     final dbUser = await getUser(email: owner.email);
     if (dbUser != owner) throw CouldNotFindUserException();
@@ -129,7 +147,7 @@ class NotesService {
   }
 
   Future<DatabaseUser> getUser({required String email}) async {
-    final db = _getDatabaseOrThrow();
+    final db = await ensureDbIsOpen();
 
     final results = await db.query(
       userTable,
@@ -146,7 +164,7 @@ class NotesService {
   }
 
   Future<DatabaseUser> createUser({required String email}) async {
-    final db = _getDatabaseOrThrow();
+    final db = await ensureDbIsOpen();
 
     final results = await db.query(
       userTable,
@@ -168,7 +186,7 @@ class NotesService {
   }
 
   Future<void> deleteUser({required String email}) async {
-    final db = _getDatabaseOrThrow();
+    final db = await ensureDbIsOpen();
 
     final deleteCount = await db.delete(
       userTable,
@@ -184,7 +202,7 @@ class NotesService {
   Database _getDatabaseOrThrow() {
     final db = _db;
     if (db == null) {
-      throw DatabaseAlreadyOpenException();
+      throw DatabaseIsNotOpenException();
     } else {
       return db;
     }
@@ -244,8 +262,8 @@ class DatabaseUser {
 class DatabaseNote {
   final int id;
   final int userId;
-  String text;
-  bool isSyncedWithCloud;
+  final String text;
+  final bool isSyncedWithCloud;
 
   DatabaseNote({
     required this.id,
