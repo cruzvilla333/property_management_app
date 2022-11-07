@@ -3,9 +3,9 @@ import 'package:training_note_app/constants/routes_tools.dart';
 import 'package:training_note_app/services/auth/auth_service.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/crud/notes_service.dart';
-import '../constants/routes.dart';
-import '../enums/menu_action.dart';
-import '../utilities/show_log_out_dialog.dart';
+import '../../constants/routes.dart';
+import '../../enums/menu_action.dart';
+import '../../utilities/show_log_out_dialog.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
@@ -35,8 +35,13 @@ class _NotesViewState extends State<NotesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Main UI'),
+        title: const Text('Your notes'),
         actions: [
+          IconButton(
+              onPressed: () {
+                shiftPage(context: context, route: newNoteRoute);
+              },
+              icon: const Icon(Icons.add)),
           PopupMenuButton<MenuAction>(
             onSelected: (value) async {
               switch (value) {
