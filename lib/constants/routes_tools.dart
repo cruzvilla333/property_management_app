@@ -12,7 +12,7 @@ void moveToPageOn({
   required String route,
   required RoutePredicate predicate,
 }) {
-  Navigator.of(context).pushNamedAndRemoveUntil(route, (route) => false);
+  Navigator.of(context).pushNamedAndRemoveUntil(route, predicate);
 }
 
 void shiftPage({

@@ -3,9 +3,10 @@ import 'package:training_note_app/constants/routes_tools.dart';
 import 'package:training_note_app/services/auth/auth_service.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/crud/notes_service.dart';
+import 'package:training_note_app/views/notes/notes_list_view.dart';
 import '../../constants/routes.dart';
 import '../../enums/menu_action.dart';
-import '../../utilities/show_log_out_dialog.dart';
+import '../../utilities/dialogs/log_out_dialog.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
@@ -73,13 +74,10 @@ class _NotesViewState extends State<NotesView> {
                     case ConnectionState.active:
                       if (snapshot.hasData) {
                         final allNotes = snapshot.data as List<DatabaseNote>;
-                        return ListView.builder(
-                          itemCount: allNotes.length,
-                          itemBuilder: (context, index) {
-                            final note = allNotes[index];
-                            return ListTile(
-                              title: Text(note.text),
-                            );
+                        return NotesListView(
+                          notes: allNotes,
+                          onDeleNote: (note) async {
+                            await _notesService.deleteNote(id: note.id);
                           },
                         );
                       } else {
