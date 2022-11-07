@@ -50,7 +50,7 @@ Future<AuthUser> tryFirebaseRegister({
   }
 }
 
-AuthUser getUser() {
+AuthUser user() {
   final user = AuthService.firebase().currentUser;
   if (user != null) {
     return user;
