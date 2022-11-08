@@ -30,11 +30,11 @@ class _NotesViewState extends State<NotesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your notes'),
+        title: const Text('Your info'),
         actions: [
           IconButton(
               onPressed: () {
-                shiftPage(context: context, route: newNoteRoute);
+                shiftPage(context: context, route: createOrUpdateNoteRoute);
               },
               icon: const Icon(Icons.add)),
           PopupMenuButton<MenuAction>(
@@ -78,6 +78,12 @@ class _NotesViewState extends State<NotesView> {
                           notes: allNotes,
                           onDeleNote: (note) async {
                             await _notesService.deleteNote(id: note.id);
+                          },
+                          onTap: (note) {
+                            Navigator.of(context).pushNamed(
+                              createOrUpdateNoteRoute,
+                              arguments: note,
+                            );
                           },
                         );
                       } else {
