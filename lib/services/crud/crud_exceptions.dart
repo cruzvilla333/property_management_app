@@ -42,3 +42,8 @@ class CouldNotUpdateNotesException implements Exception {
   @override
   String toString() => 'Could not update notes';
 }
+
+class UserShouldBeSetBeforeReadingAllNotes implements Exception {
+  @override
+  String toString() => 'User should be set before reading all notes';
+}
