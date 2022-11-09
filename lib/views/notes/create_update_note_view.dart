@@ -63,7 +63,7 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
       return exsistingNote;
     }
     final newNote = await _notesService.createNote(
-        owner: await _notesService.getUser(email: user().email!));
+        owner: await _notesService.getUser(email: user().email));
     _note = newNote;
     return newNote;
   }

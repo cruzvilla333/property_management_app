@@ -108,6 +108,7 @@ class MockAuthProvider implements AuthProvider {
     const user = AuthUser(
       email: '',
       isEmailVerified: false,
+      id: '',
     );
     _user = user;
 
@@ -129,6 +130,7 @@ class MockAuthProvider implements AuthProvider {
     const newUser = AuthUser(
       email: '',
       isEmailVerified: true,
+      id: '',
     );
     _user = newUser;
   }
