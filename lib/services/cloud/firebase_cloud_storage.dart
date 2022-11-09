@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:training_note_app/services/cloud/cloud_note.dart';
 import 'package:training_note_app/services/cloud/cloud_storage_constants.dart';
 import 'package:training_note_app/services/cloud/cloud_storage_exceptions.dart';
@@ -10,6 +9,14 @@ class FirebaseCloudStorage {
   Future<void> deleteNote({required String documentId}) async {
     try {
       await notes.doc(documentId).delete();
+    } catch (e) {
+      throw CouldNotDeleteNoteException();
+    }
+  }
+
+  Future<void> deleteAllNotes({required String ownerUserId}) async {
+    try {
+      await notes.doc(ownerUserId).delete();
     } catch (e) {
       throw CouldNotDeleteNoteException();
     }
@@ -31,6 +38,22 @@ class FirebaseCloudStorage {
           .map((doc) => CloudNote.fromSnapshot(doc))
           .where((note) => note.ownerUserId == ownerUserId));
 
+  Future<CloudNote> getNote({
+    required String documentId,
+  }) async {
+    try {
+      final note = await notes.doc(documentId).get();
+      final owner = note.data()!;
+      return CloudNote(
+        documentId: note.id,
+        ownerUserId: owner[ownerUserIdFieldName],
+        text: owner[textFieldName],
+      );
+    } catch (e) {
+      throw CouldNotFindNoteExcepiton();
+    }
+  }
+
   Future<Iterable<CloudNote>> getNotes({required String ownerUserId}) async {
     try {
       return await notes
@@ -46,7 +69,7 @@ class FirebaseCloudStorage {
     }
   }
 
-  Future<CloudNote> createNewNote({required String ownerUserId}) async {
+  Future<CloudNote> createNote({required String ownerUserId}) async {
     final document = await notes.add({
       ownerUserIdFieldName: ownerUserId,
       textFieldName: '',
