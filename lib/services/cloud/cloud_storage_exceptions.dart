@@ -1,11 +1,15 @@
-class ClodStorageException implements Exception {
-  const ClodStorageException();
+class CloudStorageException implements Exception {
+  const CloudStorageException();
 }
 
-class CouldNotCreateNoteException extends ClodStorageException {}
+class CouldNotCreateNoteException extends CloudStorageException {}
 
-class CouldNotGetAllNotesException extends ClodStorageException {}
+class CouldNotGetAllNotesException extends CloudStorageException {}
 
-class CouldNotUpdateNoteException extends ClodStorageException {}
+class CouldNotUpdateNoteException extends CloudStorageException {}
 
-class CouldNotDeleteNoteException extends ClodStorageException {}
+class CouldNotDeleteNoteException extends CloudStorageException {}
+
+class CouldNotFindNoteExcepiton extends CloudStorageException {}
+
+class CouldNotDelteAllNotesException extends CloudStorageException {}

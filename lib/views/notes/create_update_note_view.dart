@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
-import 'package:training_note_app/services/crud/notes_service.dart';
+import 'package:training_note_app/services/cloud/cloud_note.dart';
+import 'package:training_note_app/services/cloud/firebase_cloud_storage.dart';
 import 'package:training_note_app/utilities/generics/get_arguments.dart';
 
 class CreateUpdateNoteView extends StatefulWidget {
@@ -11,13 +12,13 @@ class CreateUpdateNoteView extends StatefulWidget {
 }
 
 class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
-  DatabaseNote? _note;
-  late final NotesService _notesService;
+  CloudNote? _note;
+  late final FirebaseCloudStorage _firebaseCloudStorageService;
   late final TextEditingController _textController;
 
   @override
   void initState() {
-    _notesService = NotesService();
+    _firebaseCloudStorageService = FirebaseCloudStorage();
     _textController = TextEditingController();
     super.initState();
   }
@@ -38,8 +39,8 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
 
     final text = _textController.text;
 
-    await _notesService.updateNote(
-      note: note,
+    await _firebaseCloudStorageService.updateNote(
+      documentId: note.documentId,
       text: text,
     );
   }
@@ -49,8 +50,8 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     _textController.addListener(_textControllerListener);
   }
 
-  Future<DatabaseNote> createOrGetExistingNote(BuildContext context) async {
-    final widgetNote = context.getArgument<DatabaseNote>();
+  Future<CloudNote> createOrGetExistingNote(BuildContext context) async {
+    final widgetNote = context.getArgument<CloudNote>();
 
     if (widgetNote != null) {
       _note = widgetNote;
@@ -62,8 +63,9 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     if (exsistingNote != null) {
       return exsistingNote;
     }
-    final newNote = await _notesService.createNote(
-        owner: await _notesService.getUser(email: user().email));
+
+    final newNote =
+        await _firebaseCloudStorageService.createNote(ownerUserId: user().id);
     _note = newNote;
     return newNote;
   }
@@ -71,15 +73,16 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   void _deleteNoteIfTextIsEmpty() async {
     final note = _note;
     if (_textController.text.isEmpty && note != null) {
-      await _notesService.deleteNote(id: note.id);
+      await _firebaseCloudStorageService.deleteNote(
+          documentId: note.documentId);
     }
   }
 
   void _saveNoteIfTextNotEmpty() async {
     final note = _note;
     if (_textController.text.isNotEmpty && note != null) {
-      await _notesService.updateNote(
-        note: note,
+      await _firebaseCloudStorageService.updateNote(
+        documentId: note.documentId,
         text: _textController.text,
       );
     }
@@ -89,7 +92,9 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('New info'),
+        title: Text(context.getArgument<CloudNote>() != null
+            ? 'Edit info'
+            : 'New info'),
       ),
       body: FutureBuilder(
         future: createOrGetExistingNote(context),
