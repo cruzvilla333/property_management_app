@@ -35,7 +35,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
         ),
         TextButton(
           onPressed: () async {
-            await tryFirebaseLogOut(context: context);
+            await attemptLogOut(context: context);
             moveToPage(
               context: context,
               route: loginRoute,
