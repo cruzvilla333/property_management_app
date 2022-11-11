@@ -30,69 +30,65 @@ class _NotesViewState extends State<NotesView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AuthBloc(AuthService.firebase()),
-      child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Your info'),
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    shiftPage(context: context, route: createOrUpdateNoteRoute);
-                  },
-                  icon: const Icon(Icons.add)),
-              PopupMenuButton<MenuAction>(
-                onSelected: (value) async {
-                  switch (value) {
-                    case MenuAction.logout:
-                      final shouldLogOut = await showlLogOutDialog(context);
-                      if (shouldLogOut && mounted) {
-                        attemptLogOut(
-                          context: context,
-                        );
-                      }
-                      break;
-                  }
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Your info'),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  shiftPage(context: context, route: createOrUpdateNoteRoute);
                 },
-                itemBuilder: (context) {
-                  return const [
-                    PopupMenuItem<MenuAction>(
-                        value: MenuAction.logout, child: Text("Log out"))
-                  ];
-                },
-              )
-            ],
-          ),
-          body: StreamBuilder(
-            stream:
-                _firebaseCloudStorageService.allNotes(ownerUserId: user().id),
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.waiting:
-                case ConnectionState.active:
-                  if (snapshot.hasData) {
-                    final allNotes = snapshot.data as Iterable<CloudNote>;
-                    return NotesListView(
-                      notes: allNotes,
-                      onDeleNote: (note) async {
-                        await _firebaseCloudStorageService.deleteNote(
-                            documentId: note.documentId);
-                      },
-                      onTap: (note) {
-                        Navigator.of(context).pushNamed(
-                          createOrUpdateNoteRoute,
-                          arguments: note,
-                        );
-                      },
-                    );
-                  } else {
-                    return const CircularProgressIndicator();
-                  }
-                default:
+                icon: const Icon(Icons.add)),
+            PopupMenuButton<MenuAction>(
+              onSelected: (value) async {
+                switch (value) {
+                  case MenuAction.logout:
+                    final shouldLogOut = await showlLogOutDialog(context);
+                    if (shouldLogOut && mounted) {
+                      attemptLogOut(
+                        context: context,
+                      );
+                    }
+                    break;
+                }
+              },
+              itemBuilder: (context) {
+                return const [
+                  PopupMenuItem<MenuAction>(
+                      value: MenuAction.logout, child: Text("Log out"))
+                ];
+              },
+            )
+          ],
+        ),
+        body: StreamBuilder(
+          stream: _firebaseCloudStorageService.allNotes(ownerUserId: user().id),
+          builder: (context, snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+              case ConnectionState.active:
+                if (snapshot.hasData) {
+                  final allNotes = snapshot.data as Iterable<CloudNote>;
+                  return NotesListView(
+                    notes: allNotes,
+                    onDeleNote: (note) async {
+                      await _firebaseCloudStorageService.deleteNote(
+                          documentId: note.documentId);
+                    },
+                    onTap: (note) {
+                      Navigator.of(context).pushNamed(
+                        createOrUpdateNoteRoute,
+                        arguments: note,
+                      );
+                    },
+                  );
+                } else {
                   return const CircularProgressIndicator();
-              }
-            },
-          )),
-    );
+                }
+              default:
+                return const CircularProgressIndicator();
+            }
+          },
+        ));
   }
 }

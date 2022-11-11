@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_note_app/constants/routes.dart';
 import 'package:training_note_app/constants/routes_tools.dart';
-import 'package:training_note_app/services/auth/auth_service.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/auth/bloc/auth_bloc.dart';
-import 'package:training_note_app/services/auth/bloc/auth_events.dart';
 import 'package:training_note_app/services/auth/bloc/auth_states.dart';
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
 
@@ -36,47 +34,53 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (context) => AuthBloc(AuthService.firebase()),
-        child: Scaffold(
-          appBar: AppBar(title: const Text('Login')),
-          body: Column(
-            children: [
-              TextField(
-                controller: _email,
-                enableSuggestions: false,
-                autocorrect: false,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(hintText: 'Enter your email'),
-              ),
-              TextField(
-                controller: _password,
-                obscureText: true,
-                enableSuggestions: false,
-                autocorrect: false,
-                decoration:
-                    const InputDecoration(hintText: 'Enter your password'),
-              ),
-              TextButton(
-                onPressed: () async {
-                  await attemptLogIn(
-                    email: _email.text,
-                    password: _password.text,
-                    context: context,
-                  );
-                },
-                child: const Text('Log in'),
-              ),
-              TextButton(
-                  onPressed: () {
-                    moveToPage(
-                      context: context,
-                      route: registerRoute,
-                    );
-                  },
-                  child: const Text("Sing up"))
-            ],
+    return Scaffold(
+      appBar: AppBar(title: const Text('Login')),
+      body: Column(
+        children: [
+          TextField(
+            controller: _email,
+            enableSuggestions: false,
+            autocorrect: false,
+            keyboardType: TextInputType.emailAddress,
+            decoration: const InputDecoration(hintText: 'Enter your email'),
           ),
-        ));
+          TextField(
+            controller: _password,
+            obscureText: true,
+            enableSuggestions: false,
+            autocorrect: false,
+            decoration: const InputDecoration(hintText: 'Enter your password'),
+          ),
+          BlocListener<AuthBloc, AuthState>(
+            listener: (context, state) async {
+              if (state is AuthStateLoggedOut) {
+                if (state.exception != null) {
+                  await showErrorDialog(context, state.exception.toString());
+                }
+              }
+            },
+            child: TextButton(
+              onPressed: () async {
+                await attemptLogIn(
+                  email: _email.text,
+                  password: _password.text,
+                  context: context,
+                );
+              },
+              child: const Text('Log in'),
+            ),
+          ),
+          TextButton(
+              onPressed: () {
+                moveToPage(
+                  context: context,
+                  route: registerRoute,
+                );
+              },
+              child: const Text("Sing up"))
+        ],
+      ),
+    );
   }
 }

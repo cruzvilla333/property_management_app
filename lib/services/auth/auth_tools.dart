@@ -6,7 +6,6 @@ import 'package:training_note_app/services/auth/auth_user.dart';
 import '../../utilities/dialogs/error_dialog.dart';
 import 'bloc/auth_bloc.dart';
 import 'bloc/auth_events.dart';
-import 'bloc/auth_states.dart';
 
 Future<void> attemptLogIn({
   required String email,
@@ -18,8 +17,8 @@ Future<void> attemptLogIn({
           email,
           password,
         ));
-  } on AuthStateLogInFailure catch (e) {
-    await showErrorDialog(context, e.exception.toString());
+  } on Exception catch (e) {
+    await showErrorDialog(context, e.toString());
     rethrow;
   }
 }
