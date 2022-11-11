@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:training_note_app/constants/routes_tools.dart';
+import 'package:training_note_app/helpers/loading/loading_screen.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/cloud/cloud_note.dart';
 import 'package:training_note_app/services/cloud/firebase_cloud_storage.dart';
@@ -79,7 +80,7 @@ class _NotesViewState extends State<NotesView> {
                     },
                   );
                 } else {
-                  return const CircularProgressIndicator();
+                  return const Center(child: CircularProgressIndicator());
                 }
               default:
                 return const CircularProgressIndicator();
