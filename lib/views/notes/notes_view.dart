@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_note_app/constants/routes_tools.dart';
-import 'package:training_note_app/services/auth/auth_service.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/cloud/cloud_note.dart';
 import 'package:training_note_app/services/cloud/firebase_cloud_storage.dart';
 import 'package:training_note_app/views/notes/notes_list_view.dart';
 import '../../constants/routes.dart';
 import '../../enums/menu_action.dart';
-import '../../services/auth/bloc/auth_bloc.dart';
-import '../../services/auth/bloc/auth_events.dart';
 import '../../utilities/dialogs/log_out_dialog.dart';
 
 class NotesView extends StatefulWidget {

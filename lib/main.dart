@@ -7,6 +7,7 @@ import 'package:training_note_app/services/auth/bloc/auth_events.dart';
 import 'package:training_note_app/services/auth/bloc/auth_states.dart';
 import 'package:training_note_app/views/login_view.dart';
 import 'package:training_note_app/views/notes/notes_view.dart';
+import 'package:training_note_app/views/register_view.dart';
 import 'package:training_note_app/views/verify_email_view.dart';
 
 void main() {
@@ -34,17 +35,21 @@ class HomePage extends StatelessWidget {
     context.read<AuthBloc>().add(const AuthEventInitialize());
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, state) {
+        if (state is AuthStateRegistering) {
+          return const RegisterView();
+        }
         if (state is AuthStateLoggedIn) {
           return const NotesView();
-        } else if (state is AuthStateVerifyEmail) {
-          return const VerifyEmailView();
-        } else if (state is AuthStateLoggedOut) {
-          return const LoginView();
-        } else {
-          return const Scaffold(
-            body: CircularProgressIndicator(),
-          );
         }
+        if (state is AuthStateVerifyEmail) {
+          return const VerifyEmailView();
+        }
+        if (state is AuthStateLoggedOut) {
+          return const LoginView();
+        }
+        return const Scaffold(
+          body: CircularProgressIndicator(),
+        );
       },
     );
   }
