@@ -6,6 +6,7 @@ import 'package:training_note_app/services/auth/auth_service.dart';
 import 'package:training_note_app/services/auth/bloc/auth_bloc.dart';
 import 'package:training_note_app/services/auth/bloc/auth_events.dart';
 import 'package:training_note_app/services/auth/bloc/auth_states.dart';
+import 'package:training_note_app/views/forgot_password_view.dart';
 import 'package:training_note_app/views/login_view.dart';
 import 'package:training_note_app/views/notes/notes_view.dart';
 import 'package:training_note_app/views/register_view.dart';
@@ -46,6 +47,9 @@ class HomePage extends StatelessWidget {
         }
       },
       builder: (context, state) {
+        if (state is AuthStateForgotPassword) {
+          return const ForgotPasswordView();
+        }
         if (state is AuthStateRegistering) {
           return const RegisterView();
         }

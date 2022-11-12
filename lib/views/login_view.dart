@@ -44,41 +44,54 @@ class _LoginViewState extends State<LoginView> {
       },
       child: Scaffold(
         appBar: AppBar(title: const Text('Login')),
-        body: Column(
-          children: [
-            TextField(
-              controller: _email,
-              enableSuggestions: false,
-              autocorrect: false,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(hintText: 'Enter your email'),
-            ),
-            TextField(
-              controller: _password,
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration:
-                  const InputDecoration(hintText: 'Enter your password'),
-            ),
-            TextButton(
-              onPressed: () async {
-                attemptLogIn(
-                  email: _email.text,
-                  password: _password.text,
-                  context: context,
-                );
-              },
-              child: const Text('Log in'),
-            ),
-            TextButton(
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: _email,
+                enableSuggestions: false,
+                autocorrect: false,
+                autofocus: true,
+                keyboardType: TextInputType.emailAddress,
+                decoration: const InputDecoration(hintText: 'Enter your email'),
+              ),
+              TextField(
+                controller: _password,
+                obscureText: true,
+                enableSuggestions: false,
+                autocorrect: false,
+                decoration:
+                    const InputDecoration(hintText: 'Enter your password'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  attemptLogIn(
+                    email: _email.text,
+                    password: _password.text,
+                    context: context,
+                  );
+                },
+                child: const Text('Log in'),
+              ),
+              TextButton(
                 onPressed: () {
                   context.read<AuthBloc>().add(
                         const AuthEventShouldRegister(),
                       );
                 },
-                child: const Text("Sing up"))
-          ],
+                child: const Text("Sing up"),
+              ),
+              TextButton(
+                onPressed: () {
+                  context.read<AuthBloc>().add(
+                        const AuthEventForgotPassword(),
+                      );
+                },
+                child: const Text("Forgot password?"),
+              ),
+            ],
+          ),
         ),
       ),
     );

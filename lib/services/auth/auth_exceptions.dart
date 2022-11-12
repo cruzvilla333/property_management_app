@@ -2,19 +2,19 @@
 
 class UserNotFoundAuthException implements Exception {
   @override
-  String toString() => 'User not found';
+  String toString() => 'This user cannot be found';
 }
 
 class WrongPasswordAuthException implements Exception {
   @override
-  String toString() => 'Wrong password';
+  String toString() => 'Incorrect email or password';
 }
 
 // Register exception
 
 class WeakPasswordAuthException implements Exception {
   @override
-  String toString() => 'Weak password';
+  String toString() => 'Password too weak';
 }
 
 class EmailAlreadyInUseAuthException implements Exception {
@@ -47,4 +47,6 @@ final Map<String, Exception> exceptions = {
   'invalid-email': InvalidEmailAuthException(),
   'weak-password': WeakPasswordAuthException(),
   'email-already-in-use': EmailAlreadyInUseAuthException(),
+  'auth/invalid-email': InvalidEmailAuthException(),
+  'auth/user-not-found': UserNotFoundAuthException(),
 };
