@@ -47,12 +47,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           final user = await provider.logIn(
               email: event.email, password: event.password);
           if (!user.isEmailVerified) {
-            emit(
-              const AuthStateLoggedOut(
-                exception: null,
-                isLoading: false,
-              ),
-            );
+            provider.logOut();
             emit(const AuthStateVerifyEmail(isLoading: false));
           } else {
             emit(AuthStateLoggedIn(user: user, isLoading: false));

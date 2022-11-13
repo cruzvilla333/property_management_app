@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/auth/bloc/auth_bloc.dart';
 import 'package:training_note_app/services/auth/bloc/auth_events.dart';
 import 'package:training_note_app/services/auth/bloc/auth_states.dart';
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
-import 'package:training_note_app/utilities/dialogs/loading_dialog.dart';
+import 'package:training_note_app/utilities/dialogs/loading_functions.dart';
+import 'package:training_note_app/utilities/routes/app_routes.dart';
+import 'package:training_note_app/utilities/routes/route_handling.dart';
+
+import '../helpers/loading/loading_screen.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -34,12 +39,16 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<AuthBloc>().add(const AuthEventInitialize());
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
+        handleLoading(context: context, state: state);
         if (state is AuthStateLoggedOut) {
           if (state.exception != null) {
             await showErrorDialog(context, state.exception.toString());
           }
+        } else {
+          handleRouting(context: context, state: state);
         }
       },
       child: Scaffold(
@@ -75,19 +84,11 @@ class _LoginViewState extends State<LoginView> {
                 child: const Text('Log in'),
               ),
               TextButton(
-                onPressed: () {
-                  context.read<AuthBloc>().add(
-                        const AuthEventShouldRegister(),
-                      );
-                },
+                onPressed: () => context.go(registerPage),
                 child: const Text("Sing up"),
               ),
               TextButton(
-                onPressed: () {
-                  context.read<AuthBloc>().add(
-                        const AuthEventForgotPassword(),
-                      );
-                },
+                onPressed: () => context.go(loginPage + passwordResetPage),
                 child: const Text("Forgot password?"),
               ),
             ],

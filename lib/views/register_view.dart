@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:training_note_app/services/auth/bloc/auth_events.dart';
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
+import 'package:training_note_app/utilities/routes/app_routes.dart';
+import 'package:training_note_app/utilities/routes/route_handling.dart';
 
+import '../helpers/loading/loading_screen.dart';
 import '../services/auth/bloc/auth_bloc.dart';
 import '../services/auth/bloc/auth_states.dart';
+import '../utilities/dialogs/loading_functions.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -35,10 +40,13 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
+        handleLoading(context: context, state: state);
         if (state is AuthStateRegistering) {
           if (state.exception != null) {
             await showErrorDialog(context, state.exception.toString());
           }
+        } else {
+          handleRouting(context: context, state: state);
         }
       },
       child: Scaffold(
@@ -75,9 +83,7 @@ class _RegisterViewState extends State<RegisterView> {
                   child: const Text('Register'),
                 ),
                 TextButton(
-                    onPressed: () {
-                      context.read<AuthBloc>().add(const AuthEventLogOut());
-                    },
+                    onPressed: () => context.go(loginPage),
                     child: const Text('Already registered?'))
               ],
             ),
