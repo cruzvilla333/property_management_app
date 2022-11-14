@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
-import 'package:training_note_app/services/cloud/cloud_note.dart';
-import 'package:training_note_app/services/cloud/firebase_cloud_storage.dart';
+import 'package:training_note_app/services/crud_services/cloud/cloud_note.dart';
+import 'package:training_note_app/services/crud_services/cloud/firebase_cloud_storage.dart';
 import 'package:training_note_app/utilities/dialogs/cannot_share_empty_note_dialog.dart';
 import 'package:training_note_app/utilities/generics/get_arguments.dart';
 
-class CreateUpdateNoteView extends StatefulWidget {
-  const CreateUpdateNoteView({super.key});
+class CreateUpdatePropertyView extends StatefulWidget {
+  const CreateUpdatePropertyView({super.key});
 
   @override
-  State<CreateUpdateNoteView> createState() => _CreateUpdateNoteViewState();
+  State<CreateUpdatePropertyView> createState() =>
+      _CreateUpdatePropertyViewState();
 }
 
-class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
+class _CreateUpdatePropertyViewState extends State<CreateUpdatePropertyView> {
   CloudNote? _note;
   late final FirebaseCloudStorage _firebaseCloudStorageService;
   late final TextEditingController _textController;

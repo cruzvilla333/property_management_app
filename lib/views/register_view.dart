@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/auth/bloc/auth_events.dart';
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
 import 'package:training_note_app/utilities/routes/app_routes.dart';
@@ -76,9 +77,10 @@ class _RegisterViewState extends State<RegisterView> {
                 ),
                 TextButton(
                   onPressed: () async {
-                    context
-                        .read<AuthBloc>()
-                        .add(AuthEventRegister(_email.text, _password.text));
+                    attemptRegister(
+                        email: _email.text,
+                        password: _password.text,
+                        context: context);
                   },
                   child: const Text('Register'),
                 ),
