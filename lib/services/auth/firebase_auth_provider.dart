@@ -43,7 +43,6 @@ class FirebaseAuthProvider implements AuthProvider {
   Future<void> logOut() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      await Future.delayed(const Duration(seconds: 5));
       await FirebaseAuth.instance.signOut();
     } else {
       throw UserNotLoggedInAuthException();

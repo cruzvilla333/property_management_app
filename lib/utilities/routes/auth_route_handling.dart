@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../services/auth/bloc/auth_states.dart';
 import 'app_routes.dart';
 
-void handleRouting({
+void handleAuthRouting({
   required BuildContext context,
   required AuthState state,
 }) async {

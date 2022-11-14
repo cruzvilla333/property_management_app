@@ -175,5 +175,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       },
     );
+    on<AuthEventShowLogOut>(
+      (event, emit) => emit(const AuthStateShowLogOut()),
+    );
   }
 }

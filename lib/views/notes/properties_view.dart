@@ -7,14 +7,17 @@ import 'package:training_note_app/services/auth/bloc/auth_events.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_note.dart';
 import 'package:training_note_app/services/crud_services/cloud/firebase_cloud_storage.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_bloc.dart';
+import 'package:training_note_app/services/crud_services/crud_bloc/crud_events.dart';
 import 'package:training_note_app/utilities/routes/app_routes.dart';
-import 'package:training_note_app/utilities/routes/route_handling.dart';
+import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
+import 'package:training_note_app/utilities/routes/crud_route_handling.dart';
 import 'package:training_note_app/views/notes/properties_list_view.dart';
 import '../../constants/routes.dart';
 import '../../enums/menu_action.dart';
 import '../../helpers/loading/loading_screen.dart';
 import '../../services/auth/bloc/auth_bloc.dart';
 import '../../services/auth/bloc/auth_states.dart';
+import '../../services/crud_services/crud_bloc/crud_states.dart';
 import '../../utilities/dialogs/loading_functions.dart';
 import '../../utilities/dialogs/log_out_dialog.dart';
 
@@ -36,12 +39,20 @@ class _PropertiesViewState extends State<PropertiesView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CrudBloc(),
-      child: BlocListener<AuthBloc, AuthState>(
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) async {
+        handleLoading(context: context, state: state);
+        if (state is AuthStateShowLogOut) {
+          final shouldLogOut = await showlLogOutDialog(context);
+          if (shouldLogOut) {
+            attemptLogOut(context: context);
+          }
+        }
+        handleAuthRouting(context: context, state: state);
+      },
+      child: BlocListener<CrudBloc, CrudState>(
         listener: (context, state) {
-          handleLoading(context: context, state: state);
-          handleRouting(context: context, state: state);
+          handleCrudRouting(context: context, state: state);
         },
         child: Scaffold(
           appBar: AppBar(
@@ -49,18 +60,15 @@ class _PropertiesViewState extends State<PropertiesView> {
             actions: [
               IconButton(
                   onPressed: () {
-                    shiftPage(context: context, route: createOrUpdateNoteRoute);
+                    context.read<CrudBloc>().add(
+                        const CrudEventGoToGetOrCreateProperty(property: null));
                   },
                   icon: const Icon(Icons.add)),
               PopupMenuButton<MenuAction>(
                 onSelected: (value) async {
                   switch (value) {
                     case MenuAction.logout:
-                      final shouldLogOut = await showlLogOutDialog(context);
-                      if (shouldLogOut && mounted) {
-                        attemptLogOut(context: context);
-                      }
-                      break;
+                      context.read<AuthBloc>().add(const AuthEventShowLogOut());
                   }
                 },
                 itemBuilder: (context) {
@@ -88,10 +96,10 @@ class _PropertiesViewState extends State<PropertiesView> {
                             documentId: note.documentId);
                       },
                       onTap: (note) {
-                        Navigator.of(context).pushNamed(
-                          createOrUpdateNoteRoute,
-                          arguments: note,
-                        );
+                        // Navigator.of(context).pushNamed(
+                        //   createOrUpdateNoteRoute,
+                        //   arguments: note,
+                        // );
                       },
                     );
                   } else {

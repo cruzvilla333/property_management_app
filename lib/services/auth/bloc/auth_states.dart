@@ -82,3 +82,10 @@ class AuthStateForgotPassword extends AuthState {
           isLoading: isLoading,
         );
 }
+
+class AuthStateShowLogOut extends AuthState {
+  const AuthStateShowLogOut()
+      : super(
+          isLoading: false,
+        );
+}

@@ -5,13 +5,17 @@ import 'package:training_note_app/services/auth/bloc/auth_events.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_events.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.dart';
 
+import '../cloud/firebase_cloud_storage.dart';
+
 class CrudBloc extends Bloc<CrudEvent, CrudState> {
-  CrudBloc()
+  CrudBloc(FirebaseCloudStorage storageProvider)
       : super(
-          const CrudStateUninitialized(),
+          const CrudStateInitialized(),
         ) {
-    on<CrudEventInitialize>(
-      (event, emit) async {},
+    on<CrudEventGoToGetOrCreateProperty>(
+      (event, emit) async {
+        emit(CrudStateGoToGetOrCreateProperty(property: event.property));
+      },
     );
   }
 }

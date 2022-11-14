@@ -6,6 +6,8 @@ import 'package:training_note_app/services/auth/auth_service.dart';
 import 'package:training_note_app/services/auth/bloc/auth_bloc.dart';
 import 'package:training_note_app/services/auth/bloc/auth_events.dart';
 import 'package:training_note_app/services/auth/bloc/auth_states.dart';
+import 'package:training_note_app/services/crud_services/cloud/firebase_cloud_storage.dart';
+import 'package:training_note_app/services/crud_services/crud_bloc/crud_bloc.dart';
 import 'package:training_note_app/utilities/routes/app_routes.dart';
 import 'package:training_note_app/views/forgot_password_view.dart';
 import 'package:training_note_app/views/login_view.dart';
@@ -16,15 +18,23 @@ import 'package:training_note_app/views/verify_email_view.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
-    BlocProvider<AuthBloc>(
-        create: (context) => AuthBloc(AuthService.firebase()),
-        child: MaterialApp.router(
-          title: 'Router test',
-          theme: ThemeData(
-            primarySwatch: Colors.red,
-          ),
-          routerConfig: router,
-        )),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(AuthService.firebase()),
+        ),
+        BlocProvider<CrudBloc>(
+          create: (context) => CrudBloc(FirebaseCloudStorage()),
+        ),
+      ],
+      child: MaterialApp.router(
+        title: 'Router test',
+        theme: ThemeData(
+          primarySwatch: Colors.red,
+        ),
+        routerConfig: router,
+      ),
+    ),
   );
 }
 

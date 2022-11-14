@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:training_note_app/views/forgot_password_view.dart';
 import 'package:training_note_app/views/login_view.dart';
+import 'package:training_note_app/views/notes/create_update_property_view.dart';
 import 'package:training_note_app/views/notes/properties_view.dart';
 import 'package:training_note_app/views/register_view.dart';
 import 'package:training_note_app/views/verify_email_view.dart';
@@ -10,6 +11,7 @@ const passwordResetPage = 'password_reset';
 const registerPage = 'register';
 const verifyEmailPage = 'verify_email';
 const propertyPage = 'properties';
+const getOrUpdatePropertyPage = 'property';
 
 final GoRouter router = GoRouter(
   debugLogDiagnostics: true,
@@ -40,6 +42,13 @@ final GoRouter router = GoRouter(
       name: propertyPage,
       path: '/properties_view',
       builder: (context, state) => const PropertiesView(),
+      routes: [
+        GoRoute(
+          name: getOrUpdatePropertyPage,
+          path: 'property',
+          builder: (context, state) => const CreateUpdatePropertyView(),
+        ),
+      ],
     ),
   ],
 );

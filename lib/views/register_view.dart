@@ -5,7 +5,7 @@ import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/auth/bloc/auth_events.dart';
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
 import 'package:training_note_app/utilities/routes/app_routes.dart';
-import 'package:training_note_app/utilities/routes/route_handling.dart';
+import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
 
 import '../helpers/loading/loading_screen.dart';
 import '../services/auth/bloc/auth_bloc.dart';
@@ -47,7 +47,7 @@ class _RegisterViewState extends State<RegisterView> {
             await showErrorDialog(context, state.exception.toString());
           }
         } else {
-          handleRouting(context: context, state: state);
+          handleAuthRouting(context: context, state: state);
         }
       },
       child: Scaffold(
