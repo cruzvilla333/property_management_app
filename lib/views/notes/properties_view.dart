@@ -8,7 +8,7 @@ import 'package:training_note_app/services/cloud/cloud_note.dart';
 import 'package:training_note_app/services/cloud/firebase_cloud_storage.dart';
 import 'package:training_note_app/utilities/routes/app_routes.dart';
 import 'package:training_note_app/utilities/routes/route_handling.dart';
-import 'package:training_note_app/views/notes/notes_list_view.dart';
+import 'package:training_note_app/views/notes/property_list_view.dart';
 import '../../constants/routes.dart';
 import '../../enums/menu_action.dart';
 import '../../helpers/loading/loading_screen.dart';
@@ -17,14 +17,14 @@ import '../../services/auth/bloc/auth_states.dart';
 import '../../utilities/dialogs/loading_functions.dart';
 import '../../utilities/dialogs/log_out_dialog.dart';
 
-class NotesView extends StatefulWidget {
-  const NotesView({super.key});
+class PropertiesView extends StatefulWidget {
+  const PropertiesView({super.key});
 
   @override
-  State<NotesView> createState() => _NotesViewState();
+  State<PropertiesView> createState() => _PropertiesViewState();
 }
 
-class _NotesViewState extends State<NotesView> {
+class _PropertiesViewState extends State<PropertiesView> {
   late final FirebaseCloudStorage _firebaseCloudStorageService;
 
   @override
@@ -77,7 +77,7 @@ class _NotesViewState extends State<NotesView> {
               case ConnectionState.active:
                 if (snapshot.hasData) {
                   final allNotes = snapshot.data as Iterable<CloudNote>;
-                  return NotesListView(
+                  return PropertiesListView(
                     notes: allNotes,
                     onDeleNote: (note) async {
                       await _firebaseCloudStorageService.deleteNote(

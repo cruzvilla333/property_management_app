@@ -1,40 +1,45 @@
 import 'package:go_router/go_router.dart';
 import 'package:training_note_app/views/forgot_password_view.dart';
 import 'package:training_note_app/views/login_view.dart';
-import 'package:training_note_app/views/notes/notes_view.dart';
+import 'package:training_note_app/views/notes/properties_view.dart';
 import 'package:training_note_app/views/register_view.dart';
 import 'package:training_note_app/views/verify_email_view.dart';
 
-const loginPage = '/';
+const loginPage = 'login';
 const passwordResetPage = 'password_reset';
-const registerPage = '/register';
-const verifyEmailPage = '/verify_email';
-const propertyPage = '/properties';
+const registerPage = 'register';
+const verifyEmailPage = 'verify_email';
+const propertyPage = 'properties';
 
 final GoRouter router = GoRouter(
   debugLogDiagnostics: true,
   routes: <GoRoute>[
     GoRoute(
-      path: loginPage,
+      name: loginPage,
+      path: '/',
       builder: (context, state) => const LoginView(),
       routes: [
         GoRoute(
-          path: passwordResetPage,
+          name: passwordResetPage,
+          path: 'password_reset',
           builder: (context, state) => const ForgotPasswordView(),
         ),
       ],
     ),
     GoRoute(
-      path: registerPage,
+      name: registerPage,
+      path: '/register',
       builder: (context, state) => const RegisterView(),
     ),
     GoRoute(
-      path: verifyEmailPage,
+      name: verifyEmailPage,
+      path: '/verify_email',
       builder: (context, state) => const VerifyEmailView(),
     ),
     GoRoute(
-      path: propertyPage,
-      builder: (context, state) => const NotesView(),
+      name: propertyPage,
+      path: '/properties_view',
+      builder: (context, state) => const PropertiesView(),
     ),
   ],
 );

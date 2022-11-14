@@ -83,7 +83,7 @@ class _RegisterViewState extends State<RegisterView> {
                   child: const Text('Register'),
                 ),
                 TextButton(
-                    onPressed: () => context.go(loginPage),
+                    onPressed: () => context.goNamed(loginPage),
                     child: const Text('Already registered?'))
               ],
             ),

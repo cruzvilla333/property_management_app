@@ -5,8 +5,8 @@ import '../../utilities/dialogs/delete_dialog.dart';
 
 typedef NoteCallBack = void Function(CloudNote note);
 
-class NotesListView extends StatelessWidget {
-  const NotesListView({
+class PropertiesListView extends StatelessWidget {
+  const PropertiesListView({
     super.key,
     required this.notes,
     required this.onDeleNote,

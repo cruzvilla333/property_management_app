@@ -9,7 +9,7 @@ import 'package:training_note_app/services/auth/bloc/auth_states.dart';
 import 'package:training_note_app/utilities/routes/app_routes.dart';
 import 'package:training_note_app/views/forgot_password_view.dart';
 import 'package:training_note_app/views/login_view.dart';
-import 'package:training_note_app/views/notes/notes_view.dart';
+import 'package:training_note_app/views/notes/properties_view.dart';
 import 'package:training_note_app/views/register_view.dart';
 import 'package:training_note_app/views/verify_email_view.dart';
 
@@ -21,7 +21,7 @@ void main() {
         child: MaterialApp.router(
           title: 'Router test',
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            primarySwatch: Colors.red,
           ),
           routerConfig: router,
         )),
@@ -53,7 +53,7 @@ class HomePage extends StatelessWidget {
           return const RegisterView();
         }
         if (state is AuthStateLoggedIn) {
-          return const NotesView();
+          return const PropertiesView();
         }
         if (state is AuthStateVerifyEmail) {
           return const VerifyEmailView();

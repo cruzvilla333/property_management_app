@@ -36,9 +36,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
             child: const Text('Resend email'),
           ),
           TextButton(
-            onPressed: () {
-              context.go(loginPage);
-            },
+            onPressed: () => context.goNamed(loginPage),
             child: const Text('Verified?'),
           ),
         ]),

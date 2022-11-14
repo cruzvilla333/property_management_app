@@ -84,11 +84,11 @@ class _LoginViewState extends State<LoginView> {
                 child: const Text('Log in'),
               ),
               TextButton(
-                onPressed: () => context.go(registerPage),
+                onPressed: () => context.goNamed(registerPage),
                 child: const Text("Sing up"),
               ),
               TextButton(
-                onPressed: () => context.go(loginPage + passwordResetPage),
+                onPressed: () => context.goNamed(passwordResetPage),
                 child: const Text("Forgot password?"),
               ),
             ],
