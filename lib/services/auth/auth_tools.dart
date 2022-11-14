@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_note_app/services/auth/auth_exceptions.dart';
 import 'package:training_note_app/services/auth/auth_service.dart';
 import 'package:training_note_app/services/auth/auth_user.dart';
-import 'bloc/auth_bloc.dart';
-import 'bloc/auth_events.dart';
+import 'auth_bloc/auth_bloc.dart';
+import 'auth_bloc/auth_events.dart';
 
 void attemptLogIn({
   required String email,

@@ -6,7 +6,18 @@ abstract class CrudEvent {
   const CrudEvent();
 }
 
-class CrudEventGoToGetOrCreateProperty extends CrudEvent {
+class CrudEventGetOrCreateProperty extends CrudEvent {
   final CloudNote? property;
-  const CrudEventGoToGetOrCreateProperty({this.property});
+  const CrudEventGetOrCreateProperty({this.property});
+}
+
+class CrudEventUpdateProperty extends CrudEvent {
+  final CloudNote property;
+  final String text;
+  const CrudEventUpdateProperty({required this.property, required this.text});
+}
+
+class CrudEventDeleteProperty extends CrudEvent {
+  final CloudNote property;
+  const CrudEventDeleteProperty({required this.property});
 }

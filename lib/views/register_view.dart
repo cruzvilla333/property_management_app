@@ -2,14 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
-import 'package:training_note_app/services/auth/bloc/auth_events.dart';
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
 import 'package:training_note_app/utilities/routes/app_routes.dart';
 import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
-
-import '../helpers/loading/loading_screen.dart';
-import '../services/auth/bloc/auth_bloc.dart';
-import '../services/auth/bloc/auth_states.dart';
+import '../services/auth/auth_bloc/auth_bloc.dart';
+import '../services/auth/auth_bloc/auth_states.dart';
 import '../utilities/dialogs/loading_functions.dart';
 
 class RegisterView extends StatefulWidget {

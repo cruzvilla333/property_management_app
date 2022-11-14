@@ -32,17 +32,17 @@ class PropertiesListView extends StatelessWidget {
             softWrap: true,
             overflow: TextOverflow.ellipsis,
           ),
-          trailing: note.text.isEmpty
-              ? null
-              : IconButton(
-                  onPressed: () async {
-                    final shouldDelete = await showDeleteDialog(context);
-                    if (shouldDelete) {
-                      onDeleNote(note);
-                    }
-                  },
-                  icon: const Icon(Icons.delete),
-                ),
+          trailing:
+              //note.text.isEmpty ? null :
+              IconButton(
+            onPressed: () async {
+              final shouldDelete = await showDeleteDialog(context);
+              if (shouldDelete) {
+                onDeleNote(note);
+              }
+            },
+            icon: const Icon(Icons.delete),
+          ),
         );
       },
     );

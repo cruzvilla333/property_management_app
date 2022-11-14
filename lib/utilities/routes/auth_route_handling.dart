@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
-import '../../services/auth/bloc/auth_states.dart';
+import '../../services/auth/auth_bloc/auth_states.dart';
 import 'app_routes.dart';
 
 void handleAuthRouting({
