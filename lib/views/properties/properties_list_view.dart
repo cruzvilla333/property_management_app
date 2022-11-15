@@ -1,33 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:training_note_app/services/crud_services/cloud/cloud_note.dart';
+import 'package:training_note_app/services/crud_services/cloud/cloud_property.dart';
 
 import '../../utilities/dialogs/delete_dialog.dart';
 
-typedef NoteCallBack = void Function(CloudNote note);
+typedef NoteCallBack = void Function(CloudProperty note);
 
 class PropertiesListView extends StatelessWidget {
   const PropertiesListView({
     super.key,
-    required this.notes,
+    required this.properties,
     required this.onDeleNote,
     required this.onTap,
   });
   final NoteCallBack onDeleNote;
-  final Iterable<CloudNote> notes;
+  final Iterable<CloudProperty> properties;
   final NoteCallBack onTap;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: notes.length,
+      itemCount: properties.length,
       itemBuilder: (context, index) {
-        final note = notes.elementAt(index);
+        final property = properties.elementAt(index);
         return ListTile(
           onTap: () {
-            onTap(note);
+            onTap(property);
           },
           title: Text(
-            note.text,
+            property.title,
             maxLines: 1,
             softWrap: true,
             overflow: TextOverflow.ellipsis,
@@ -38,7 +38,7 @@ class PropertiesListView extends StatelessWidget {
             onPressed: () async {
               final shouldDelete = await showDeleteDialog(context);
               if (shouldDelete) {
-                onDeleNote(note);
+                onDeleNote(property);
               }
             },
             icon: const Icon(Icons.delete),

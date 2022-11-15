@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart' show immutable;
-import 'package:training_note_app/services/crud_services/cloud/cloud_note.dart';
+import 'package:training_note_app/services/crud_services/cloud/cloud_property.dart';
 
 @immutable
 abstract class CrudState {
@@ -17,7 +17,7 @@ class CrudStateLoading extends CrudState {
 }
 
 class CrudStateGetOrCreateProperty extends CrudState {
-  final CloudNote property;
+  final CloudProperty property;
   const CrudStateGetOrCreateProperty(
       {required this.property, Exception? exception})
       : super(exception: exception);

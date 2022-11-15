@@ -3,19 +3,20 @@ import 'package:training_note_app/services/crud_services/cloud/cloud_storage_con
 import 'package:flutter/cupertino.dart';
 
 @immutable
-class CloudNote {
+class CloudProperty {
   final String documentId;
   final String ownerUserId;
-  final String text;
+  final String title;
 
-  const CloudNote({
+  const CloudProperty({
     required this.documentId,
     required this.ownerUserId,
-    required this.text,
+    required this.title,
   });
 
-  CloudNote.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
+  CloudProperty.fromSnapshot(
+      QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : documentId = snapshot.id,
         ownerUserId = snapshot.data()[ownerUserIdFieldName],
-        text = snapshot.data()[textFieldName] as String;
+        title = snapshot.data()[titleFieldName] as String;
 }

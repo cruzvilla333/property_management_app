@@ -2,42 +2,42 @@ class CloudStorageException implements Exception {
   const CloudStorageException();
 }
 
-class CouldNotCreateNoteException extends CloudStorageException {
+class CouldNotCreatePropertyException extends CloudStorageException {
   @override
   String toString() {
     return 'Could not create property';
   }
 }
 
-class CouldNotGetAllNotesException extends CloudStorageException {
+class CouldNotGetAllPropertiesException extends CloudStorageException {
   @override
   String toString() {
     return 'Could not get all properties';
   }
 }
 
-class CouldNotUpdateNoteException extends CloudStorageException {
+class CouldNotUpdatePropertyException extends CloudStorageException {
   @override
   String toString() {
     return 'Could not update property';
   }
 }
 
-class CouldNotDeleteNoteException extends CloudStorageException {
+class CouldNotDeletePropertyException extends CloudStorageException {
   @override
   String toString() {
     return 'Could not delete property';
   }
 }
 
-class CouldNotFindNoteExcepiton extends CloudStorageException {
+class CouldNotFindPropertyExcepiton extends CloudStorageException {
   @override
   String toString() {
     return 'Could not find property';
   }
 }
 
-class CouldNotDelteAllNotesException extends CloudStorageException {
+class CouldNotDelteAllPropertiesException extends CloudStorageException {
   @override
   String toString() {
     return 'Could not delete all properties';

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/auth/auth_bloc/auth_events.dart';
-import 'package:training_note_app/services/crud_services/cloud/cloud_note.dart';
+import 'package:training_note_app/services/crud_services/cloud/cloud_property.dart';
 import 'package:training_note_app/services/crud_services/cloud/firebase_cloud_storage.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_bloc.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_events.dart';
 import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
 import 'package:training_note_app/utilities/routes/crud_route_handling.dart';
-import 'package:training_note_app/views/notes/properties_list_view.dart';
+import 'package:training_note_app/views/properties/properties_list_view.dart';
 import '../../enums/menu_action.dart';
 import '../../services/auth/auth_bloc/auth_bloc.dart';
 import '../../services/auth/auth_bloc/auth_states.dart';
@@ -83,24 +83,25 @@ class _PropertiesViewState extends State<PropertiesView> {
           ],
         ),
         body: StreamBuilder(
-          stream: _firebaseCloudStorageService.allNotes(ownerUserId: user().id),
+          stream: _firebaseCloudStorageService.allProperties(
+              ownerUserId: user().id),
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
               case ConnectionState.active:
                 if (snapshot.hasData) {
-                  final allNotes = snapshot.data as Iterable<CloudNote>;
+                  final allProperties =
+                      snapshot.data as Iterable<CloudProperty>;
                   return PropertiesListView(
-                    notes: allNotes,
-                    onDeleNote: (note) async {
-                      await _firebaseCloudStorageService.deleteNote(
-                          documentId: note.documentId);
+                    properties: allProperties,
+                    onDeleNote: (property) {
+                      context
+                          .read<CrudBloc>()
+                          .add(CrudEventDeleteProperty(property: property));
                     },
-                    onTap: (note) {
-                      // Navigator.of(context).pushNamed(
-                      //   createOrUpdateNoteRoute,
-                      //   arguments: note,
-                      // );
+                    onTap: (property) {
+                      context.read<CrudBloc>().add(
+                          CrudEventGetOrCreateProperty(property: property));
                     },
                   );
                 } else {

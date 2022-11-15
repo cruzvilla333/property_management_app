@@ -8,7 +8,7 @@ void handleAuthRouting({
   required AuthState state,
 }) async {
   if (state is AuthStateVerifyEmail) context.goNamed(verifyEmailPage);
-  if (state is AuthStateLoggedIn) context.goNamed(propertyPage);
+  if (state is AuthStateLoggedIn) context.goNamed(propertiesPage);
   if (state is AuthStateLoggedOut) context.goNamed(loginPage);
   if (state is AuthStateRegistering) context.goNamed(registerPage);
   if (state is AuthStateForgotPassword) context.goNamed(passwordResetPage);

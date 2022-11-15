@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart' show immutable;
-import 'package:training_note_app/services/crud_services/cloud/cloud_note.dart';
+import 'package:training_note_app/services/crud_services/cloud/cloud_property.dart';
 
 @immutable
 abstract class CrudEvent {
@@ -7,17 +7,17 @@ abstract class CrudEvent {
 }
 
 class CrudEventGetOrCreateProperty extends CrudEvent {
-  final CloudNote? property;
+  final CloudProperty? property;
   const CrudEventGetOrCreateProperty({this.property});
 }
 
 class CrudEventUpdateProperty extends CrudEvent {
-  final CloudNote property;
+  final CloudProperty property;
   final String text;
   const CrudEventUpdateProperty({required this.property, required this.text});
 }
 
 class CrudEventDeleteProperty extends CrudEvent {
-  final CloudNote property;
+  final CloudProperty property;
   const CrudEventDeleteProperty({required this.property});
 }

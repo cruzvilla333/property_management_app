@@ -1,88 +1,90 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:training_note_app/services/crud_services/cloud/cloud_note.dart';
+import 'package:training_note_app/services/crud_services/cloud/cloud_property.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_storage_constants.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_storage_exceptions.dart';
 
 class FirebaseCloudStorage {
-  final notes = FirebaseFirestore.instance.collection(notesDocument);
+  final properties = FirebaseFirestore.instance.collection(propertiesDocument);
 
-  Future<void> deleteNote({required String documentId}) async {
+  Future<void> deleteProperty({required String documentId}) async {
     try {
-      await notes.doc(documentId).delete();
+      await properties.doc(documentId).delete();
     } catch (e) {
-      throw CouldNotDeleteNoteException();
+      throw CouldNotDeletePropertyException();
     }
   }
 
-  Future<void> deleteAllNotes({required String ownerUserId}) async {
+  Future<void> deleteAllProperties({required String ownerUserId}) async {
     try {
-      await notes.doc(ownerUserId).delete();
+      await properties.doc(ownerUserId).delete();
     } catch (e) {
-      throw CouldNotDeleteNoteException();
+      throw CouldNotDeletePropertyException();
     }
   }
 
-  Future<void> updateNote({
+  Future<void> updateProperty({
     required String documentId,
     required String text,
   }) async {
     try {
-      notes.doc(documentId).update({textFieldName: text});
+      properties.doc(documentId).update({titleFieldName: text});
     } catch (e) {
-      throw CouldNotUpdateNoteException();
+      throw CouldNotUpdatePropertyException();
     }
   }
 
-  Stream<Iterable<CloudNote>> allNotes({required String ownerUserId}) =>
-      notes.snapshots().map((event) => event.docs
-          .map((doc) => CloudNote.fromSnapshot(doc))
-          .where((note) => note.ownerUserId == ownerUserId));
+  Stream<Iterable<CloudProperty>> allProperties(
+          {required String ownerUserId}) =>
+      properties.snapshots().map((event) => event.docs
+          .map((doc) => CloudProperty.fromSnapshot(doc))
+          .where((property) => property.ownerUserId == ownerUserId));
 
-  Future<CloudNote> getNote({
+  Future<CloudProperty> getProperty({
     required String documentId,
   }) async {
     try {
-      final note = await notes.doc(documentId).get();
+      final note = await properties.doc(documentId).get();
       final owner = note.data()!;
-      return CloudNote(
+      return CloudProperty(
         documentId: note.id,
         ownerUserId: owner[ownerUserIdFieldName],
-        text: owner[textFieldName],
+        title: owner[titleFieldName],
       );
     } catch (e) {
-      throw CouldNotFindNoteExcepiton();
+      throw CouldNotFindPropertyExcepiton();
     }
   }
 
-  Future<Iterable<CloudNote>> getNotes({required String ownerUserId}) async {
+  Future<Iterable<CloudProperty>> getProperties(
+      {required String ownerUserId}) async {
     try {
-      return await notes
+      return await properties
           .where(
             ownerUserIdFieldName,
             isEqualTo: ownerUserId,
           )
           .get()
-          .then(
-              (value) => value.docs.map((doc) => CloudNote.fromSnapshot(doc)));
+          .then((value) =>
+              value.docs.map((doc) => CloudProperty.fromSnapshot(doc)));
     } catch (e) {
-      throw CouldNotGetAllNotesException();
+      throw CouldNotGetAllPropertiesException();
     }
   }
 
-  Future<CloudNote> createNote({required String ownerUserId}) async {
+  Future<CloudProperty> createProperty({required String ownerUserId}) async {
     try {
-      final document = await notes.add({
+      final document = await properties.add({
         ownerUserIdFieldName: ownerUserId,
-        textFieldName: '',
+        titleFieldName: '',
       });
       final newNote = await document.get();
-      return CloudNote(
+      return CloudProperty(
         documentId: newNote.id,
         ownerUserId: ownerUserId,
-        text: '',
+        title: '',
       );
     } catch (e) {
-      throw CouldNotCreateNoteException();
+      throw CouldNotCreatePropertyException();
     }
   }
 
