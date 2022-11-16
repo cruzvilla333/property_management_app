@@ -11,7 +11,7 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
       : super(
           const CrudStateUninitialized(),
         ) {
-    on<CrudEventInitialize>(
+    on<CrudEventPropertiesView>(
       (event, emit) {
         emit(const CrudStatePropertiesView());
       },
@@ -19,26 +19,39 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
     on<CrudEventLoading>((event, emit) {
       emit(CrudStateLoading(text: event.text));
     });
-    on<CrudEventGetOrCreateProperty>(
+    on<CrudEventGetProperty>(
       (event, emit) async {
-        emit(const CrudStateLoading(text: 'Creating property...'));
+        emit(CrudStateLoading(
+            text: event.property != null
+                ? 'Getting property...'
+                : 'Creating property...'));
         late final CloudProperty property;
         if (event.property != null) {
           property = event.property!;
         } else {
-          property =
-              await storageProvider.createProperty(ownerUserId: user().id);
+          property = const CloudProperty(
+              documentId: '', ownerUserId: '', title: '', address: '');
         }
-        emit(CrudStateGetOrCreateProperty(property: property));
+        emit(CrudStateGetProperty(property: property));
       },
     );
-    on<CrudEventUpdateProperty>(
+    on<CrudEventCreateOrUpdateProperty>(
       (event, emit) async {
         try {
+          emit(const CrudStateLoading(text: 'Creating property...'));
+          CloudProperty property = event.property;
+          if (property.documentId.isEmpty) {
+            property =
+                await storageProvider.createProperty(ownerUserId: user().id);
+          }
           await storageProvider.updateProperty(
-              documentId: event.property.documentId, text: event.text);
+            documentId: property.documentId,
+            title: event.title,
+            address: event.address,
+          );
+          emit(const CrudStatePropertiesView());
         } on Exception catch (e) {
-          emit(CrudStateUpdateNote(exception: e));
+          emit(CrudStateCreateOrUpdateProperty(exception: e));
         }
       },
     );
@@ -47,7 +60,7 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
         await storageProvider.deleteProperty(
             documentId: event.property.documentId);
       } on Exception catch (e) {
-        emit(CrudStateDeleteNote(exception: e));
+        emit(CrudStateDeleteProperty(exception: e));
       }
     });
   }

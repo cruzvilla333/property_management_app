@@ -32,7 +32,7 @@ class _PropertiesViewState extends State<PropertiesView> {
 
   @override
   Widget build(BuildContext context) {
-    context.read<CrudBloc>().add(const CrudEventInitialize());
+    context.read<CrudBloc>().add(const CrudEventPropertiesView());
     return MultiBlocListener(
       listeners: [
         BlocListener<CrudBloc, CrudState>(
@@ -61,7 +61,7 @@ class _PropertiesViewState extends State<PropertiesView> {
               firebaseCloudStorageService: _firebaseCloudStorageService,
             );
           }
-          if (state is CrudStateGetOrCreateProperty) {
+          if (state is CrudStateGetProperty) {
             return CreateUpdatePropertyView(
               state: state,
             );

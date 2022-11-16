@@ -8,7 +8,7 @@ import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.d
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
 
 class CreateUpdatePropertyView extends StatefulWidget {
-  final CrudStateGetOrCreateProperty state;
+  final CrudStateGetProperty state;
   const CreateUpdatePropertyView({super.key, required this.state});
 
   @override
@@ -18,35 +18,28 @@ class CreateUpdatePropertyView extends StatefulWidget {
 
 class _CreateUpdatePropertyViewState extends State<CreateUpdatePropertyView> {
   late final CloudProperty _property;
-  late final TextEditingController _textController;
-
+  late final TextEditingController _titleController;
+  late final TextEditingController _addressController;
+  final _updateOrCreatePropertyForm = GlobalKey<FormState>();
   @override
   void initState() {
     _property = widget.state.property;
-    _textController = TextEditingController();
-    _textController.text = widget.state.property.title;
+    _titleController = TextEditingController();
+    _addressController = TextEditingController();
+    _titleController.text = widget.state.property.title;
+    _addressController.text = widget.state.property.address;
     super.initState();
   }
 
   @override
   void dispose() {
     _deleteNoteIfTextIsEmpty();
-    _textController.dispose();
+    _titleController.dispose();
     super.dispose();
   }
 
-  void _textControllerListener() async {
-    context.read<CrudBloc>().add(CrudEventUpdateProperty(
-        property: _property, text: _textController.text));
-  }
-
-  void _setUpTextControllerListener() async {
-    _textController.removeListener(_textControllerListener);
-    _textController.addListener(_textControllerListener);
-  }
-
   void _deleteNoteIfTextIsEmpty() async {
-    if (_textController.text.isEmpty) {
+    if (_titleController.text.isEmpty) {
       await FirebaseCloudStorage()
           .deleteProperty(documentId: _property.documentId);
     }
@@ -68,25 +61,66 @@ class _CreateUpdatePropertyViewState extends State<CreateUpdatePropertyView> {
           actions: [
             IconButton(
                 onPressed: () {
-                  context.read<CrudBloc>().add(const CrudEventInitialize());
+                  if (_updateOrCreatePropertyForm.currentState!.validate()) {
+                    context
+                        .read<CrudBloc>()
+                        .add(CrudEventCreateOrUpdateProperty(
+                          property: _property,
+                          title: _titleController.text,
+                          address: _addressController.text,
+                        ));
+                  }
                 },
                 icon: const Icon(Icons.check)),
-            IconButton(onPressed: () {}, icon: const Icon(Icons.clear))
+            IconButton(
+                onPressed: () {
+                  context.read<CrudBloc>().add(const CrudEventPropertiesView());
+                },
+                icon: const Icon(Icons.clear))
           ],
         ),
         body: Builder(
           builder: (context) {
-            _setUpTextControllerListener();
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                controller: _textController,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                decoration: const InputDecoration(
-                  hintText: 'Start typing your notes...',
-                  labelText: 'Title',
-                  border: OutlineInputBorder(),
+            return Form(
+              key: _updateOrCreatePropertyForm,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'This field needs value';
+                        }
+                        return null;
+                      },
+                      controller: _titleController,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      decoration: const InputDecoration(
+                        hintText: 'Title...',
+                        labelText: 'Title',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'This field needs value';
+                        }
+                        return null;
+                      },
+                      controller: _addressController,
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      decoration: const InputDecoration(
+                        hintText: 'Address...',
+                        labelText: 'Address',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             );

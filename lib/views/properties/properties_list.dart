@@ -28,7 +28,7 @@ class PropertiesList extends StatelessWidget {
               onPressed: () {
                 context
                     .read<CrudBloc>()
-                    .add(const CrudEventGetOrCreateProperty(property: null));
+                    .add(const CrudEventGetProperty(property: null));
               },
               icon: const Icon(Icons.add)),
           PopupMenuButton<MenuAction>(
@@ -66,14 +66,14 @@ class PropertiesList extends StatelessWidget {
                   onTap: (property) {
                     context
                         .read<CrudBloc>()
-                        .add(CrudEventGetOrCreateProperty(property: property));
+                        .add(CrudEventGetProperty(property: property));
                   },
                 );
               } else {
                 return const LoadingOverlay();
               }
             default:
-              return const CircularProgressIndicator();
+              return const LoadingOverlay();
           }
         },
       ),

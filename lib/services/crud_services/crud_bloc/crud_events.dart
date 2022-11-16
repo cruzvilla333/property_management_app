@@ -6,8 +6,8 @@ abstract class CrudEvent {
   const CrudEvent();
 }
 
-class CrudEventInitialize extends CrudEvent {
-  const CrudEventInitialize();
+class CrudEventPropertiesView extends CrudEvent {
+  const CrudEventPropertiesView();
 }
 
 class CrudEventLoading extends CrudEvent {
@@ -15,15 +15,20 @@ class CrudEventLoading extends CrudEvent {
   const CrudEventLoading({required this.text});
 }
 
-class CrudEventGetOrCreateProperty extends CrudEvent {
+class CrudEventGetProperty extends CrudEvent {
   final CloudProperty? property;
-  const CrudEventGetOrCreateProperty({this.property});
+  const CrudEventGetProperty({this.property});
 }
 
-class CrudEventUpdateProperty extends CrudEvent {
+class CrudEventCreateOrUpdateProperty extends CrudEvent {
   final CloudProperty property;
-  final String text;
-  const CrudEventUpdateProperty({required this.property, required this.text});
+  final String title;
+  final String address;
+  const CrudEventCreateOrUpdateProperty({
+    required this.property,
+    required this.title,
+    required this.address,
+  });
 }
 
 class CrudEventDeleteProperty extends CrudEvent {

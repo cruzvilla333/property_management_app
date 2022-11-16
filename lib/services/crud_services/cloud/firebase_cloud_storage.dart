@@ -4,7 +4,8 @@ import 'package:training_note_app/services/crud_services/cloud/cloud_storage_con
 import 'package:training_note_app/services/crud_services/cloud/cloud_storage_exceptions.dart';
 
 class FirebaseCloudStorage {
-  final properties = FirebaseFirestore.instance.collection(propertiesDocument);
+  final collections = FirebaseFirestore.instance;
+  late final properties = collections.collection(propertiesDocument);
 
   Future<void> deleteProperty({required String documentId}) async {
     try {
@@ -24,10 +25,14 @@ class FirebaseCloudStorage {
 
   Future<void> updateProperty({
     required String documentId,
-    required String text,
+    required String title,
+    required String address,
   }) async {
     try {
-      properties.doc(documentId).update({titleFieldName: text});
+      properties.doc(documentId).update({
+        titleFieldName: title,
+        addressFieldName: address,
+      });
     } catch (e) {
       throw CouldNotUpdatePropertyException();
     }
@@ -43,12 +48,13 @@ class FirebaseCloudStorage {
     required String documentId,
   }) async {
     try {
-      final note = await properties.doc(documentId).get();
-      final owner = note.data()!;
+      final property = await properties.doc(documentId).get();
+      final owner = property.data()!;
       return CloudProperty(
-        documentId: note.id,
+        documentId: property.id,
         ownerUserId: owner[ownerUserIdFieldName],
         title: owner[titleFieldName],
+        address: owner[addressFieldName],
       );
     } catch (e) {
       throw CouldNotFindPropertyExcepiton();
@@ -76,12 +82,14 @@ class FirebaseCloudStorage {
       final document = await properties.add({
         ownerUserIdFieldName: ownerUserId,
         titleFieldName: '',
+        addressFieldName: '',
       });
       final newNote = await document.get();
       return CloudProperty(
         documentId: newNote.id,
         ownerUserId: ownerUserId,
         title: '',
+        address: '',
       );
     } catch (e) {
       throw CouldNotCreatePropertyException();

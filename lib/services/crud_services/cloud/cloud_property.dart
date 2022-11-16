@@ -7,16 +7,19 @@ class CloudProperty {
   final String documentId;
   final String ownerUserId;
   final String title;
+  final String address;
 
   const CloudProperty({
     required this.documentId,
     required this.ownerUserId,
     required this.title,
+    required this.address,
   });
 
   CloudProperty.fromSnapshot(
       QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : documentId = snapshot.id,
         ownerUserId = snapshot.data()[ownerUserIdFieldName],
-        title = snapshot.data()[titleFieldName] as String;
+        title = snapshot.data()[titleFieldName] as String,
+        address = snapshot.data()[addressFieldName] as String;
 }

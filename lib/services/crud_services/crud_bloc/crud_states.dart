@@ -24,19 +24,18 @@ class CrudStateLoading extends CrudState {
   const CrudStateLoading({required this.text});
 }
 
-class CrudStateGetOrCreateProperty extends CrudState {
+class CrudStateGetProperty extends CrudState {
   final CloudProperty property;
-  const CrudStateGetOrCreateProperty(
-      {required this.property, Exception? exception})
+  const CrudStateGetProperty({required this.property, Exception? exception})
       : super(exception: exception);
 }
 
-class CrudStateDeleteNote extends CrudState {
-  const CrudStateDeleteNote({Exception? exception})
+class CrudStateDeleteProperty extends CrudState {
+  const CrudStateDeleteProperty({Exception? exception})
       : super(exception: exception);
 }
 
-class CrudStateUpdateNote extends CrudState {
-  const CrudStateUpdateNote({Exception? exception})
+class CrudStateCreateOrUpdateProperty extends CrudState {
+  const CrudStateCreateOrUpdateProperty({Exception? exception})
       : super(exception: exception);
 }
