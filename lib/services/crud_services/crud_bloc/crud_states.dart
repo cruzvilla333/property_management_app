@@ -11,6 +11,14 @@ class CrudStateInitialized extends CrudState {
   const CrudStateInitialized();
 }
 
+class CrudStateUninitialized extends CrudState {
+  const CrudStateUninitialized();
+}
+
+class CrudStatePropertiesView extends CrudState {
+  const CrudStatePropertiesView();
+}
+
 class CrudStateLoading extends CrudState {
   final String text;
   const CrudStateLoading({required this.text});

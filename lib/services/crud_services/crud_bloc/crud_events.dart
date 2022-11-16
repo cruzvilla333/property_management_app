@@ -6,6 +6,15 @@ abstract class CrudEvent {
   const CrudEvent();
 }
 
+class CrudEventInitialize extends CrudEvent {
+  const CrudEventInitialize();
+}
+
+class CrudEventLoading extends CrudEvent {
+  final String text;
+  const CrudEventLoading({required this.text});
+}
+
 class CrudEventGetOrCreateProperty extends CrudEvent {
   final CloudProperty? property;
   const CrudEventGetOrCreateProperty({this.property});

@@ -22,9 +22,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(const AuthStateVerifyEmail());
         } else {
           emit(
-            AuthStateLoggedIn(
-              user: user,
-            ),
+            const AuthStateLoggedIn(),
           );
         }
       },
@@ -43,7 +41,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             provider.logOut();
             emit(const AuthStateVerifyEmail());
           } else {
-            emit(AuthStateLoggedIn(user: user));
+            emit(const AuthStateLoggedIn());
           }
         } on Exception catch (e) {
           emit(

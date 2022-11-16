@@ -13,6 +13,8 @@ import 'package:training_note_app/views/properties/properties_view.dart';
 import 'package:training_note_app/views/register_view.dart';
 import 'package:training_note_app/views/verify_email_view.dart';
 
+import 'helpers/loading/loading_screen.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
@@ -44,14 +46,14 @@ class HomePage extends StatelessWidget {
     context.read<AuthBloc>().add(const AuthEventInitialize());
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
-        // if (state.isLoading) {
-        //   LoadingScreen().show(
-        //     context: context,
-        //     text: state.loadingText ?? 'Please wait a moment',
-        //   );
-        // } else {
-        //   LoadingScreen().hide();
-        // }
+        if (state is AuthStateLoading) {
+          LoadingScreen().show(
+            context: context,
+            text: state.text,
+          );
+        } else {
+          LoadingScreen().hide();
+        }
       },
       builder: (context, state) {
         if (state is AuthStateForgotPassword) {

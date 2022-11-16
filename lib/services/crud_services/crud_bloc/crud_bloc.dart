@@ -9,8 +9,16 @@ import '../cloud/firebase_cloud_storage.dart';
 class CrudBloc extends Bloc<CrudEvent, CrudState> {
   CrudBloc(FirebaseCloudStorage storageProvider)
       : super(
-          const CrudStateInitialized(),
+          const CrudStateUninitialized(),
         ) {
+    on<CrudEventInitialize>(
+      (event, emit) {
+        emit(const CrudStatePropertiesView());
+      },
+    );
+    on<CrudEventLoading>((event, emit) {
+      emit(CrudStateLoading(text: event.text));
+    });
     on<CrudEventGetOrCreateProperty>(
       (event, emit) async {
         emit(const CrudStateLoading(text: 'Creating property...'));
