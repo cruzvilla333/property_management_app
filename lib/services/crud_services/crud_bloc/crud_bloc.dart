@@ -13,6 +13,7 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
         ) {
     on<CrudEventPropertiesView>(
       (event, emit) {
+        emit(const CrudStateLoading(text: 'Getting properties'));
         emit(const CrudStatePropertiesView());
       },
     );
@@ -25,30 +26,24 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
             text: event.property != null
                 ? 'Getting property...'
                 : 'Creating property...'));
-        late final CloudProperty property;
-        if (event.property != null) {
-          property = event.property!;
-        } else {
-          property = const CloudProperty(
-              documentId: '', ownerUserId: '', title: '', address: '');
-        }
-        emit(CrudStateGetProperty(property: property));
+        emit(CrudStateGetProperty(property: event.property));
       },
     );
     on<CrudEventCreateOrUpdateProperty>(
       (event, emit) async {
         try {
           emit(const CrudStateLoading(text: 'Creating property...'));
-          CloudProperty property = event.property;
-          if (property.documentId.isEmpty) {
-            property =
-                await storageProvider.createProperty(ownerUserId: user().id);
+          CloudProperty? property = event.property;
+          if (property == null) {
+            property = await storageProvider.createProperty(
+              ownerUserId: user().id,
+              title: event.title,
+              address: event.address,
+              monthlyPrice: event.monthlyPrice,
+            );
+          } else {
+            await storageProvider.updateProperty(property: property);
           }
-          await storageProvider.updateProperty(
-            documentId: property.documentId,
-            title: event.title,
-            address: event.address,
-          );
           emit(const CrudStatePropertiesView());
         } on Exception catch (e) {
           emit(CrudStateCreateOrUpdateProperty(exception: e));
@@ -63,5 +58,11 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
         emit(CrudStateDeleteProperty(exception: e));
       }
     });
+    on<CrudEventSeePropertyDetails>(
+      (event, emit) {
+        emit(const CrudStateLoading(text: 'Getting property'));
+        emit(CrudStatesSeePropertyDetails(property: event.property));
+      },
+    );
   }
 }

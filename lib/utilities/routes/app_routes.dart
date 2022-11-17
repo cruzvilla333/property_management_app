@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:training_note_app/views/forgot_password_view.dart';
 import 'package:training_note_app/views/login_view.dart';
 import 'package:training_note_app/views/properties/properties_view.dart';
+import 'package:training_note_app/views/properties/property_details_view.dart';
 import 'package:training_note_app/views/register_view.dart';
 import 'package:training_note_app/views/verify_email_view.dart';
 
@@ -11,6 +12,7 @@ const registerPage = 'register';
 const verifyEmailPage = 'verify_email';
 const propertiesPage = 'properties';
 const getOrUpdatePropertyPage = 'property';
+const propertyDetailsPage = 'property_details';
 
 final GoRouter router = GoRouter(
   debugLogDiagnostics: true,
@@ -41,13 +43,6 @@ final GoRouter router = GoRouter(
       name: propertiesPage,
       path: '/properties',
       builder: (context, state) => const PropertiesView(),
-      // routes: [
-      //   GoRoute(
-      //     name: getOrUpdatePropertyPage,
-      //     path: 'property',
-      //     builder: (context, state) => const CreateUpdatePropertyView(),
-      //   ),
-      // ],
     ),
   ],
 );

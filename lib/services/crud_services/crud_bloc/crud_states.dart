@@ -25,7 +25,7 @@ class CrudStateLoading extends CrudState {
 }
 
 class CrudStateGetProperty extends CrudState {
-  final CloudProperty property;
+  final CloudProperty? property;
   const CrudStateGetProperty({required this.property, Exception? exception})
       : super(exception: exception);
 }
@@ -33,6 +33,11 @@ class CrudStateGetProperty extends CrudState {
 class CrudStateDeleteProperty extends CrudState {
   const CrudStateDeleteProperty({Exception? exception})
       : super(exception: exception);
+}
+
+class CrudStatesSeePropertyDetails extends CrudState {
+  final CloudProperty property;
+  const CrudStatesSeePropertyDetails({required this.property});
 }
 
 class CrudStateCreateOrUpdateProperty extends CrudState {

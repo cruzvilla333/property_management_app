@@ -23,15 +23,13 @@ class FirebaseCloudStorage {
     }
   }
 
-  Future<void> updateProperty({
-    required String documentId,
-    required String title,
-    required String address,
-  }) async {
+  Future<void> updateProperty({required CloudProperty property}) async {
     try {
-      properties.doc(documentId).update({
-        titleFieldName: title,
-        addressFieldName: address,
+      properties.doc(property.documentId).update({
+        titleFieldName: property.title,
+        addressFieldName: property.address,
+        monthlyPriceFieldName: property.monthlyPrice,
+        moneyDueFieldName: property.moneyDue,
       });
     } catch (e) {
       throw CouldNotUpdatePropertyException();
@@ -55,6 +53,7 @@ class FirebaseCloudStorage {
         ownerUserId: owner[ownerUserIdFieldName],
         title: owner[titleFieldName],
         address: owner[addressFieldName],
+        monthlyPrice: owner[monthlyPriceFieldName],
       );
     } catch (e) {
       throw CouldNotFindPropertyExcepiton();
@@ -77,19 +76,50 @@ class FirebaseCloudStorage {
     }
   }
 
-  Future<CloudProperty> createProperty({required String ownerUserId}) async {
+  Future<CloudProperty> createEmptyProperty(
+      {required String ownerUserId}) async {
     try {
       final document = await properties.add({
         ownerUserIdFieldName: ownerUserId,
         titleFieldName: '',
         addressFieldName: '',
+        monthlyPriceFieldName: 0,
+        moneyDueFieldName: 0,
+      });
+      final newProperty = await document.get();
+      return CloudProperty(
+        documentId: newProperty.id,
+        ownerUserId: ownerUserId,
+        title: '',
+        address: '',
+        monthlyPrice: 0,
+      );
+    } catch (e) {
+      throw CouldNotCreatePropertyException();
+    }
+  }
+
+  Future<CloudProperty> createProperty({
+    required String ownerUserId,
+    required String title,
+    required String address,
+    required int monthlyPrice,
+  }) async {
+    try {
+      final document = await properties.add({
+        ownerUserIdFieldName: ownerUserId,
+        titleFieldName: title,
+        addressFieldName: address,
+        monthlyPriceFieldName: monthlyPrice,
+        moneyDueFieldName: monthlyPrice,
       });
       final newNote = await document.get();
       return CloudProperty(
         documentId: newNote.id,
         ownerUserId: ownerUserId,
-        title: '',
-        address: '',
+        title: title,
+        address: address,
+        monthlyPrice: monthlyPrice,
       );
     } catch (e) {
       throw CouldNotCreatePropertyException();

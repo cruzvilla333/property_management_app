@@ -58,16 +58,15 @@ class PropertiesList extends StatelessWidget {
                 final allProperties = snapshot.data as Iterable<CloudProperty>;
                 return PropertiesListView(
                   properties: allProperties,
-                  onDeleNote: (property) {
-                    context
-                        .read<CrudBloc>()
-                        .add(CrudEventDeleteProperty(property: property));
-                  },
-                  onTap: (property) {
-                    context
-                        .read<CrudBloc>()
-                        .add(CrudEventGetProperty(property: property));
-                  },
+                  onDeleteNote: (property) => context
+                      .read<CrudBloc>()
+                      .add(CrudEventDeleteProperty(property: property)),
+                  onEditPress: (property) => context
+                      .read<CrudBloc>()
+                      .add(CrudEventGetProperty(property: property)),
+                  onTap: (property) => context
+                      .read<CrudBloc>()
+                      .add(CrudEventSeePropertyDetails(property: property)),
                 );
               } else {
                 return const LoadingOverlay();

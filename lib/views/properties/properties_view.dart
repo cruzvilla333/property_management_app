@@ -7,6 +7,7 @@ import 'package:training_note_app/services/crud_services/crud_bloc/crud_events.d
 import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
 import 'package:training_note_app/utilities/routes/crud_route_handling.dart';
 import 'package:training_note_app/views/properties/create_update_property_view.dart';
+import 'package:training_note_app/views/properties/property_details_view.dart';
 import '../../services/auth/auth_bloc/auth_bloc.dart';
 import '../../services/auth/auth_bloc/auth_states.dart';
 import '../../services/crud_services/crud_bloc/crud_states.dart';
@@ -62,9 +63,12 @@ class _PropertiesViewState extends State<PropertiesView> {
             );
           }
           if (state is CrudStateGetProperty) {
-            return CreateUpdatePropertyView(
+            return CreateEditPropertyView(
               state: state,
             );
+          }
+          if (state is CrudStatesSeePropertyDetails) {
+            return PropertyDetailsView(state: state);
           }
           return const Scaffold();
         },

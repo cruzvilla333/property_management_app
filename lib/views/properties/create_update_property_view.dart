@@ -1,48 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:training_note_app/constants/regular_expressions.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_property.dart';
-import 'package:training_note_app/services/crud_services/cloud/firebase_cloud_storage.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_bloc.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_events.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.dart';
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
 
-class CreateUpdatePropertyView extends StatefulWidget {
+class CreateEditPropertyView extends StatefulWidget {
   final CrudStateGetProperty state;
-  const CreateUpdatePropertyView({super.key, required this.state});
+  const CreateEditPropertyView({super.key, required this.state});
 
   @override
-  State<CreateUpdatePropertyView> createState() =>
-      _CreateUpdatePropertyViewState();
+  State<CreateEditPropertyView> createState() => _CreateEditPropertyViewState();
 }
 
-class _CreateUpdatePropertyViewState extends State<CreateUpdatePropertyView> {
-  late final CloudProperty _property;
+class _CreateEditPropertyViewState extends State<CreateEditPropertyView> {
+  late final CloudProperty? _property;
   late final TextEditingController _titleController;
   late final TextEditingController _addressController;
+  late final TextEditingController _monthlyPriceController;
   final _updateOrCreatePropertyForm = GlobalKey<FormState>();
   @override
   void initState() {
     _property = widget.state.property;
     _titleController = TextEditingController();
     _addressController = TextEditingController();
-    _titleController.text = widget.state.property.title;
-    _addressController.text = widget.state.property.address;
+    _monthlyPriceController = TextEditingController();
+    _titleController.text = widget.state.property?.title ?? '';
+    _addressController.text = widget.state.property?.address ?? '';
+    int monthlyPrice = widget.state.property?.monthlyPrice ?? 0;
+    _monthlyPriceController.text = monthlyPrice == 0
+        ? ''
+        : monthlyPrice.toString().replaceAllMapped(reg, mathFunc);
     super.initState();
   }
 
   @override
   void dispose() {
-    _deleteNoteIfTextIsEmpty();
     _titleController.dispose();
+    _addressController.dispose();
+    _monthlyPriceController.dispose();
     super.dispose();
-  }
-
-  void _deleteNoteIfTextIsEmpty() async {
-    if (_titleController.text.isEmpty) {
-      await FirebaseCloudStorage()
-          .deleteProperty(documentId: _property.documentId);
-    }
   }
 
   @override
@@ -55,9 +54,8 @@ class _CreateUpdatePropertyViewState extends State<CreateUpdatePropertyView> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.state.property.title.isEmpty
-              ? 'New property'
-              : 'Edit property'),
+          title: Text(
+              widget.state.property == null ? 'New property' : 'Edit property'),
           actions: [
             IconButton(
                 onPressed: () {
@@ -65,17 +63,20 @@ class _CreateUpdatePropertyViewState extends State<CreateUpdatePropertyView> {
                     context
                         .read<CrudBloc>()
                         .add(CrudEventCreateOrUpdateProperty(
+                          moneyDue: 0,
                           property: _property,
                           title: _titleController.text,
                           address: _addressController.text,
+                          monthlyPrice: int.parse(_monthlyPriceController.text
+                              .replaceAll(RegExp(r','), '')),
                         ));
                   }
                 },
                 icon: const Icon(Icons.check)),
             IconButton(
-                onPressed: () {
-                  context.read<CrudBloc>().add(const CrudEventPropertiesView());
-                },
+                onPressed: () => context
+                    .read<CrudBloc>()
+                    .add(const CrudEventPropertiesView()),
                 icon: const Icon(Icons.clear))
           ],
         ),
@@ -112,11 +113,28 @@ class _CreateUpdatePropertyViewState extends State<CreateUpdatePropertyView> {
                         return null;
                       },
                       controller: _addressController,
-                      keyboardType: TextInputType.multiline,
+                      keyboardType: TextInputType.streetAddress,
                       maxLines: null,
                       decoration: const InputDecoration(
                         hintText: 'Address...',
                         labelText: 'Address',
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'This field needs value';
+                        }
+                        return null;
+                      },
+                      controller: _monthlyPriceController,
+                      keyboardType: TextInputType.number,
+                      maxLines: null,
+                      decoration: const InputDecoration(
+                        hintText: 'Monthly price...',
+                        labelText: 'Monthly price',
                         border: OutlineInputBorder(),
                       ),
                     ),
