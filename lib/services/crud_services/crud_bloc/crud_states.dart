@@ -35,9 +35,10 @@ class CrudStateDeleteProperty extends CrudState {
       : super(exception: exception);
 }
 
-class CrudStatesSeePropertyDetails extends CrudState {
+class CrudStateSeePropertyDetails extends CrudState {
   final CloudProperty property;
-  const CrudStatesSeePropertyDetails({required this.property});
+  const CrudStateSeePropertyDetails({required this.property, exception})
+      : super(exception: exception);
 }
 
 class CrudStateCreateOrUpdateProperty extends CrudState {

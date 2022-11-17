@@ -26,11 +26,16 @@ class PropertiesListView extends StatelessWidget {
       itemBuilder: (context, index) {
         final property = properties.elementAt(index);
         return Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(16.0),
           child: ListTile(
+            tileColor: property.moneyDue == 0
+                ? Colors.green.shade200
+                : Colors.red.shade200,
             shape: RoundedRectangleBorder(
-              side: const BorderSide(color: Colors.black, width: 1),
-              borderRadius: BorderRadius.circular(5),
+              side: BorderSide(
+                  color: property.moneyDue == 0 ? Colors.green : Colors.red,
+                  width: 1),
+              borderRadius: BorderRadius.circular(15),
             ),
             onTap: () => onTap(property),
             title: Column(

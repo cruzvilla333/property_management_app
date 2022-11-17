@@ -43,3 +43,10 @@ class CouldNotDelteAllPropertiesException extends CloudStorageException {
     return 'Could not delete all properties';
   }
 }
+
+class PaymentExceedsRequiredAmount implements Exception {
+  @override
+  String toString() {
+    return 'Payment Exceeds Required Amount';
+  }
+}

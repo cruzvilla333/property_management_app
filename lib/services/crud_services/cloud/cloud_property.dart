@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_storage_constants.dart';
+import 'package:training_note_app/services/crud_services/cloud/cloud_storage_exceptions.dart';
 
 class CloudProperty {
   String documentId;
@@ -36,7 +37,13 @@ class CloudProperty {
     required this.monthlyPrice,
   }) : _moneyDue = monthlyPrice;
 
+  int resetMoneyDue() {
+    _moneyDue = monthlyPrice;
+    return _moneyDue;
+  }
+
   int makePayment({required int amount}) {
+    if (amount > _moneyDue) throw PaymentExceedsRequiredAmount();
     _moneyDue -= amount;
     return _moneyDue;
   }

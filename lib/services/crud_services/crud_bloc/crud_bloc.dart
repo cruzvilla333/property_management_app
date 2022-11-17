@@ -61,7 +61,26 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
     on<CrudEventSeePropertyDetails>(
       (event, emit) {
         emit(const CrudStateLoading(text: 'Getting property'));
-        emit(CrudStatesSeePropertyDetails(property: event.property));
+        emit(CrudStateSeePropertyDetails(property: event.property));
+      },
+    );
+    on<CrudEventUpdateMoneyDue>(
+      (event, emit) async {
+        try {
+          emit(const CrudStateLoading(text: 'Making payment...'));
+          if (event.resetMoneyDue == true) {
+            event.property.resetMoneyDue();
+          } else {
+            event.property.makePayment(amount: event.amount);
+          }
+          await storageProvider.updateProperty(property: event.property);
+          emit(CrudStateSeePropertyDetails(property: event.property));
+        } on Exception catch (e) {
+          emit(CrudStateSeePropertyDetails(
+            property: event.property,
+            exception: e,
+          ));
+        }
       },
     );
   }

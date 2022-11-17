@@ -67,7 +67,7 @@ class _PropertiesViewState extends State<PropertiesView> {
               state: state,
             );
           }
-          if (state is CrudStatesSeePropertyDetails) {
+          if (state is CrudStateSeePropertyDetails) {
             return PropertyDetailsView(state: state);
           }
           return const Scaffold();

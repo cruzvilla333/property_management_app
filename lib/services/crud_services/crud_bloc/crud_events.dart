@@ -35,6 +35,18 @@ class CrudEventCreateOrUpdateProperty extends CrudEvent {
   });
 }
 
+class CrudEventUpdateMoneyDue extends CrudEvent {
+  final int amount;
+  final bool? resetMoneyDue;
+  final CloudProperty property;
+
+  const CrudEventUpdateMoneyDue({
+    required this.amount,
+    required this.property,
+    this.resetMoneyDue,
+  });
+}
+
 class CrudEventSeePropertyDetails extends CrudEvent {
   final CloudProperty property;
   const CrudEventSeePropertyDetails({required this.property});
