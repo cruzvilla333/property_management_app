@@ -37,13 +37,13 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
       (event, emit) async {
         try {
           emit(const CrudStateLoading(text: 'Creating property...'));
-          CloudProperty? property = event.property;
-          if (property == null) {
+          CloudProperty property = event.property;
+          if (property.documentId.isEmpty) {
             property = await storageProvider.createProperty(
               ownerUserId: user().id,
-              title: event.title,
-              address: event.address,
-              monthlyPrice: event.monthlyPrice,
+              title: event.property.title,
+              address: event.property.address,
+              monthlyPrice: event.property.monthlyPrice,
             );
           } else {
             await storageProvider.updateProperty(property: property);
@@ -56,11 +56,11 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
     on<CrudEventDeleteProperty>((event, emit) async {
       emit(const CrudStateLoading(text: 'Deleting property'));
       try {
-        await storageProvider.deleteAllPayments(
+        storageProvider.deleteAllPayments(
             propertyId: event.property.documentId);
         await storageProvider.deleteProperty(
             documentId: event.property.documentId);
-        emit(currentPage());
+        emit(const CrudStateDisableLoading());
       } on Exception catch (e) {
         emit(CrudStateDeleteProperty(exception: e));
       }

@@ -31,10 +31,9 @@ void lastPage({required BuildContext context}) {
   }
 }
 
-CrudState currentPage() {
+void currentPage({required BuildContext context}) {
   var navigator = navigationStack.pop();
-  if (navigator is CrudState) {
-    return navigator;
+  if (navigator is CrudEvent) {
+    context.read<CrudBloc>().add(navigator);
   }
-  return const CrudStateLoading(text: 'Finding navigation page');
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_note_app/constants/regular_expressions.dart';
+import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_property.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_bloc.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_events.dart';
@@ -61,15 +62,18 @@ class _CreateEditPropertyViewState extends State<CreateEditPropertyView> {
             IconButton(
                 onPressed: () {
                   if (_updateOrCreatePropertyForm.currentState!.validate()) {
+                    final property = CloudProperty(
+                      documentId: _property?.documentId ?? '',
+                      ownerUserId: user().id,
+                      title: _titleController.text,
+                      address: _addressController.text,
+                      monthlyPrice: int.parse(_monthlyPriceController.text
+                          .replaceAll(RegExp(r','), '')),
+                    );
                     context
                         .read<CrudBloc>()
                         .add(CrudEventCreateOrUpdateProperty(
-                          moneyDue: 0,
-                          property: _property,
-                          title: _titleController.text,
-                          address: _addressController.text,
-                          monthlyPrice: int.parse(_monthlyPriceController.text
-                              .replaceAll(RegExp(r','), '')),
+                          property: property,
                         ));
                     lastPage(context: context);
                   }

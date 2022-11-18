@@ -22,17 +22,10 @@ class CrudEventGetProperty extends CrudEvent {
 }
 
 class CrudEventCreateOrUpdateProperty extends CrudEvent {
-  final CloudProperty? property;
-  final String title;
-  final String address;
-  final int monthlyPrice;
-  final int moneyDue;
+  final CloudProperty property;
+
   const CrudEventCreateOrUpdateProperty({
     required this.property,
-    required this.title,
-    required this.address,
-    required this.monthlyPrice,
-    required this.moneyDue,
   });
 }
 
