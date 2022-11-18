@@ -1,8 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:training_note_app/views/forgot_password_view.dart';
 import 'package:training_note_app/views/login_view.dart';
-import 'package:training_note_app/views/properties/properties_view.dart';
-import 'package:training_note_app/views/properties/property_details_view.dart';
+import 'package:training_note_app/views/properties/properties_view_builder.dart';
 import 'package:training_note_app/views/register_view.dart';
 import 'package:training_note_app/views/verify_email_view.dart';
 
@@ -42,7 +41,7 @@ final GoRouter router = GoRouter(
     GoRoute(
       name: propertiesPage,
       path: '/properties',
-      builder: (context, state) => const PropertiesView(),
+      builder: (context, state) => const PropertiesViewBuilder(),
     ),
   ],
 );

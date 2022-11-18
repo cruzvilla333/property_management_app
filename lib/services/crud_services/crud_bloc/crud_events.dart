@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:training_note_app/services/crud_services/cloud/cloud_property.dart';
+import 'package:training_note_app/services/crud_services/cloud/cloud_property_payment.dart';
 
 @immutable
 abstract class CrudEvent {
@@ -35,24 +36,36 @@ class CrudEventCreateOrUpdateProperty extends CrudEvent {
   });
 }
 
-class CrudEventUpdateMoneyDue extends CrudEvent {
+class CrudEventMakePayment extends CrudEvent {
   final int amount;
   final bool? resetMoneyDue;
   final CloudProperty property;
+  final String paymentMethod;
 
-  const CrudEventUpdateMoneyDue({
+  const CrudEventMakePayment({
     required this.amount,
     required this.property,
     this.resetMoneyDue,
+    required this.paymentMethod,
   });
 }
 
-class CrudEventSeePropertyDetails extends CrudEvent {
+class CrudEventPropertyInfo extends CrudEvent {
   final CloudProperty property;
-  const CrudEventSeePropertyDetails({required this.property});
+  const CrudEventPropertyInfo({required this.property});
+}
+
+class CrudEventPaymentHistory extends CrudEvent {
+  final CloudProperty property;
+  const CrudEventPaymentHistory({required this.property});
 }
 
 class CrudEventDeleteProperty extends CrudEvent {
   final CloudProperty property;
   const CrudEventDeleteProperty({required this.property});
+}
+
+class CrudEventDeletePayment extends CrudEvent {
+  final CloudPropertyPayment payment;
+  const CrudEventDeletePayment({required this.payment});
 }

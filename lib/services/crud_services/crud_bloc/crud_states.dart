@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:training_note_app/services/crud_services/cloud/cloud_property.dart';
+import 'package:training_note_app/services/crud_services/cloud/cloud_property_payment.dart';
 
 @immutable
 abstract class CrudState {
@@ -35,13 +36,26 @@ class CrudStateDeleteProperty extends CrudState {
       : super(exception: exception);
 }
 
-class CrudStateSeePropertyDetails extends CrudState {
+class CrudStateDeletePayment extends CrudState {
+  const CrudStateDeletePayment({Exception? exception})
+      : super(exception: exception);
+}
+
+class CrudStatePropertyInfo extends CrudState {
   final CloudProperty property;
-  const CrudStateSeePropertyDetails({required this.property, exception})
+  const CrudStatePropertyInfo({required this.property, exception})
       : super(exception: exception);
 }
 
 class CrudStateCreateOrUpdateProperty extends CrudState {
   const CrudStateCreateOrUpdateProperty({Exception? exception})
+      : super(exception: exception);
+}
+
+class CrudStatePaymentHistory extends CrudState {
+  final Iterable<CloudPropertyPayment> payments;
+  final CloudProperty property;
+  const CrudStatePaymentHistory(
+      {required this.property, required this.payments, exception})
       : super(exception: exception);
 }

@@ -9,10 +9,24 @@ class CouldNotCreatePropertyException extends CloudStorageException {
   }
 }
 
+class CouldNotCreatePaymentException extends CloudStorageException {
+  @override
+  String toString() {
+    return 'Could not create payment';
+  }
+}
+
 class CouldNotGetAllPropertiesException extends CloudStorageException {
   @override
   String toString() {
     return 'Could not get all properties';
+  }
+}
+
+class CouldNotGetAllPaymentsException extends CloudStorageException {
+  @override
+  String toString() {
+    return 'Could not get all payments';
   }
 }
 
@@ -24,6 +38,13 @@ class CouldNotUpdatePropertyException extends CloudStorageException {
 }
 
 class CouldNotDeletePropertyException extends CloudStorageException {
+  @override
+  String toString() {
+    return 'Could not delete property';
+  }
+}
+
+class CouldNotDeletePaymentException extends CloudStorageException {
   @override
   String toString() {
     return 'Could not delete property';

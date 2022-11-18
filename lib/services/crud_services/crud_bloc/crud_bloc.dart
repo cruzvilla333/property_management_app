@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_events.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.dart';
-
+import '../../../utilities/navigation/navigation_utilities.dart';
 import '../cloud/cloud_property.dart';
 import '../cloud/firebase_cloud_storage.dart';
 
@@ -14,6 +14,7 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
     on<CrudEventPropertiesView>(
       (event, emit) {
         emit(const CrudStateLoading(text: 'Getting properties'));
+        navigationStack.push(event);
         emit(const CrudStatePropertiesView());
       },
     );
@@ -58,13 +59,13 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
         emit(CrudStateDeleteProperty(exception: e));
       }
     });
-    on<CrudEventSeePropertyDetails>(
+    on<CrudEventPropertyInfo>(
       (event, emit) {
-        emit(const CrudStateLoading(text: 'Getting property'));
-        emit(CrudStateSeePropertyDetails(property: event.property));
+        navigationStack.push(event);
+        emit(CrudStatePropertyInfo(property: event.property));
       },
     );
-    on<CrudEventUpdateMoneyDue>(
+    on<CrudEventMakePayment>(
       (event, emit) async {
         try {
           emit(const CrudStateLoading(text: 'Making payment...'));
@@ -72,16 +73,43 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
             event.property.resetMoneyDue();
           } else {
             event.property.makePayment(amount: event.amount);
+            storageProvider.createPayment(
+              propertyId: event.property.documentId,
+              paymentAmount: event.amount,
+              paymentMethod: event.paymentMethod,
+            );
           }
           await storageProvider.updateProperty(property: event.property);
-          emit(CrudStateSeePropertyDetails(property: event.property));
+          emit(CrudStatePropertyInfo(property: event.property));
         } on Exception catch (e) {
-          emit(CrudStateSeePropertyDetails(
+          emit(CrudStatePropertyInfo(
             property: event.property,
             exception: e,
           ));
         }
       },
     );
+    on<CrudEventPaymentHistory>(
+      (event, emit) async {
+        emit(const CrudStateLoading(text: 'Getting payment history'));
+        try {
+          final payments = await storageProvider.getPropertyPayments(
+              propertyId: event.property.documentId);
+          navigationStack.push(event);
+          emit(CrudStatePaymentHistory(
+              property: event.property, payments: payments));
+        } on Exception catch (e) {
+          emit(CrudStatePropertyInfo(property: event.property, exception: e));
+        }
+      },
+    );
+    on<CrudEventDeletePayment>((event, emit) async {
+      try {
+        await storageProvider.deletePayment(
+            documentId: event.payment.documentId);
+      } on Exception catch (e) {
+        emit(CrudStateDeletePayment(exception: e));
+      }
+    });
   }
 }

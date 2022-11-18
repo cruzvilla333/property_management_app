@@ -9,7 +9,6 @@ class CloudProperty {
   String address;
   int monthlyPrice;
   int _moneyDue;
-
   CloudProperty({
     required this.documentId,
     required this.ownerUserId,
@@ -28,14 +27,6 @@ class CloudProperty {
         address = snapshot.data()[addressFieldName] as String,
         monthlyPrice = snapshot.data()[monthlyPriceFieldName] as int,
         _moneyDue = snapshot.data()[moneyDueFieldName] as int;
-
-  CloudProperty.populate({
-    required this.documentId,
-    required this.ownerUserId,
-    required this.title,
-    required this.address,
-    required this.monthlyPrice,
-  }) : _moneyDue = monthlyPrice;
 
   int resetMoneyDue() {
     _moneyDue = monthlyPrice;

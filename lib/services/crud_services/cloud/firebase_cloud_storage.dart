@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_property.dart';
+import 'package:training_note_app/services/crud_services/cloud/cloud_property_payment.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_storage_constants.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_storage_exceptions.dart';
 
 class FirebaseCloudStorage {
   final collections = FirebaseFirestore.instance;
-  late final properties = collections.collection(propertiesDocument);
+  late final payments = collections.collection(paymentsCollection);
+  late final properties = collections.collection(propertiesCollection);
 
   Future<void> deleteProperty({required String documentId}) async {
     try {
@@ -15,11 +17,71 @@ class FirebaseCloudStorage {
     }
   }
 
+  Future<void> deletePayment({required String documentId}) async {
+    try {
+      await payments.doc(documentId).delete();
+    } catch (e) {
+      throw CouldNotDeletePaymentException();
+    }
+  }
+
+  Future<CloudPropertyPayment> createPayment({
+    required String propertyId,
+    required int paymentAmount,
+    required String paymentMethod,
+  }) async {
+    try {
+      final payment = await payments.add({
+        propertyIdFieldName: propertyId,
+        paymentAmountFieldName: paymentAmount,
+        paymentMethodFieldName: paymentMethod,
+      });
+      final newPayment = await payment.get();
+      return CloudPropertyPayment(
+        documentId: newPayment.id,
+        propertyId: propertyId,
+        paymentAmount: paymentAmount,
+        paymentMethod: paymentMethod,
+      );
+    } catch (e) {
+      throw CouldNotCreatePaymentException();
+    }
+  }
+
+  Future<Iterable<CloudPropertyPayment>> getPropertyPayments({
+    required String propertyId,
+  }) async {
+    try {
+      return await payments
+          .where(
+            propertyIdFieldName,
+            isEqualTo: propertyId,
+          )
+          .get()
+          .then((value) =>
+              value.docs.map((doc) => CloudPropertyPayment.fromSnapshot(doc)));
+    } catch (e) {
+      throw CouldNotGetAllPaymentsException();
+    }
+  }
+
   Future<void> deleteAllProperties({required String ownerUserId}) async {
     try {
       await properties.doc(ownerUserId).delete();
     } catch (e) {
       throw CouldNotDeletePropertyException();
+    }
+  }
+
+  Future<void> deleteAllPayments({required String propertyId}) async {
+    try {
+      await payments.get().then((value) async {
+        for (var document in value.docs) {
+          await payments.doc(document.id).delete();
+        }
+      });
+    } catch (e) {
+      throw CouldNotDeletePaymentException();
     }
   }
 
@@ -76,28 +138,28 @@ class FirebaseCloudStorage {
     }
   }
 
-  Future<CloudProperty> createEmptyProperty(
-      {required String ownerUserId}) async {
-    try {
-      final document = await properties.add({
-        ownerUserIdFieldName: ownerUserId,
-        titleFieldName: '',
-        addressFieldName: '',
-        monthlyPriceFieldName: 0,
-        moneyDueFieldName: 0,
-      });
-      final newProperty = await document.get();
-      return CloudProperty(
-        documentId: newProperty.id,
-        ownerUserId: ownerUserId,
-        title: '',
-        address: '',
-        monthlyPrice: 0,
-      );
-    } catch (e) {
-      throw CouldNotCreatePropertyException();
-    }
-  }
+  // Future<CloudProperty> createEmptyProperty(
+  //     {required String ownerUserId}) async {
+  //   try {
+  //     final document = await properties.add({
+  //       ownerUserIdFieldName: ownerUserId,
+  //       titleFieldName: '',
+  //       addressFieldName: '',
+  //       monthlyPriceFieldName: 0,
+  //       moneyDueFieldName: 0,
+  //     });
+  //     final newProperty = await document.get();
+  //     return CloudProperty(
+  //       documentId: newProperty.id,
+  //       ownerUserId: ownerUserId,
+  //       title: '',
+  //       address: '',
+  //       monthlyPrice: 0,
+  //     );
+  //   } catch (e) {
+  //     throw CouldNotCreatePropertyException();
+  //   }
+  // }
 
   Future<CloudProperty> createProperty({
     required String ownerUserId,

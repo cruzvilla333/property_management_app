@@ -76,7 +76,8 @@ class PropertiesListView extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () async {
-                    final shouldDelete = await showDeleteDialog(context);
+                    final shouldDelete =
+                        await showDeletePropertyDialog(context);
                     if (shouldDelete) {
                       onDeleteNote(property);
                     }

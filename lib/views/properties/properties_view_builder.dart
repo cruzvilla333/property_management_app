@@ -7,22 +7,23 @@ import 'package:training_note_app/services/crud_services/crud_bloc/crud_events.d
 import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
 import 'package:training_note_app/utilities/routes/crud_route_handling.dart';
 import 'package:training_note_app/views/properties/create_update_property_view.dart';
-import 'package:training_note_app/views/properties/property_details_view.dart';
 import '../../services/auth/auth_bloc/auth_bloc.dart';
 import '../../services/auth/auth_bloc/auth_states.dart';
 import '../../services/crud_services/crud_bloc/crud_states.dart';
 import '../../utilities/dialogs/loading_functions.dart';
 import '../../utilities/dialogs/log_out_dialog.dart';
 import 'properties_list.dart';
+import 'property_info_view.dart';
+import 'property_payments_view.dart';
 
-class PropertiesView extends StatefulWidget {
-  const PropertiesView({super.key});
+class PropertiesViewBuilder extends StatefulWidget {
+  const PropertiesViewBuilder({super.key});
 
   @override
-  State<PropertiesView> createState() => _PropertiesViewState();
+  State<PropertiesViewBuilder> createState() => _PropertiesViewBuilderState();
 }
 
-class _PropertiesViewState extends State<PropertiesView> {
+class _PropertiesViewBuilderState extends State<PropertiesViewBuilder> {
   late final FirebaseCloudStorage _firebaseCloudStorageService;
 
   @override
@@ -67,8 +68,15 @@ class _PropertiesViewState extends State<PropertiesView> {
               state: state,
             );
           }
-          if (state is CrudStateSeePropertyDetails) {
-            return PropertyDetailsView(state: state);
+          if (state is CrudStatePropertyInfo) {
+            return PropertyInfoView(
+              state: state,
+            );
+          }
+          if (state is CrudStatePaymentHistory) {
+            return PropertyPaymentsView(
+              state: state,
+            );
           }
           return const Scaffold();
         },

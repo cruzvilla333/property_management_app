@@ -66,7 +66,7 @@ class PropertiesList extends StatelessWidget {
                       .add(CrudEventGetProperty(property: property)),
                   onTap: (property) => context
                       .read<CrudBloc>()
-                      .add(CrudEventSeePropertyDetails(property: property)),
+                      .add(CrudEventPropertyInfo(property: property)),
                 );
               } else {
                 return const LoadingOverlay();
