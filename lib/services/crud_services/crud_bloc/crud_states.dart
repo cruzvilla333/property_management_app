@@ -17,7 +17,8 @@ class CrudStateUninitialized extends CrudState {
 }
 
 class CrudStatePropertiesView extends CrudState {
-  const CrudStatePropertiesView();
+  final Stream<Iterable<CloudProperty>> properties;
+  const CrudStatePropertiesView({required this.properties});
 }
 
 class CrudStateLoading extends CrudState {
@@ -29,6 +30,10 @@ class CrudStateGetProperty extends CrudState {
   final CloudProperty? property;
   const CrudStateGetProperty({required this.property, Exception? exception})
       : super(exception: exception);
+}
+
+class CrudStateDisableLoading extends CrudState {
+  const CrudStateDisableLoading();
 }
 
 class CrudStateDeleteProperty extends CrudState {
@@ -53,9 +58,7 @@ class CrudStateCreateOrUpdateProperty extends CrudState {
 }
 
 class CrudStatePaymentHistory extends CrudState {
-  final Iterable<CloudPropertyPayment> payments;
-  final CloudProperty property;
-  const CrudStatePaymentHistory(
-      {required this.property, required this.payments, exception})
+  final Stream<Iterable<CloudPropertyPayment>> payments;
+  const CrudStatePaymentHistory({required this.payments, exception})
       : super(exception: exception);
 }

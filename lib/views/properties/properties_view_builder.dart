@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
-import 'package:training_note_app/services/crud_services/cloud/firebase_cloud_storage.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_bloc.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_events.dart';
 import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
@@ -24,11 +23,8 @@ class PropertiesViewBuilder extends StatefulWidget {
 }
 
 class _PropertiesViewBuilderState extends State<PropertiesViewBuilder> {
-  late final FirebaseCloudStorage _firebaseCloudStorageService;
-
   @override
   void initState() {
-    _firebaseCloudStorageService = FirebaseCloudStorage();
     super.initState();
   }
 
@@ -60,7 +56,7 @@ class _PropertiesViewBuilderState extends State<PropertiesViewBuilder> {
         builder: (context, state) {
           if (state is CrudStatePropertiesView) {
             return PropertiesList(
-              firebaseCloudStorageService: _firebaseCloudStorageService,
+              state: state,
             );
           }
           if (state is CrudStateGetProperty) {

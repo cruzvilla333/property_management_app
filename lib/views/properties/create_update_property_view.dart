@@ -6,6 +6,7 @@ import 'package:training_note_app/services/crud_services/crud_bloc/crud_bloc.dar
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_events.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.dart';
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
+import 'package:training_note_app/utilities/navigation/navigation_utilities.dart';
 
 class CreateEditPropertyView extends StatefulWidget {
   final CrudStateGetProperty state;
@@ -70,13 +71,12 @@ class _CreateEditPropertyViewState extends State<CreateEditPropertyView> {
                           monthlyPrice: int.parse(_monthlyPriceController.text
                               .replaceAll(RegExp(r','), '')),
                         ));
+                    lastPage(context: context);
                   }
                 },
                 icon: const Icon(Icons.check)),
             IconButton(
-                onPressed: () => context
-                    .read<CrudBloc>()
-                    .add(const CrudEventPropertiesView()),
+                onPressed: () => lastPage(context: context),
                 icon: const Icon(Icons.clear))
           ],
         ),

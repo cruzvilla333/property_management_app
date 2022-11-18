@@ -6,12 +6,14 @@ class CloudPropertyPayment {
   String propertyId;
   int paymentAmount;
   String paymentMethod;
+  DateTime paymentDate;
 
   CloudPropertyPayment({
     required this.paymentAmount,
     required this.paymentMethod,
     required this.documentId,
     required this.propertyId,
+    required this.paymentDate,
   });
 
   CloudPropertyPayment.fromSnapshot(
@@ -19,5 +21,7 @@ class CloudPropertyPayment {
       : documentId = snapshot.id,
         propertyId = snapshot.data()[propertyIdFieldName] as String,
         paymentAmount = snapshot.data()[paymentAmountFieldName] as int,
-        paymentMethod = snapshot.data()[paymentMethodFieldName] as String;
+        paymentMethod = snapshot.data()[paymentMethodFieldName] as String,
+        paymentDate =
+            (snapshot.data()[paymentDateFieldName] as Timestamp).toDate();
 }

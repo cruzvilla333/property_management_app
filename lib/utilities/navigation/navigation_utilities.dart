@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.dart';
 
 import '../../services/crud_services/crud_bloc/crud_bloc.dart';
 import '../../services/crud_services/crud_bloc/crud_events.dart';
@@ -22,10 +23,18 @@ class Stack<E> {
 
 var navigationStack = Stack<Object>();
 
-void goBack({required BuildContext context}) {
+void lastPage({required BuildContext context}) {
   var navigator = navigationStack.pop();
   navigator = navigationStack.pop();
   if (navigator is CrudEvent) {
     context.read<CrudBloc>().add(navigator);
   }
+}
+
+CrudState currentPage() {
+  var navigator = navigationStack.pop();
+  if (navigator is CrudState) {
+    return navigator;
+  }
+  return const CrudStateLoading(text: 'Finding navigation page');
 }

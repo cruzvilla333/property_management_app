@@ -15,7 +15,9 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
       (event, emit) {
         emit(const CrudStateLoading(text: 'Getting properties'));
         navigationStack.push(event);
-        emit(const CrudStatePropertiesView());
+        final properties =
+            storageProvider.allProperties(ownerUserId: user().id);
+        emit(CrudStatePropertiesView(properties: properties));
       },
     );
     on<CrudEventLoading>((event, emit) {
@@ -27,6 +29,7 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
             text: event.property != null
                 ? 'Getting property...'
                 : 'Creating property...'));
+        navigationStack.push(event);
         emit(CrudStateGetProperty(property: event.property));
       },
     );
@@ -45,16 +48,19 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
           } else {
             await storageProvider.updateProperty(property: property);
           }
-          emit(const CrudStatePropertiesView());
         } on Exception catch (e) {
           emit(CrudStateCreateOrUpdateProperty(exception: e));
         }
       },
     );
     on<CrudEventDeleteProperty>((event, emit) async {
+      emit(const CrudStateLoading(text: 'Deleting property'));
       try {
+        await storageProvider.deleteAllPayments(
+            propertyId: event.property.documentId);
         await storageProvider.deleteProperty(
             documentId: event.property.documentId);
+        emit(currentPage());
       } on Exception catch (e) {
         emit(CrudStateDeleteProperty(exception: e));
       }
@@ -93,11 +99,10 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
       (event, emit) async {
         emit(const CrudStateLoading(text: 'Getting payment history'));
         try {
-          final payments = await storageProvider.getPropertyPayments(
+          final payments = storageProvider.allPayments(
               propertyId: event.property.documentId);
           navigationStack.push(event);
-          emit(CrudStatePaymentHistory(
-              property: event.property, payments: payments));
+          emit(CrudStatePaymentHistory(payments: payments));
         } on Exception catch (e) {
           emit(CrudStatePropertyInfo(property: event.property, exception: e));
         }

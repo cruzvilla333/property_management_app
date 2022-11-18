@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.dart';
 import 'package:training_note_app/views/properties/properties_list_view.dart';
 import 'package:training_note_app/helpers/loading/loading_overlay.dart';
 import '../../enums/menu_action.dart';
 import '../../services/auth/auth_bloc/auth_bloc.dart';
 import '../../services/auth/auth_bloc/auth_events.dart';
-import '../../services/auth/auth_tools.dart';
 import '../../services/crud_services/cloud/cloud_property.dart';
-import '../../services/crud_services/cloud/firebase_cloud_storage.dart';
 import '../../services/crud_services/crud_bloc/crud_bloc.dart';
 import '../../services/crud_services/crud_bloc/crud_events.dart';
 
 class PropertiesList extends StatelessWidget {
-  const PropertiesList({
-    super.key,
-    required this.firebaseCloudStorageService,
-  });
-  final FirebaseCloudStorage firebaseCloudStorageService;
-
+  const PropertiesList({super.key, required this.state});
+  final CrudStatePropertiesView state;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,8 +43,7 @@ class PropertiesList extends StatelessWidget {
         ],
       ),
       body: StreamBuilder(
-        stream:
-            firebaseCloudStorageService.allProperties(ownerUserId: user().id),
+        stream: state.properties,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:

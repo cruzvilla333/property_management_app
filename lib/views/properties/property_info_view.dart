@@ -50,7 +50,7 @@ class _PropertyInfoViewState extends State<PropertyInfoView> {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-              onPressed: () => goBack(context: context),
+              onPressed: () => lastPage(context: context),
               icon: const Icon(Icons.arrow_back)),
           title: Text(widget.state.property.title),
         ),

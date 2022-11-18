@@ -31,13 +31,16 @@ class FirebaseCloudStorage {
     required String paymentMethod,
   }) async {
     try {
+      final date = DateTime.now();
       final payment = await payments.add({
         propertyIdFieldName: propertyId,
         paymentAmountFieldName: paymentAmount,
         paymentMethodFieldName: paymentMethod,
+        paymentDateFieldName: date,
       });
       final newPayment = await payment.get();
       return CloudPropertyPayment(
+        paymentDate: date,
         documentId: newPayment.id,
         propertyId: propertyId,
         paymentAmount: paymentAmount,
@@ -103,6 +106,12 @@ class FirebaseCloudStorage {
       properties.snapshots().map((event) => event.docs
           .map((doc) => CloudProperty.fromSnapshot(doc))
           .where((property) => property.ownerUserId == ownerUserId));
+
+  Stream<Iterable<CloudPropertyPayment>> allPayments(
+          {required String propertyId}) =>
+      payments.snapshots().map((event) => event.docs
+          .map((doc) => CloudPropertyPayment.fromSnapshot(doc))
+          .where((payment) => payment.propertyId == propertyId));
 
   Future<CloudProperty> getProperty({
     required String documentId,
