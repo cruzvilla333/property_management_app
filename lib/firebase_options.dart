@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAYtcP6kQz7ZT-FGK17rFw2ciLyBaMUlo4',
-    appId: '1:573611467302:android:7e860ff7b53a5996547ce7',
-    messagingSenderId: '573611467302',
-    projectId: 'training-note-app',
-    storageBucket: 'training-note-app.appspot.com',
+    apiKey: 'AIzaSyDLgKi_NIaJj4vMTnViDKEU36Rns3TYwZc',
+    appId: '1:649016749443:android:7cde119fc6fb58600d1ab6',
+    messagingSenderId: '649016749443',
+    projectId: 'property-manager-ca0c6',
+    storageBucket: 'property-manager-ca0c6.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD2sJqU6tADADq0ti1OdOgvhtURdbV7KQE',
-    appId: '1:573611467302:ios:71f4bda2ed9f19a0547ce7',
-    messagingSenderId: '573611467302',
-    projectId: 'training-note-app',
-    storageBucket: 'training-note-app.appspot.com',
-    iosClientId: '573611467302-sno9e8p41k0r8ntuse4r5507da8a937r.apps.googleusercontent.com',
+    apiKey: 'AIzaSyAenbaqzjcN3j14I2vixTSTNdyvLZJtiwM',
+    appId: '1:649016749443:ios:a3f74da13a1a20110d1ab6',
+    messagingSenderId: '649016749443',
+    projectId: 'property-manager-ca0c6',
+    storageBucket: 'property-manager-ca0c6.appspot.com',
+    iosClientId: '649016749443-2k2d774782g2er2jjcm074sn8fvhhnv8.apps.googleusercontent.com',
     iosBundleId: 'training.app.trainingNoteApp',
   );
 }

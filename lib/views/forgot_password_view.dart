@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
+import 'package:training_note_app/utilities/dialogs/loading_functions.dart';
 import 'package:training_note_app/utilities/dialogs/password_reset_email_sent_dialog.dart';
 
-import '../services/auth/bloc/auth_bloc.dart';
-import '../services/auth/bloc/auth_events.dart';
-import '../services/auth/bloc/auth_states.dart';
+import '../services/auth/auth_bloc/auth_bloc.dart';
+import '../services/auth/auth_bloc/auth_events.dart';
+import '../services/auth/auth_bloc/auth_states.dart';
 
 class ForgotPasswordView extends StatefulWidget {
   const ForgotPasswordView({super.key});
@@ -33,6 +34,8 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
+        handleLoading(context: context, state: state);
+
         if (state is AuthStateForgotPassword) {
           if (state.hasSentEmail) {
             _controller.clear();
@@ -50,7 +53,6 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(children: [
-            const Text(''),
             TextField(
               keyboardType: TextInputType.emailAddress,
               autocorrect: false,
@@ -69,12 +71,6 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                     );
               },
               child: const Text('Send password reset email'),
-            ),
-            TextButton(
-              onPressed: () {
-                context.read<AuthBloc>().add(const AuthEventLogOut());
-              },
-              child: const Text('Back to login page'),
             ),
           ]),
         ),

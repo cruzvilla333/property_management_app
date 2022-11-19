@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "573611467302",
-    "project_id": "training-note-app",
-    "storage_bucket": "training-note-app.appspot.com"
+    "project_number": "649016749443",
+    "project_id": "property-manager-ca0c6",
+    "storage_bucket": "property-manager-ca0c6.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:573611467302:android:7e860ff7b53a5996547ce7",
+        "mobilesdk_app_id": "1:649016749443:android:7cde119fc6fb58600d1ab6",
         "android_client_info": {
           "package_name": "training.app.training_note_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "573611467302-pvh5abc8i84acs3j6j9m58a4lasjrstq.apps.googleusercontent.com",
+          "client_id": "649016749443-33ph8sa3rej456t7uhm4gqu1l7uab929.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAYtcP6kQz7ZT-FGK17rFw2ciLyBaMUlo4"
+          "current_key": "AIzaSyDLgKi_NIaJj4vMTnViDKEU36Rns3TYwZc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "573611467302-pvh5abc8i84acs3j6j9m58a4lasjrstq.apps.googleusercontent.com",
+              "client_id": "649016749443-33ph8sa3rej456t7uhm4gqu1l7uab929.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

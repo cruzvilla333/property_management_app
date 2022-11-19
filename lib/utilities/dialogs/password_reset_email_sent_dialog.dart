@@ -6,6 +6,6 @@ Future<void> showPasswordResetSentDialog(BuildContext context) {
     context: context,
     title: 'Password Reset',
     content: 'We have sent you a password reset email',
-    optionsBuilder: () => {'': false},
+    optionsBuilder: () => {'Ok': false},
   );
 }

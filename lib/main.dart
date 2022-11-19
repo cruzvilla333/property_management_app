@@ -1,30 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:training_note_app/constants/routes.dart';
-import 'package:training_note_app/helpers/loading/loading_screen.dart';
 import 'package:training_note_app/services/auth/auth_service.dart';
-import 'package:training_note_app/services/auth/bloc/auth_bloc.dart';
-import 'package:training_note_app/services/auth/bloc/auth_events.dart';
-import 'package:training_note_app/services/auth/bloc/auth_states.dart';
+import 'package:training_note_app/services/auth/auth_bloc/auth_bloc.dart';
+import 'package:training_note_app/services/auth/auth_bloc/auth_events.dart';
+import 'package:training_note_app/services/auth/auth_bloc/auth_states.dart';
+import 'package:training_note_app/services/crud_services/cloud/firebase_cloud_storage.dart';
+import 'package:training_note_app/services/crud_services/crud_bloc/crud_bloc.dart';
+import 'package:training_note_app/utilities/routes/app_routes.dart';
 import 'package:training_note_app/views/forgot_password_view.dart';
 import 'package:training_note_app/views/login_view.dart';
-import 'package:training_note_app/views/notes/notes_view.dart';
+import 'package:training_note_app/views/properties/properties_view_builder.dart';
 import 'package:training_note_app/views/register_view.dart';
 import 'package:training_note_app/views/verify_email_view.dart';
+
+import 'helpers/loading/loading_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
-    MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.yellow,
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(AuthService.firebase()),
+        ),
+        BlocProvider<CrudBloc>(
+          create: (context) => CrudBloc(FirebaseCloudStorage()),
+        ),
+      ],
+      child: MaterialApp.router(
+        title: 'Router test',
+        theme: ThemeData(
+          primarySwatch: Colors.red,
+        ),
+        routerConfig: router,
       ),
-      home: BlocProvider<AuthBloc>(
-        create: (context) => AuthBloc(AuthService.firebase()),
-        child: const HomePage(),
-      ),
-      routes: routes,
     ),
   );
 }
@@ -37,10 +46,10 @@ class HomePage extends StatelessWidget {
     context.read<AuthBloc>().add(const AuthEventInitialize());
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
-        if (state.isLoading) {
+        if (state is AuthStateLoading) {
           LoadingScreen().show(
             context: context,
-            text: state.loadingText ?? 'Please wait a moment',
+            text: state.text,
           );
         } else {
           LoadingScreen().hide();
@@ -54,7 +63,7 @@ class HomePage extends StatelessWidget {
           return const RegisterView();
         }
         if (state is AuthStateLoggedIn) {
-          return const NotesView();
+          return const PropertiesViewBuilder();
         }
         if (state is AuthStateVerifyEmail) {
           return const VerifyEmailView();

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:training_note_app/services/auth/bloc/auth_events.dart';
+import 'package:go_router/go_router.dart';
+import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
-
-import '../services/auth/bloc/auth_bloc.dart';
-import '../services/auth/bloc/auth_states.dart';
+import 'package:training_note_app/utilities/routes/app_routes.dart';
+import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
+import '../services/auth/auth_bloc/auth_bloc.dart';
+import '../services/auth/auth_bloc/auth_states.dart';
+import '../utilities/dialogs/loading_functions.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -35,10 +38,13 @@ class _RegisterViewState extends State<RegisterView> {
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) async {
+        handleLoading(context: context, state: state);
         if (state is AuthStateRegistering) {
           if (state.exception != null) {
             await showErrorDialog(context, state.exception.toString());
           }
+        } else {
+          handleAuthRouting(context: context, state: state);
         }
       },
       child: Scaffold(
@@ -68,16 +74,15 @@ class _RegisterViewState extends State<RegisterView> {
                 ),
                 TextButton(
                   onPressed: () async {
-                    context
-                        .read<AuthBloc>()
-                        .add(AuthEventRegister(_email.text, _password.text));
+                    attemptRegister(
+                        email: _email.text,
+                        password: _password.text,
+                        context: context);
                   },
                   child: const Text('Register'),
                 ),
                 TextButton(
-                    onPressed: () {
-                      context.read<AuthBloc>().add(const AuthEventLogOut());
-                    },
+                    onPressed: () => context.goNamed(loginPage),
                     child: const Text('Already registered?'))
               ],
             ),
