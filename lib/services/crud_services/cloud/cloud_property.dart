@@ -9,6 +9,7 @@ class CloudProperty {
   String address;
   int monthlyPrice;
   int _moneyDue;
+  DateTime? currentDate;
   CloudProperty({
     required this.documentId,
     required this.ownerUserId,
@@ -26,7 +27,10 @@ class CloudProperty {
         title = snapshot.data()[titleFieldName] as String,
         address = snapshot.data()[addressFieldName] as String,
         monthlyPrice = snapshot.data()[monthlyPriceFieldName] as int,
-        _moneyDue = snapshot.data()[moneyDueFieldName] as int;
+        _moneyDue = snapshot.data()[moneyDueFieldName] as int,
+        currentDate =
+            (snapshot.data()[propertyCurrentDateFieldName] as Timestamp)
+                .toDate();
 
   int resetMoneyDue() {
     _moneyDue = monthlyPrice;

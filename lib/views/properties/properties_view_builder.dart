@@ -58,11 +58,11 @@ class _PropertiesViewBuilderState extends State<PropertiesViewBuilder> {
           if (state is CrudStateDisableLoading) {
             currentPage(context: context);
           }
-          if (state is CrudStatePropertiesView) {
-            return PropertiesList(
-              state: state,
-            );
-          }
+          // if (state is CrudStatePropertiesView) {
+          //   return PropertiesList(
+          //     state: state,
+          //   );
+          // }
           if (state is CrudStateGetProperty) {
             return CreateEditPropertyView(
               state: state,

@@ -101,6 +101,38 @@ class FirebaseCloudStorage {
     }
   }
 
+  // Future<void> updatePropertyField(
+  //     {required String propertyId,
+  //     int? monthlyPrice,
+  //     String? title,
+  //     String? address,
+  //     int? moneyDue,
+  //     DateTime? currentDate}) async {
+  //   try {
+  //     if (title != null) {
+  //       properties.doc(propertyId).update({titleFieldName: title});
+  //     }
+  //     if (address != null) {
+  //       properties.doc(propertyId).update({addressFieldName: address});
+  //     }
+  //     if (monthlyPrice != null) {
+  //       properties
+  //           .doc(propertyId)
+  //           .update({monthlyPriceFieldName: monthlyPrice});
+  //     }
+  //     if (moneyDue != null) {
+  //       properties.doc(propertyId).update({moneyDueFieldName: moneyDue});
+  //     }
+  //     if (currentDate != null) {
+  //       properties
+  //           .doc(propertyId)
+  //           .update({propertyCurrentDateFieldName: currentDate});
+  //     }
+  //   } catch (e) {
+  //     throw CouldNotUpdatePropertyException();
+  //   }
+  // }
+
   Stream<Iterable<CloudProperty>> allProperties(
           {required String ownerUserId}) =>
       properties.snapshots().map((event) => event.docs
@@ -109,9 +141,25 @@ class FirebaseCloudStorage {
 
   Stream<Iterable<CloudPropertyPayment>> allPayments(
           {required String propertyId}) =>
-      payments.snapshots().map((event) => event.docs
-          .map((doc) => CloudPropertyPayment.fromSnapshot(doc))
-          .where((payment) => payment.propertyId == propertyId));
+      payments.orderBy(paymentDateFieldName, descending: true).snapshots().map(
+          (event) => event.docs
+              .map((doc) => CloudPropertyPayment.fromSnapshot(doc))
+              .where((payment) => payment.propertyId == propertyId));
+
+  // Future<void> adjustMoneyDue({
+  //   required CloudProperty property,
+  // }) async {
+  //   final currDate = DateTime.now();
+  //   final propertyDate = property.currentDate!;
+  //   final months = ((currDate.year - propertyDate.year) * 12) -
+  //       (propertyDate.month - currDate.month);
+
+  //   await updatePropertyField(
+  //     propertyId: property.documentId,
+  //     moneyDue: property.moneyDue + (property.monthlyPrice * months),
+  //     currentDate: currDate,
+  //   );
+  // }
 
   Future<CloudProperty> getProperty({
     required String documentId,
@@ -183,6 +231,7 @@ class FirebaseCloudStorage {
         addressFieldName: address,
         monthlyPriceFieldName: monthlyPrice,
         moneyDueFieldName: monthlyPrice,
+        propertyCurrentDateFieldName: DateTime.now(),
       });
       final newNote = await document.get();
       return CloudProperty(

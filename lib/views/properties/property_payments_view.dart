@@ -9,12 +9,30 @@ import '../../services/crud_services/crud_bloc/crud_events.dart';
 import '../../utilities/dialogs/delete_dialog.dart';
 import '../../utilities/navigation/navigation_utilities.dart';
 
-class PropertyPaymentsView extends StatelessWidget {
+class PropertyPaymentsView extends StatefulWidget {
   const PropertyPaymentsView({super.key, required this.state});
   final CrudStatePaymentHistory state;
 
   @override
-  Widget build(BuildContext context, [bool mounted = true]) {
+  State<PropertyPaymentsView> createState() => _PropertyPaymentsViewState();
+}
+
+class _PropertyPaymentsViewState extends State<PropertyPaymentsView> {
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Payment history'),
@@ -23,7 +41,7 @@ class PropertyPaymentsView extends StatelessWidget {
             icon: const Icon(Icons.arrow_back)),
       ),
       body: StreamBuilder<Object>(
-          stream: state.payments,
+          stream: widget.state.payments,
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
@@ -32,6 +50,8 @@ class PropertyPaymentsView extends StatelessWidget {
                   final allPayments =
                       snapshot.data as Iterable<CloudPropertyPayment>;
                   return ListView.builder(
+                    reverse: true,
+                    controller: _scrollController,
                     itemCount: allPayments.length,
                     itemBuilder: (context, index) {
                       final payment = allPayments.elementAt(index);
