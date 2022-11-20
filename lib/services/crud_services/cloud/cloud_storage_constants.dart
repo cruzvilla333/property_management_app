@@ -9,3 +9,4 @@ const propertyIdFieldName = 'property_id';
 const paymentAmountFieldName = 'payment_amount';
 const paymentMethodFieldName = 'payment_method';
 const paymentDateFieldName = 'payment_date';
+const propertyCurrentDateFieldName = 'current_date';

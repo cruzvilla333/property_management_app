@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_bloc.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_events.dart';
+import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
 import 'package:training_note_app/utilities/navigation/navigation_utilities.dart';
 import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
-import 'package:training_note_app/utilities/routes/crud_route_handling.dart';
 import 'package:training_note_app/views/properties/create_update_property_view.dart';
 import '../../services/auth/auth_bloc/auth_bloc.dart';
 import '../../services/auth/auth_bloc/auth_states.dart';
@@ -36,8 +36,11 @@ class _PropertiesViewBuilderState extends State<PropertiesViewBuilder> {
       listeners: [
         BlocListener<CrudBloc, CrudState>(
           listener: (context, state) {
-            handleLoading(context: context, state: state);
-            handleCrudRouting(context: context, state: state);
+            if (state.exception != null) {
+              showErrorDialog(context, state.toString());
+            } else {
+              handleLoading(context: context, state: state);
+            }
           },
         ),
         BlocListener<AuthBloc, AuthState>(

@@ -12,9 +12,14 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
           const CrudStateUninitialized(),
         ) {
     on<CrudEventPropertiesView>(
-      (event, emit) {
+      (event, emit) async {
         emit(const CrudStateLoading(text: 'Getting properties'));
         navigationStack.push(event);
+        final currProperties =
+            await storageProvider.getProperties(ownerUserId: user().id);
+        for (CloudProperty property in currProperties) {
+          await storageProvider.adjustMoneyDue(property: property);
+        }
         final properties =
             storageProvider.allProperties(ownerUserId: user().id);
         emit(CrudStatePropertiesView(properties: properties));
@@ -109,9 +114,11 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
       },
     );
     on<CrudEventDeletePayment>((event, emit) async {
+      emit(const CrudStateLoading(text: 'Deleting payment'));
       try {
         await storageProvider.deletePayment(
             documentId: event.payment.documentId);
+        emit(const CrudStateDisableLoading());
       } on Exception catch (e) {
         emit(CrudStateDeletePayment(exception: e));
       }

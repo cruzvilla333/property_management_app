@@ -8,16 +8,15 @@ class CloudProperty {
   String title;
   String address;
   int monthlyPrice;
-  int _moneyDue;
-  CloudProperty({
-    required this.documentId,
-    required this.ownerUserId,
-    required this.title,
-    required this.address,
-    required this.monthlyPrice,
-  }) : _moneyDue = monthlyPrice;
-
-  int get moneyDue => _moneyDue;
+  int moneyDue;
+  DateTime? currentDate;
+  CloudProperty(
+      {required this.documentId,
+      required this.ownerUserId,
+      required this.title,
+      required this.address,
+      required this.monthlyPrice,
+      required this.moneyDue});
 
   CloudProperty.fromSnapshot(
       QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
@@ -26,16 +25,19 @@ class CloudProperty {
         title = snapshot.data()[titleFieldName] as String,
         address = snapshot.data()[addressFieldName] as String,
         monthlyPrice = snapshot.data()[monthlyPriceFieldName] as int,
-        _moneyDue = snapshot.data()[moneyDueFieldName] as int;
+        moneyDue = snapshot.data()[moneyDueFieldName] as int,
+        currentDate =
+            (snapshot.data()[propertyCurrentDateFieldName] as Timestamp)
+                .toDate();
 
   int resetMoneyDue() {
-    _moneyDue = monthlyPrice;
-    return _moneyDue;
+    moneyDue = monthlyPrice;
+    return moneyDue;
   }
 
   int makePayment({required int amount}) {
-    if (amount > _moneyDue) throw PaymentExceedsRequiredAmount();
-    _moneyDue -= amount;
-    return _moneyDue;
+    if (amount > moneyDue) throw PaymentExceedsRequiredAmount();
+    moneyDue -= amount;
+    return moneyDue;
   }
 }

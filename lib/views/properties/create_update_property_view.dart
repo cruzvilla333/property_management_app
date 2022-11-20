@@ -69,6 +69,9 @@ class _CreateEditPropertyViewState extends State<CreateEditPropertyView> {
                       address: _addressController.text,
                       monthlyPrice: int.parse(_monthlyPriceController.text
                           .replaceAll(RegExp(r','), '')),
+                      moneyDue: _property?.moneyDue ??
+                          int.parse(_monthlyPriceController.text
+                              .replaceAll(RegExp(r','), '')),
                     );
                     context
                         .read<CrudBloc>()
