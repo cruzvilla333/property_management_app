@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:training_note_app/designs/buttons/button_designs.dart';
 import 'package:training_note_app/services/auth/auth_bloc/auth_bloc.dart';
 import 'package:training_note_app/services/auth/auth_bloc/auth_events.dart';
 import 'package:training_note_app/services/auth/auth_bloc/auth_states.dart';
@@ -8,7 +9,7 @@ import 'package:training_note_app/utilities/dialogs/loading_functions.dart';
 import 'package:training_note_app/utilities/routes/app_routes.dart';
 import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
 
-import '../utilities/app_colors.dart';
+import '../designs/colors/app_colors.dart';
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({super.key});
@@ -42,15 +43,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
               ),
               const SizedBox(height: 50),
               TextButton(
-                style: ButtonStyle(
-                    backgroundColor:
-                        const MaterialStatePropertyAll(Colors.white),
-                    shape: MaterialStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                    ),
-                    fixedSize: const MaterialStatePropertyAll(Size(200, 10))),
+                style: standardButtonStyle(width: 200),
                 onPressed: () async {
                   context.read<AuthBloc>().add(
                         const AuthEventSendEmailVerification(),
@@ -62,15 +55,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                 ),
               ),
               TextButton(
-                style: ButtonStyle(
-                    backgroundColor:
-                        const MaterialStatePropertyAll(Colors.white),
-                    shape: MaterialStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                    ),
-                    fixedSize: const MaterialStatePropertyAll(Size(200, 10))),
+                style: standardButtonStyle(width: 200),
                 onPressed: () => context.goNamed(loginPage),
                 child: const Text(
                   'Verified?',

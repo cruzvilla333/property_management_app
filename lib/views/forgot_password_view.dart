@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:training_note_app/utilities/app_colors.dart';
+import 'package:training_note_app/designs/buttons/button_designs.dart';
+import 'package:training_note_app/designs/colors/app_colors.dart';
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
 import 'package:training_note_app/utilities/dialogs/loading_functions.dart';
 import 'package:training_note_app/utilities/dialogs/password_reset_email_sent_dialog.dart';
 
+import '../designs/textfields/textfield_designs.dart';
 import '../services/auth/auth_bloc/auth_bloc.dart';
 import '../services/auth/auth_bloc/auth_events.dart';
 import '../services/auth/auth_bloc/auth_states.dart';
@@ -64,25 +66,12 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                 keyboardType: TextInputType.emailAddress,
                 autocorrect: false,
                 controller: _controller,
-                decoration: InputDecoration(
-                  hintText: 'Your email here...',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100)),
-                  fillColor: Colors.white,
-                  filled: true,
-                ),
+                decoration:
+                    standartTextFieldDecoration(text: 'Your email here'),
               ),
               const SizedBox(height: 20),
               TextButton(
-                style: ButtonStyle(
-                    backgroundColor:
-                        const MaterialStatePropertyAll(Colors.white),
-                    shape: MaterialStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                    ),
-                    fixedSize: const MaterialStatePropertyAll(Size(300, 10))),
+                style: standardButtonStyle(width: 300),
                 onPressed: () {
                   context.read<AuthBloc>().add(
                         AuthEventForgotPassword(

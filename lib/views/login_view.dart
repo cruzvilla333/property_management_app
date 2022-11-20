@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:training_note_app/designs/buttons/button_designs.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/auth/auth_bloc/auth_bloc.dart';
 import 'package:training_note_app/services/auth/auth_bloc/auth_events.dart';
@@ -9,6 +10,9 @@ import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
 import 'package:training_note_app/utilities/dialogs/loading_functions.dart';
 import 'package:training_note_app/utilities/routes/app_routes.dart';
 import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
+
+import '../designs/colors/app_colors.dart';
+import '../designs/textfields/textfield_designs.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -53,9 +57,9 @@ class _LoginViewState extends State<LoginView> {
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.blue.shade600,
+          backgroundColor: backGroundColor,
           appBar: AppBar(
-            title: const Text('Login'),
+            title: const Text('Please login'),
           ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -73,14 +77,8 @@ class _LoginViewState extends State<LoginView> {
                   enableSuggestions: false,
                   autocorrect: false,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    hintText: 'Enter your email',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    fillColor: Colors.white,
-                    filled: true,
-                  ),
+                  decoration:
+                      standartTextFieldDecoration(text: 'Enter your email'),
                 ),
                 const SizedBox(height: 10),
                 TextField(
@@ -88,25 +86,12 @@ class _LoginViewState extends State<LoginView> {
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
-                  decoration: InputDecoration(
-                    hintText: 'Enter your password',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(100)),
-                    fillColor: Colors.white,
-                    filled: true,
-                  ),
+                  decoration:
+                      standartTextFieldDecoration(text: 'Enter your password'),
                 ),
                 const SizedBox(height: 20),
                 TextButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          const MaterialStatePropertyAll(Colors.white),
-                      shape: MaterialStatePropertyAll(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                      ),
-                      fixedSize: const MaterialStatePropertyAll(Size(300, 10))),
+                  style: standardButtonStyle(width: 300),
                   onPressed: () async {
                     attemptLogIn(
                       email: _email.text,
@@ -123,15 +108,7 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 ),
                 TextButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          const MaterialStatePropertyAll(Colors.white),
-                      shape: MaterialStatePropertyAll(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                      ),
-                      fixedSize: const MaterialStatePropertyAll(Size(300, 10))),
+                  style: standardButtonStyle(width: 300),
                   onPressed: () => context.goNamed(registerPage),
                   child: const Text("Sing up"),
                 ),

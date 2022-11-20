@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:training_note_app/designs/buttons/button_designs.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
 import 'package:training_note_app/utilities/routes/app_routes.dart';
 import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
+import '../designs/textfields/textfield_designs.dart';
 import '../services/auth/auth_bloc/auth_bloc.dart';
 import '../services/auth/auth_bloc/auth_states.dart';
+import '../designs/colors/app_colors.dart';
 import '../utilities/dialogs/loading_functions.dart';
 
 class RegisterView extends StatefulWidget {
@@ -50,7 +53,7 @@ class _RegisterViewState extends State<RegisterView> {
       child: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: Scaffold(
-            backgroundColor: Colors.blue.shade600,
+            backgroundColor: backGroundColor,
             appBar: AppBar(
               title: const Text('Register'),
             ),
@@ -63,14 +66,8 @@ class _RegisterViewState extends State<RegisterView> {
                     enableSuggestions: false,
                     autocorrect: false,
                     keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      hintText: 'Enter your email',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      fillColor: Colors.white,
-                      filled: true,
-                    ),
+                    decoration:
+                        standartTextFieldDecoration(text: 'Enter your email'),
                   ),
                   const SizedBox(height: 10),
                   TextField(
@@ -78,26 +75,12 @@ class _RegisterViewState extends State<RegisterView> {
                     obscureText: true,
                     enableSuggestions: false,
                     autocorrect: false,
-                    decoration: InputDecoration(
-                      hintText: 'Enter your password',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(100)),
-                      fillColor: Colors.white,
-                      filled: true,
-                    ),
+                    decoration: standartTextFieldDecoration(
+                        text: 'Enter your password'),
                   ),
                   const SizedBox(height: 20),
                   TextButton(
-                    style: ButtonStyle(
-                        backgroundColor:
-                            const MaterialStatePropertyAll(Colors.white),
-                        shape: MaterialStatePropertyAll(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                        ),
-                        fixedSize:
-                            const MaterialStatePropertyAll(Size(300, 10))),
+                    style: standardButtonStyle(width: 300),
                     onPressed: () async {
                       attemptRegister(
                           email: _email.text,
@@ -107,16 +90,7 @@ class _RegisterViewState extends State<RegisterView> {
                     child: const Text('Register'),
                   ),
                   TextButton(
-                      style: ButtonStyle(
-                          backgroundColor:
-                              const MaterialStatePropertyAll(Colors.white),
-                          shape: MaterialStatePropertyAll(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                          ),
-                          fixedSize:
-                              const MaterialStatePropertyAll(Size(300, 10))),
+                      style: standardButtonStyle(width: 300),
                       onPressed: () => context.goNamed(loginPage),
                       child: const Text('Already registered?'))
                 ],
