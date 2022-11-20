@@ -30,7 +30,7 @@ void main() {
       child: MaterialApp.router(
         title: 'Router test',
         theme: ThemeData(
-          primarySwatch: Colors.red,
+          primarySwatch: Colors.blue,
         ),
         routerConfig: router,
       ),

@@ -16,6 +16,7 @@ class PropertiesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue.shade600,
       appBar: AppBar(
         title: const Text('Your properties'),
         actions: [

@@ -28,37 +28,35 @@ class PropertiesListView extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: ListTile(
-            tileColor: property.moneyDue == 0
-                ? Colors.green.shade200
-                : Colors.red.shade200,
+            tileColor: Colors.white,
             shape: RoundedRectangleBorder(
-              side: BorderSide(
-                  color: property.moneyDue == 0 ? Colors.green : Colors.red,
-                  width: 1),
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(20),
             ),
             onTap: () => onTap(property),
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Title: ${property.title}',
+                  property.title,
                   maxLines: 1,
                   softWrap: true,
                   overflow: TextOverflow.ellipsis,
                 ),
+                const SizedBox(height: 10),
                 Text(
                   'Address: ${property.address}',
                   maxLines: 1,
                   softWrap: true,
                   overflow: TextOverflow.ellipsis,
                 ),
+                const SizedBox(height: 10),
                 Text(
                   'Monthly price: ${property.monthlyPrice.toString().replaceAllMapped(reg, mathFunc)}\$',
                   maxLines: 1,
                   softWrap: true,
                   overflow: TextOverflow.ellipsis,
                 ),
+                const SizedBox(height: 10),
                 Text(
                   'Money due: ${property.moneyDue.toString().replaceAllMapped(reg, mathFunc)}\$',
                   maxLines: 1,
