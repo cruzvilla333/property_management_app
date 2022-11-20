@@ -133,13 +133,13 @@ class FirebaseCloudStorage {
     }
   }
 
-  Stream<Iterable<CloudProperty>> allProperties(
+  Stream<Iterable<CloudProperty>> propertyStream(
           {required String ownerUserId}) =>
       properties.snapshots().map((event) => event.docs.map((doc) {
             return CloudProperty.fromSnapshot(doc);
           }).where((property) => property.ownerUserId == ownerUserId));
 
-  Stream<Iterable<CloudPropertyPayment>> allPayments(
+  Stream<Iterable<CloudPropertyPayment>> paymentStream(
           {required String propertyId}) =>
       payments.orderBy(paymentDateFieldName, descending: true).snapshots().map(
           (event) => event.docs

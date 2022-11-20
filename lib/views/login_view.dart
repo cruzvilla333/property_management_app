@@ -6,10 +6,14 @@ import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/auth/auth_bloc/auth_bloc.dart';
 import 'package:training_note_app/services/auth/auth_bloc/auth_events.dart';
 import 'package:training_note_app/services/auth/auth_bloc/auth_states.dart';
+import 'package:training_note_app/services/crud_services/crud_bloc/crud_events.dart';
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
 import 'package:training_note_app/utilities/dialogs/loading_functions.dart';
+import 'package:training_note_app/utilities/navigation/navigation_utilities.dart';
 import 'package:training_note_app/utilities/routes/app_routes.dart';
 import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
+import 'package:training_note_app/views/forgot_password_view.dart';
+import 'package:training_note_app/views/register_view.dart';
 
 import '../designs/colors/app_colors.dart';
 import '../designs/textfields/textfield_designs.dart';
@@ -24,7 +28,7 @@ class LoginView extends StatefulWidget {
 class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
-
+  //bool _secureState = true;
   @override
   void initState() {
     _email = TextEditingController();
@@ -66,6 +70,7 @@ class _LoginViewState extends State<LoginView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                const SizedBox(height: 100),
                 const Icon(
                   Icons.house_outlined,
                   size: 150,
@@ -77,8 +82,9 @@ class _LoginViewState extends State<LoginView> {
                   enableSuggestions: false,
                   autocorrect: false,
                   keyboardType: TextInputType.emailAddress,
-                  decoration:
-                      standartTextFieldDecoration(text: 'Enter your email'),
+                  decoration: standardTextFieldDecoration(
+                      text: 'Enter your email',
+                      endIcon: const Icon(Icons.email)),
                 ),
                 const SizedBox(height: 10),
                 TextField(
@@ -86,8 +92,9 @@ class _LoginViewState extends State<LoginView> {
                   obscureText: true,
                   enableSuggestions: false,
                   autocorrect: false,
-                  decoration:
-                      standartTextFieldDecoration(text: 'Enter your password'),
+                  decoration: standardTextFieldDecoration(
+                      text: 'Enter your password',
+                      endIcon: const Icon(Icons.security)),
                 ),
                 const SizedBox(height: 20),
                 TextButton(

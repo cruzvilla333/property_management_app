@@ -66,8 +66,9 @@ class _RegisterViewState extends State<RegisterView> {
                     enableSuggestions: false,
                     autocorrect: false,
                     keyboardType: TextInputType.emailAddress,
-                    decoration:
-                        standartTextFieldDecoration(text: 'Enter your email'),
+                    decoration: standardTextFieldDecoration(
+                        text: 'Enter your email',
+                        endIcon: const Icon(Icons.email)),
                   ),
                   const SizedBox(height: 10),
                   TextField(
@@ -75,8 +76,10 @@ class _RegisterViewState extends State<RegisterView> {
                     obscureText: true,
                     enableSuggestions: false,
                     autocorrect: false,
-                    decoration: standartTextFieldDecoration(
-                        text: 'Enter your password'),
+                    decoration: standardTextFieldDecoration(
+                      text: 'Enter your password',
+                      endIcon: const Icon(Icons.security),
+                    ),
                   ),
                   const SizedBox(height: 20),
                   TextButton(

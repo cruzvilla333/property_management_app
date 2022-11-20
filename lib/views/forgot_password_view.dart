@@ -67,7 +67,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                 autocorrect: false,
                 controller: _controller,
                 decoration:
-                    standartTextFieldDecoration(text: 'Your email here'),
+                    standardTextFieldDecoration(text: 'Your email here'),
               ),
               const SizedBox(height: 20),
               TextButton(

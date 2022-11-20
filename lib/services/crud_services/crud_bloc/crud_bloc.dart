@@ -21,7 +21,7 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
           await storageProvider.adjustMoneyDue(property: property);
         }
         final properties =
-            storageProvider.allProperties(ownerUserId: user().id);
+            storageProvider.propertyStream(ownerUserId: user().id);
         emit(CrudStatePropertiesView(properties: properties));
       },
     );
@@ -104,7 +104,7 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
       (event, emit) async {
         emit(const CrudStateLoading(text: 'Getting payment history'));
         try {
-          final payments = storageProvider.allPayments(
+          final payments = storageProvider.paymentStream(
               propertyId: event.property.documentId);
           navigationStack.push(event);
           emit(CrudStatePaymentHistory(payments: payments));
