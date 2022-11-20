@@ -47,46 +47,82 @@ class _RegisterViewState extends State<RegisterView> {
           handleAuthRouting(context: context, state: state);
         }
       },
-      child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Register'),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                TextField(
-                  controller: _email,
-                  enableSuggestions: false,
-                  autocorrect: false,
-                  autofocus: true,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration:
-                      const InputDecoration(hintText: 'Enter your email'),
-                ),
-                TextField(
-                  controller: _password,
-                  obscureText: true,
-                  enableSuggestions: false,
-                  autocorrect: false,
-                  decoration:
-                      const InputDecoration(hintText: 'Enter your password'),
-                ),
-                TextButton(
-                  onPressed: () async {
-                    attemptRegister(
-                        email: _email.text,
-                        password: _password.text,
-                        context: context);
-                  },
-                  child: const Text('Register'),
-                ),
-                TextButton(
-                    onPressed: () => context.goNamed(loginPage),
-                    child: const Text('Already registered?'))
-              ],
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        child: Scaffold(
+            backgroundColor: Colors.blue.shade600,
+            appBar: AppBar(
+              title: const Text('Register'),
             ),
-          )),
+            body: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _email,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      hintText: 'Enter your email',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                      fillColor: Colors.white,
+                      filled: true,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextField(
+                    controller: _password,
+                    obscureText: true,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    decoration: InputDecoration(
+                      hintText: 'Enter your password',
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(100)),
+                      fillColor: Colors.white,
+                      filled: true,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  TextButton(
+                    style: ButtonStyle(
+                        backgroundColor:
+                            const MaterialStatePropertyAll(Colors.white),
+                        shape: MaterialStatePropertyAll(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                        ),
+                        fixedSize:
+                            const MaterialStatePropertyAll(Size(300, 10))),
+                    onPressed: () async {
+                      attemptRegister(
+                          email: _email.text,
+                          password: _password.text,
+                          context: context);
+                    },
+                    child: const Text('Register'),
+                  ),
+                  TextButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              const MaterialStatePropertyAll(Colors.white),
+                          shape: MaterialStatePropertyAll(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                          ),
+                          fixedSize:
+                              const MaterialStatePropertyAll(Size(300, 10))),
+                      onPressed: () => context.goNamed(loginPage),
+                      child: const Text('Already registered?'))
+                ],
+              ),
+            )),
+      ),
     );
   }
 }

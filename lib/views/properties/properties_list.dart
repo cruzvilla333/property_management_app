@@ -9,6 +9,7 @@ import '../../services/auth/auth_bloc/auth_events.dart';
 import '../../services/crud_services/cloud/cloud_property.dart';
 import '../../services/crud_services/crud_bloc/crud_bloc.dart';
 import '../../services/crud_services/crud_bloc/crud_events.dart';
+import '../../utilities/app_colors.dart';
 
 class PropertiesList extends StatelessWidget {
   const PropertiesList({super.key, required this.state});
@@ -16,7 +17,7 @@ class PropertiesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue.shade600,
+      backgroundColor: backGroundColor,
       appBar: AppBar(
         title: const Text('Your properties'),
         actions: [

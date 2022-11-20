@@ -74,7 +74,7 @@ class _LoginViewState extends State<LoginView> {
                   autocorrect: false,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
-                    hintText: '   Enter your email',
+                    hintText: 'Enter your email',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(100),
                     ),
@@ -89,7 +89,7 @@ class _LoginViewState extends State<LoginView> {
                   enableSuggestions: false,
                   autocorrect: false,
                   decoration: InputDecoration(
-                    hintText: '   Enter your password',
+                    hintText: 'Enter your password',
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(100)),
                     fillColor: Colors.white,

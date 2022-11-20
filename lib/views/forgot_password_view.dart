@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:training_note_app/utilities/app_colors.dart';
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
 import 'package:training_note_app/utilities/dialogs/loading_functions.dart';
 import 'package:training_note_app/utilities/dialogs/password_reset_email_sent_dialog.dart';
@@ -46,33 +47,53 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
           }
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Forgot Password'),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(children: [
-            TextField(
-              keyboardType: TextInputType.emailAddress,
-              autocorrect: false,
-              autofocus: true,
-              controller: _controller,
-              decoration: const InputDecoration(
-                hintText: 'Your email here...',
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: backGroundColor,
+          appBar: AppBar(
+            title: const Text('Forgot Password'),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child:
+                Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+              const SizedBox(height: 200),
+              TextField(
+                keyboardType: TextInputType.emailAddress,
+                autocorrect: false,
+                controller: _controller,
+                decoration: InputDecoration(
+                  hintText: 'Your email here...',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(100)),
+                  fillColor: Colors.white,
+                  filled: true,
+                ),
               ),
-            ),
-            TextButton(
-              onPressed: () {
-                context.read<AuthBloc>().add(
-                      AuthEventForgotPassword(
-                        email: _controller.text,
+              const SizedBox(height: 20),
+              TextButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        const MaterialStatePropertyAll(Colors.white),
+                    shape: MaterialStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
                       ),
-                    );
-              },
-              child: const Text('Send password reset email'),
-            ),
-          ]),
+                    ),
+                    fixedSize: const MaterialStatePropertyAll(Size(300, 10))),
+                onPressed: () {
+                  context.read<AuthBloc>().add(
+                        AuthEventForgotPassword(
+                          email: _controller.text,
+                        ),
+                      );
+                },
+                child: const Text('Send password reset email'),
+              ),
+            ]),
+          ),
         ),
       ),
     );

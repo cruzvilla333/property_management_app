@@ -8,6 +8,8 @@ import 'package:training_note_app/utilities/dialogs/loading_functions.dart';
 import 'package:training_note_app/utilities/routes/app_routes.dart';
 import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
 
+import '../utilities/app_colors.dart';
+
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({super.key});
 
@@ -24,22 +26,58 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
         handleAuthRouting(context: context, state: state);
       },
       child: Scaffold(
+        backgroundColor: backGroundColor,
         appBar: AppBar(title: const Text('Verify email')),
-        body: Column(children: [
-          const Text('A verification email has been sent to your address'),
-          TextButton(
-            onPressed: () async {
-              context.read<AuthBloc>().add(
-                    const AuthEventSendEmailVerification(),
-                  );
-            },
-            child: const Text('Resend email'),
-          ),
-          TextButton(
-            onPressed: () => context.goNamed(loginPage),
-            child: const Text('Verified?'),
-          ),
-        ]),
+        body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  'A verification email has been sent to your email address',
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 50),
+              TextButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        const MaterialStatePropertyAll(Colors.white),
+                    shape: MaterialStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
+                    fixedSize: const MaterialStatePropertyAll(Size(200, 10))),
+                onPressed: () async {
+                  context.read<AuthBloc>().add(
+                        const AuthEventSendEmailVerification(),
+                      );
+                },
+                child: const Text(
+                  'Resend email',
+                  style: TextStyle(),
+                ),
+              ),
+              TextButton(
+                style: ButtonStyle(
+                    backgroundColor:
+                        const MaterialStatePropertyAll(Colors.white),
+                    shape: MaterialStatePropertyAll(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
+                    fixedSize: const MaterialStatePropertyAll(Size(200, 10))),
+                onPressed: () => context.goNamed(loginPage),
+                child: const Text(
+                  'Verified?',
+                  style: TextStyle(),
+                ),
+              ),
+            ]),
       ),
     );
   }
