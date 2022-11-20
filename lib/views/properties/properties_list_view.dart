@@ -33,37 +33,69 @@ class PropertiesListView extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             onTap: () => onTap(property),
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  property.title,
-                  maxLines: 1,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  'Address: ${property.address}',
-                  maxLines: 1,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  'Monthly price: ${property.monthlyPrice.toString().replaceAllMapped(reg, mathFunc)}\$',
-                  maxLines: 1,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  'Money due: ${property.moneyDue.toString().replaceAllMapped(reg, mathFunc)}\$',
-                  maxLines: 1,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+            title: SizedBox(
+              height: 130,
+              width: 100,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    property.title,
+                    maxLines: 1,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    property.address,
+                    maxLines: 1,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 17,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  RichText(
+                    text: TextSpan(
+                      text: 'Monthly price: ',
+                      style: const TextStyle(fontSize: 17, color: Colors.black),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text:
+                                '${property.monthlyPrice.toString().replaceAllMapped(reg, mathFunc)}\$',
+                            style: const TextStyle(
+                                fontSize: 17,
+                                color: Color.fromARGB(218, 70, 117, 228))),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  RichText(
+                    text: TextSpan(
+                      text: 'Money due: ',
+                      style: const TextStyle(fontSize: 17, color: Colors.black),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text:
+                                '${property.moneyDue.toString().replaceAllMapped(reg, mathFunc)}\$',
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: property.moneyDue > 0
+                                    ? Colors.red
+                                    : Colors.green)),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,

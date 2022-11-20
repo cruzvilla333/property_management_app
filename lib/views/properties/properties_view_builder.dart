@@ -37,7 +37,7 @@ class _PropertiesViewBuilderState extends State<PropertiesViewBuilder> {
         BlocListener<CrudBloc, CrudState>(
           listener: (context, state) {
             if (state.exception != null) {
-              showErrorDialog(context, state.toString());
+              showErrorDialog(context, state.exception.toString());
             } else {
               handleLoading(context: context, state: state);
             }

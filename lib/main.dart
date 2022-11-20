@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:training_note_app/designs/colors/app_colors.dart';
 import 'package:training_note_app/services/auth/auth_service.dart';
 import 'package:training_note_app/services/auth/auth_bloc/auth_bloc.dart';
 import 'package:training_note_app/services/auth/auth_bloc/auth_events.dart';
@@ -29,9 +30,7 @@ void main() {
       ],
       child: MaterialApp.router(
         title: 'Router test',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+        theme: ThemeData(primarySwatch: generateMaterialColor(Colors.black)),
         routerConfig: router,
       ),
     ),

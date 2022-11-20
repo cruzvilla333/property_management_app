@@ -63,18 +63,22 @@ class _LoginViewState extends State<LoginView> {
           resizeToAvoidBottomInset: false,
           backgroundColor: backGroundColor,
           appBar: AppBar(
-            title: const Text('Please login'),
+            backgroundColor: appBarColor,
+            title: Text(
+              'Please login',
+              style: TextStyle(color: mainAppTextColor),
+            ),
           ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const SizedBox(height: 100),
+                const SizedBox(height: 70),
                 const Icon(
                   Icons.house_outlined,
                   size: 150,
-                  color: Colors.white,
+                  color: houseIcon,
                 ),
                 const SizedBox(height: 20, width: 10),
                 TextField(
@@ -106,18 +110,22 @@ class _LoginViewState extends State<LoginView> {
                       context: context,
                     );
                   },
-                  child: const Text(
+                  child: Text(
                     'Log in',
                     style: TextStyle(
                       fontSize: 15,
                       fontStyle: FontStyle.normal,
+                      color: mainAppTextColor,
                     ),
                   ),
                 ),
                 TextButton(
                   style: standardButtonStyle(width: 300),
                   onPressed: () => context.goNamed(registerPage),
-                  child: const Text("Sing up"),
+                  child: Text(
+                    "Sing up",
+                    style: TextStyle(color: mainAppTextColor),
+                  ),
                 ),
                 TextButton(
                   style: ButtonStyle(
@@ -128,9 +136,9 @@ class _LoginViewState extends State<LoginView> {
                       ),
                       fixedSize: const MaterialStatePropertyAll(Size(200, 10))),
                   onPressed: () => context.goNamed(passwordResetPage),
-                  child: const Text(
+                  child: Text(
                     "Forgot password?",
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: mainAppTextColor),
                   ),
                 ),
               ],

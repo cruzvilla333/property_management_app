@@ -42,11 +42,7 @@ class _PropertyInfoViewState extends State<PropertyInfoView> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<CrudBloc, CrudState>(
-      listener: (context, state) async {
-        if (state.exception != null) {
-          await showErrorDialog(context, state.exception.toString());
-        }
-      },
+      listener: (context, state) async {},
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(

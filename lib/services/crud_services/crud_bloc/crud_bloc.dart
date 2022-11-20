@@ -65,10 +65,10 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
             propertyId: event.property.documentId);
         await storageProvider.deleteProperty(
             documentId: event.property.documentId);
-        emit(const CrudStateDisableLoading());
       } on Exception catch (e) {
         emit(CrudStateDeleteProperty(exception: e));
       }
+      emit(const CrudStateDisableLoading());
     });
     on<CrudEventPropertyInfo>(
       (event, emit) {
@@ -78,8 +78,8 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
     );
     on<CrudEventMakePayment>(
       (event, emit) async {
+        emit(const CrudStateLoading(text: 'Making payment...'));
         try {
-          emit(const CrudStateLoading(text: 'Making payment...'));
           if (event.resetMoneyDue == true) {
             event.property.resetMoneyDue();
           } else {
@@ -91,13 +91,13 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
             );
           }
           await storageProvider.updateProperty(property: event.property);
-          emit(CrudStatePropertyInfo(property: event.property));
         } on Exception catch (e) {
           emit(CrudStatePropertyInfo(
             property: event.property,
             exception: e,
           ));
         }
+        emit(const CrudStateDisableLoading());
       },
     );
     on<CrudEventPaymentHistory>(
@@ -118,10 +118,10 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
       try {
         await storageProvider.deletePayment(
             documentId: event.payment.documentId);
-        emit(const CrudStateDisableLoading());
       } on Exception catch (e) {
         emit(CrudStateDeletePayment(exception: e));
       }
+      emit(const CrudStateDisableLoading());
     });
   }
 }

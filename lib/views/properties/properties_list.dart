@@ -19,16 +19,28 @@ class PropertiesList extends StatelessWidget {
     return Scaffold(
       backgroundColor: backGroundColor,
       appBar: AppBar(
-        title: const Text('Your properties'),
+        backgroundColor: appBarColor,
+        title: const Text(
+          'Your properties',
+          style: TextStyle(color: Colors.black),
+        ),
         actions: [
           IconButton(
+              //style: ButtonStyle(foregroundColor: MaterialStateProperty.all(Colors.black)),
               onPressed: () {
                 context
                     .read<CrudBloc>()
                     .add(const CrudEventGetProperty(property: null));
               },
-              icon: const Icon(Icons.add)),
+              icon: const Icon(
+                Icons.add,
+                color: Colors.black,
+              )),
           PopupMenuButton<MenuAction>(
+            icon: Icon(
+              Icons.adaptive.more,
+              color: Colors.black,
+            ),
             onSelected: (value) async {
               switch (value) {
                 case MenuAction.logout:
