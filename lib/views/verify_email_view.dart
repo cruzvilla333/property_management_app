@@ -28,16 +28,21 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
       },
       child: Scaffold(
         backgroundColor: mainAppBackGroundColor,
-        appBar: AppBar(title: const Text('Verify email')),
+        appBar: AppBar(
+            backgroundColor: mainAppBarColor,
+            title: Text(
+              'Verify email',
+              style: TextStyle(color: mainAppTextColor),
+            )),
         body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Padding(
-                padding: EdgeInsets.all(16.0),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Text(
                   'A verification email has been sent to your email address',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                  style: TextStyle(color: mainAppTextColor, fontSize: 20),
                   textAlign: TextAlign.center,
                 ),
               ),

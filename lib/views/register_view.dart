@@ -53,9 +53,11 @@ class _RegisterViewState extends State<RegisterView> {
       child: GestureDetector(
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: Scaffold(
-            backgroundColor: mainAppBarColor,
+            backgroundColor: mainAppBackGroundColor,
             appBar: AppBar(
-              title: const Text('Register'),
+              backgroundColor: mainAppBarColor,
+              title:
+                  Text('Register', style: TextStyle(color: mainAppTextColor)),
             ),
             body: Padding(
               padding: const EdgeInsets.all(16.0),

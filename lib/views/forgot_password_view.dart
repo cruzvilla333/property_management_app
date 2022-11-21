@@ -55,7 +55,9 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
           resizeToAvoidBottomInset: false,
           backgroundColor: mainAppBackGroundColor,
           appBar: AppBar(
-            title: const Text('Forgot Password'),
+            backgroundColor: mainAppBarColor,
+            title: Text('Forgot Password',
+                style: TextStyle(color: mainAppTextColor)),
           ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
