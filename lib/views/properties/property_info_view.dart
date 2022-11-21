@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_note_app/designs/buttons/button_designs.dart';
 import 'package:training_note_app/designs/colors/app_colors.dart';
+import 'package:training_note_app/designs/icons/icons_designs.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_events.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.dart';
 import 'package:training_note_app/utilities/navigation/navigation_utilities.dart';
 
 import '../../constants/regular_expressions.dart';
-import '../../enums/menu_action.dart';
+import '../../enums/pop_up_actions.dart';
 import '../../services/crud_services/cloud/cloud_property.dart';
 import '../../services/crud_services/crud_bloc/crud_bloc.dart';
 
@@ -50,9 +51,10 @@ class _PropertyInfoViewState extends State<PropertyInfoView> {
         appBar: AppBar(
           backgroundColor: mainAppBarColor,
           leading: IconButton(
-              color: mainAppIconColor,
-              onPressed: () => lastPage(context: context),
-              icon: const Icon(Icons.arrow_back)),
+            color: mainAppIconColor,
+            onPressed: () => lastPage(context: context),
+            icon: backArrowIcon,
+          ),
           title: Text(
             _property.title,
             style: TextStyle(color: mainAppTextColor),
@@ -60,7 +62,7 @@ class _PropertyInfoViewState extends State<PropertyInfoView> {
           actions: [
             PopupMenuButton<PropertyInfoAction>(
               icon: Icon(
-                Icons.adaptive.more,
+                Icons.menu,
                 color: mainAppIconColor,
               ),
               onSelected: (value) async {

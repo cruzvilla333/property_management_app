@@ -10,6 +10,8 @@ import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.d
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
 import 'package:training_note_app/utilities/navigation/navigation_utilities.dart';
 
+import '../../services/crud_services/crud_utilities.dart';
+
 class CreateEditPropertyView extends StatefulWidget {
   final CrudStateGetProperty state;
   const CreateEditPropertyView({super.key, required this.state});
@@ -23,6 +25,7 @@ class _CreateEditPropertyViewState extends State<CreateEditPropertyView> {
   late final TextEditingController _titleController;
   late final TextEditingController _addressController;
   late final TextEditingController _monthlyPriceController;
+  late final TextEditingController _moneyDueController;
   final _updateOrCreatePropertyForm = GlobalKey<FormState>();
   @override
   void initState() {
@@ -30,6 +33,11 @@ class _CreateEditPropertyViewState extends State<CreateEditPropertyView> {
     _titleController = TextEditingController();
     _addressController = TextEditingController();
     _monthlyPriceController = TextEditingController();
+    _moneyDueController = TextEditingController();
+    int moneyDue = widget.state.property?.moneyDue ?? 0;
+    _moneyDueController.text = moneyDue == 0
+        ? ''
+        : moneyDue.toString().replaceAllMapped(reg, mathFunc);
     _titleController.text = widget.state.property?.title ?? '';
     _addressController.text = widget.state.property?.address ?? '';
     int monthlyPrice = widget.state.property?.monthlyPrice ?? 0;
@@ -59,10 +67,22 @@ class _CreateEditPropertyViewState extends State<CreateEditPropertyView> {
         appBar: AppBar(
           backgroundColor: mainAppBarColor,
           title: Text(
-            widget.state.property == null ? 'New property' : 'Edit property',
+            _property == null ? 'New property' : 'Edit property',
             style: TextStyle(color: mainAppTextColor),
           ),
           actions: [
+            _property != null
+                ? IconButton(
+                    color: mainAppIconColor,
+                    onPressed: () async {
+                      final deleted = await attemptPropertyDeletion(
+                          context: context, property: _property!);
+                      if (deleted == true) {
+                        lastPage(context: context);
+                      }
+                    },
+                    icon: const Icon(Icons.delete))
+                : const SizedBox(height: 0, width: 0),
             IconButton(
                 color: mainAppIconColor,
                 onPressed: () {
@@ -151,6 +171,29 @@ class _CreateEditPropertyViewState extends State<CreateEditPropertyView> {
                         border: OutlineInputBorder(),
                       ),
                     ),
+                    const SizedBox(height: 20),
+                    _property != null
+                        ? TextFormField(
+                            validator: (value) {
+                              if (_property == null) return null;
+                              if (value == null || value.isEmpty) {
+                                return 'This field needs value';
+                              }
+                              return null;
+                            },
+                            controller: _moneyDueController,
+                            keyboardType: TextInputType.number,
+                            maxLines: null,
+                            decoration: const InputDecoration(
+                              hintText: 'Money due...',
+                              labelText: 'Money due',
+                              border: OutlineInputBorder(),
+                            ),
+                          )
+                        : const SizedBox(
+                            height: 0,
+                            width: 0,
+                          ),
                   ],
                 ),
               ),

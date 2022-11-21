@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_note_app/designs/colors/app_colors.dart';
+import 'package:training_note_app/designs/icons/icons_designs.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_property_payment.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.dart';
+import 'package:training_note_app/services/crud_services/crud_utilities.dart';
 import '../../constants/regular_expressions.dart';
 import '../../helpers/loading/loading_overlay.dart';
 import '../../services/crud_services/crud_bloc/crud_bloc.dart';
@@ -44,7 +46,7 @@ class _PropertyPaymentsViewState extends State<PropertyPaymentsView> {
         leading: IconButton(
             color: mainAppIconColor,
             onPressed: () => lastPage(context: context),
-            icon: const Icon(Icons.arrow_back)),
+            icon: backArrowIcon),
       ),
       body: StreamBuilder<Object>(
           stream: widget.state.payments,
@@ -94,12 +96,8 @@ class _PropertyPaymentsViewState extends State<PropertyPaymentsView> {
                           ),
                           trailing: IconButton(
                             onPressed: () async {
-                              final shouldDelete =
-                                  await showDeletePaymentDialog(context);
-                              if (shouldDelete && mounted) {
-                                context.read<CrudBloc>().add(
-                                    CrudEventDeletePayment(payment: payment));
-                              }
+                              await attemptPaymentDeletion(
+                                  context: context, payment: payment);
                             },
                             icon: const Icon(Icons.delete),
                           ),

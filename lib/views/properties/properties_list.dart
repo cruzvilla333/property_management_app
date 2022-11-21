@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.dart';
 import 'package:training_note_app/views/properties/properties_list_view.dart';
 import 'package:training_note_app/helpers/loading/loading_overlay.dart';
-import '../../enums/menu_action.dart';
+import '../../enums/pop_up_actions.dart';
 import '../../services/auth/auth_bloc/auth_bloc.dart';
 import '../../services/auth/auth_bloc/auth_events.dart';
 import '../../services/crud_services/cloud/cloud_property.dart';
@@ -65,17 +65,12 @@ class PropertiesList extends StatelessWidget {
                 final allProperties = snapshot.data as Iterable<CloudProperty>;
                 return PropertiesListView(
                   properties: allProperties,
-                  onDeleteProperty: (property) => context
+                  onTap: (property) => context
                       .read<CrudBloc>()
-                      .add(CrudEventDeleteProperty(property: property)),
-                  onEditPress: (property) => context
+                      .add(CrudEventPropertyInfo(property: property)),
+                  onLongPress: (property) => context
                       .read<CrudBloc>()
                       .add(CrudEventGetProperty(property: property)),
-                  onTap: (property) {
-                    return context
-                        .read<CrudBloc>()
-                        .add(CrudEventPropertyInfo(property: property));
-                  },
                 );
               } else {
                 return const LoadingOverlay();
