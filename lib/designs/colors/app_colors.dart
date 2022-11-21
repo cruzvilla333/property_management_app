@@ -3,11 +3,13 @@ import 'dart:math';
 
 const test = Color.fromARGB(191, 160, 255, 253);
 const houseIcon = Color.fromARGB(206, 0, 0, 0);
-Color backGroundColor = Colors.grey.shade300;
+Color mainAppBackGroundColor = Colors.grey.shade300;
 MaterialColor mainAppColor = Colors.blue;
-Color buttonBackgroundColor = Colors.white;
-Color appBarColor = Colors.white;
+Color mainAppButtonBackgroundColor = Colors.white;
+Color mainAppBarColor = Colors.white;
 Color mainAppTextColor = Colors.black;
+Color mainAppIconColor = Colors.black;
+Color mainAppTileColor = Colors.white;
 
 MaterialColor generateMaterialColor(Color color) {
   return MaterialColor(color.value, {

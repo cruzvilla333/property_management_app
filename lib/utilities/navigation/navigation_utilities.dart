@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.dart';
 
 import '../../services/crud_services/crud_bloc/crud_bloc.dart';
 import '../../services/crud_services/crud_bloc/crud_events.dart';
-import '../../views/forgot_password_view.dart';
 
 class Stack<E> {
   final _list = <E>[];

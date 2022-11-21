@@ -53,7 +53,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: backGroundColor,
+          backgroundColor: mainAppBackGroundColor,
           appBar: AppBar(
             title: const Text('Forgot Password'),
           ),

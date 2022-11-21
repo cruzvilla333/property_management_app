@@ -27,7 +27,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
         handleAuthRouting(context: context, state: state);
       },
       child: Scaffold(
-        backgroundColor: backGroundColor,
+        backgroundColor: mainAppBackGroundColor,
         appBar: AppBar(title: const Text('Verify email')),
         body: Column(
             mainAxisAlignment: MainAxisAlignment.center,

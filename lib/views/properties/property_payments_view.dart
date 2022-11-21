@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:training_note_app/designs/colors/app_colors.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_property_payment.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.dart';
 import '../../constants/regular_expressions.dart';
@@ -35,8 +36,13 @@ class _PropertyPaymentsViewState extends State<PropertyPaymentsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Payment history'),
+        backgroundColor: mainAppBarColor,
+        title: Text(
+          'Payment history',
+          style: TextStyle(color: mainAppTextColor),
+        ),
         leading: IconButton(
+            color: mainAppIconColor,
             onPressed: () => lastPage(context: context),
             icon: const Icon(Icons.arrow_back)),
       ),

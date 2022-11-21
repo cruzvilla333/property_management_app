@@ -9,7 +9,7 @@ InputDecoration standardTextFieldDecoration(
     hintText: text,
     border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(radius),
-        borderSide: BorderSide(color: backGroundColor, width: radius)),
+        borderSide: BorderSide(color: mainAppBackGroundColor, width: radius)),
     fillColor: Colors.white,
     filled: true,
   );

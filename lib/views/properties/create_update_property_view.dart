@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_note_app/constants/regular_expressions.dart';
+import 'package:training_note_app/designs/colors/app_colors.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_property.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_bloc.dart';
@@ -56,10 +57,14 @@ class _CreateEditPropertyViewState extends State<CreateEditPropertyView> {
       },
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: mainAppBarColor,
           title: Text(
-              widget.state.property == null ? 'New property' : 'Edit property'),
+            widget.state.property == null ? 'New property' : 'Edit property',
+            style: TextStyle(color: mainAppTextColor),
+          ),
           actions: [
             IconButton(
+                color: mainAppIconColor,
                 onPressed: () {
                   if (_updateOrCreatePropertyForm.currentState!.validate()) {
                     final property = CloudProperty(
@@ -83,6 +88,7 @@ class _CreateEditPropertyViewState extends State<CreateEditPropertyView> {
                 },
                 icon: const Icon(Icons.check)),
             IconButton(
+                color: mainAppIconColor,
                 onPressed: () => lastPage(context: context),
                 icon: const Icon(Icons.clear))
           ],

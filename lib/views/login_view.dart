@@ -6,14 +6,10 @@ import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/auth/auth_bloc/auth_bloc.dart';
 import 'package:training_note_app/services/auth/auth_bloc/auth_events.dart';
 import 'package:training_note_app/services/auth/auth_bloc/auth_states.dart';
-import 'package:training_note_app/services/crud_services/crud_bloc/crud_events.dart';
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
 import 'package:training_note_app/utilities/dialogs/loading_functions.dart';
-import 'package:training_note_app/utilities/navigation/navigation_utilities.dart';
 import 'package:training_note_app/utilities/routes/app_routes.dart';
 import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
-import 'package:training_note_app/views/forgot_password_view.dart';
-import 'package:training_note_app/views/register_view.dart';
 
 import '../designs/colors/app_colors.dart';
 import '../designs/textfields/textfield_designs.dart';
@@ -61,9 +57,9 @@ class _LoginViewState extends State<LoginView> {
         onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: backGroundColor,
+          backgroundColor: mainAppBackGroundColor,
           appBar: AppBar(
-            backgroundColor: appBarColor,
+            backgroundColor: mainAppBarColor,
             title: Text(
               'Please login',
               style: TextStyle(color: mainAppTextColor),

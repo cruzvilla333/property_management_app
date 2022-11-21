@@ -17,29 +17,28 @@ class PropertiesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backGroundColor,
+      backgroundColor: mainAppBackGroundColor,
       appBar: AppBar(
-        backgroundColor: appBarColor,
-        title: const Text(
+        backgroundColor: mainAppBarColor,
+        title: Text(
           'Your properties',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: mainAppTextColor),
         ),
         actions: [
           IconButton(
-              //style: ButtonStyle(foregroundColor: MaterialStateProperty.all(Colors.black)),
               onPressed: () {
                 context
                     .read<CrudBloc>()
                     .add(const CrudEventGetProperty(property: null));
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.add,
-                color: Colors.black,
+                color: mainAppIconColor,
               )),
           PopupMenuButton<MenuAction>(
             icon: Icon(
               Icons.adaptive.more,
-              color: Colors.black,
+              color: mainAppIconColor,
             ),
             onSelected: (value) async {
               switch (value) {
@@ -66,15 +65,17 @@ class PropertiesList extends StatelessWidget {
                 final allProperties = snapshot.data as Iterable<CloudProperty>;
                 return PropertiesListView(
                   properties: allProperties,
-                  onDeleteNote: (property) => context
+                  onDeleteProperty: (property) => context
                       .read<CrudBloc>()
                       .add(CrudEventDeleteProperty(property: property)),
                   onEditPress: (property) => context
                       .read<CrudBloc>()
                       .add(CrudEventGetProperty(property: property)),
-                  onTap: (property) => context
-                      .read<CrudBloc>()
-                      .add(CrudEventPropertyInfo(property: property)),
+                  onTap: (property) {
+                    return context
+                        .read<CrudBloc>()
+                        .add(CrudEventPropertyInfo(property: property));
+                  },
                 );
               } else {
                 return const LoadingOverlay();

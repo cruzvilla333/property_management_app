@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:training_note_app/designs/buttons/button_designs.dart';
+import 'package:training_note_app/designs/colors/app_colors.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_events.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.dart';
 import 'package:training_note_app/utilities/navigation/navigation_utilities.dart';
 
 import '../../constants/regular_expressions.dart';
+import '../../enums/menu_action.dart';
 import '../../services/crud_services/cloud/cloud_property.dart';
 import '../../services/crud_services/crud_bloc/crud_bloc.dart';
-import '../../utilities/dialogs/error_dialog.dart';
 
 class PropertyInfoView extends StatefulWidget {
   const PropertyInfoView({super.key, required this.state});
@@ -44,11 +46,40 @@ class _PropertyInfoViewState extends State<PropertyInfoView> {
     return BlocListener<CrudBloc, CrudState>(
       listener: (context, state) async {},
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          backgroundColor: mainAppBarColor,
           leading: IconButton(
+              color: mainAppIconColor,
               onPressed: () => lastPage(context: context),
               icon: const Icon(Icons.arrow_back)),
-          title: Text(widget.state.property.title),
+          title: Text(
+            _property.title,
+            style: TextStyle(color: mainAppTextColor),
+          ),
+          actions: [
+            PopupMenuButton<PropertyInfoAction>(
+              icon: Icon(
+                Icons.adaptive.more,
+                color: mainAppIconColor,
+              ),
+              onSelected: (value) async {
+                switch (value) {
+                  case PropertyInfoAction.paymentHistory:
+                    context
+                        .read<CrudBloc>()
+                        .add(CrudEventPaymentHistory(property: _property));
+                }
+              },
+              itemBuilder: (context) {
+                return const [
+                  PopupMenuItem<PropertyInfoAction>(
+                      value: PropertyInfoAction.paymentHistory,
+                      child: Text("Payment history"))
+                ];
+              },
+            )
+          ],
         ),
         body: Form(
           key: _updateOrCreatePropertyForm,
@@ -58,30 +89,28 @@ class _PropertyInfoViewState extends State<PropertyInfoView> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(height: 20),
                 Text(
-                  'Address: ${_property.address}',
+                  _property.address,
                   textAlign: TextAlign.right,
                   softWrap: true,
+                  style: const TextStyle(fontSize: 20),
                 ),
                 const SizedBox(height: 20),
                 Text(
                   'Monthly price: ${_property.monthlyPrice.toString().replaceAllMapped(reg, mathFunc)}\$',
                   textAlign: TextAlign.right,
                   softWrap: true,
+                  style: const TextStyle(fontSize: 20),
                 ),
                 const SizedBox(height: 20),
                 Text(
                   'Money due: ${_property.moneyDue.toString().replaceAllMapped(reg, mathFunc)}\$',
                   textAlign: TextAlign.right,
                   softWrap: true,
+                  style: const TextStyle(fontSize: 20),
                 ),
-                const SizedBox(height: 20),
-                TextButton(
-                    onPressed: () => context
-                        .read<CrudBloc>()
-                        .add(CrudEventPaymentHistory(property: _property)),
-                    child: const Text('Payment history')),
-                const SizedBox(height: 20),
+                const SizedBox(height: 100),
                 ToggleButtons(
                   direction: vertical ? Axis.vertical : Axis.horizontal,
                   onPressed: (int index) {
@@ -93,10 +122,10 @@ class _PropertyInfoViewState extends State<PropertyInfoView> {
                     });
                   },
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  selectedBorderColor: Colors.red[700],
-                  selectedColor: Colors.white,
-                  fillColor: Colors.red[200],
-                  color: Colors.red[400],
+                  selectedBorderColor: Colors.red,
+                  selectedColor: Colors.black,
+                  fillColor: Colors.white,
+                  color: mainAppTextColor,
                   constraints: const BoxConstraints(
                     minHeight: 40.0,
                     minWidth: 80.0,
@@ -127,7 +156,14 @@ class _PropertyInfoViewState extends State<PropertyInfoView> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 20),
                 TextButton(
+                  style: standardButtonStyle(
+                    width: 150,
+                    height: 50,
+                    alignment: Alignment.center,
+                    backgroundColor: mainAppBackGroundColor,
+                  ),
                   onPressed: () => context.read<CrudBloc>().add(
                         CrudEventMakePayment(
                             property: _property,
@@ -136,8 +172,9 @@ class _PropertyInfoViewState extends State<PropertyInfoView> {
                             paymentMethod: _paymentMethod),
                       ),
                   child: const Text(
-                    'Make payment',
+                    'Add payment',
                     style: TextStyle(fontSize: 20),
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ],
