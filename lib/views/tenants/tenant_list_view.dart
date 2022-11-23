@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:training_note_app/services/crud_services/cloud/cloud_tenant.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.dart';
-import 'package:training_note_app/views/properties/properties_list_view.dart';
+import 'package:training_note_app/utilities/navigation/navigation_utilities.dart';
 import 'package:training_note_app/helpers/loading/loading_overlay.dart';
 import '../../enums/pop_up_actions.dart';
 import '../../services/auth/auth_bloc/auth_bloc.dart';
 import '../../services/auth/auth_bloc/auth_events.dart';
-import '../../services/crud_services/cloud/cloud_property.dart';
 import '../../services/crud_services/crud_bloc/crud_bloc.dart';
 import '../../services/crud_services/crud_bloc/crud_events.dart';
 import '../../designs/colors/app_colors.dart';
+import 'tenant_tile_list_view.dart';
 
-class PropertiesList extends StatelessWidget {
-  const PropertiesList({super.key, required this.state});
-  final CrudStatePropertiesView state;
+class TenantListView extends StatelessWidget {
+  const TenantListView({super.key, required this.state});
+  final CrudStateTenantsView state;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +22,7 @@ class PropertiesList extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: mainAppBarColor,
         title: Text(
-          'Your properties',
+          'Your tenants',
           style: TextStyle(color: mainAppTextColor),
         ),
         actions: [
@@ -29,7 +30,7 @@ class PropertiesList extends StatelessWidget {
               onPressed: () {
                 context
                     .read<CrudBloc>()
-                    .add(const CrudEventGetProperty(property: null));
+                    .add(const CrudEventGetTenant(tenant: null));
               },
               icon: Icon(
                 Icons.add,
@@ -56,21 +57,17 @@ class PropertiesList extends StatelessWidget {
         ],
       ),
       body: StreamBuilder(
-        stream: state.properties,
+        stream: state.tenants,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
             case ConnectionState.active:
               if (snapshot.hasData) {
-                final allProperties = snapshot.data as Iterable<CloudProperty>;
-                return PropertiesListView(
-                  properties: allProperties,
-                  onTap: (property) => context
-                      .read<CrudBloc>()
-                      .add(CrudEventPropertyInfo(property: property)),
-                  onLongPress: (property) => context
-                      .read<CrudBloc>()
-                      .add(CrudEventGetProperty(property: property)),
+                final allTenants = snapshot.data as Iterable<CloudTenant>;
+                return TenantTileListView(
+                  tenants: allTenants,
+                  onTap: (tenant) {},
+                  onLongPress: (tenant) {},
                 );
               } else {
                 return const LoadingOverlay();
@@ -79,6 +76,14 @@ class PropertiesList extends StatelessWidget {
               return const LoadingOverlay();
           }
         },
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.house), label: 'properties'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'tenants'),
+        ],
+        currentIndex: 1,
+        onTap: (index) => context.read<CrudBloc>().add(navigationRoute[index]!),
       ),
     );
   }

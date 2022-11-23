@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_storage_constants.dart';
+import 'package:training_note_app/services/crud_services/cloud/firebase_cloud_storage.dart';
 
-class CloudPropertyPayment {
+class CloudPropertyPayment extends FirebaseCloudObject {
   String documentId;
   String propertyId;
   int paymentAmount;

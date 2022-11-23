@@ -7,12 +7,14 @@ import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
 import 'package:training_note_app/utilities/navigation/navigation_utilities.dart';
 import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
 import 'package:training_note_app/views/properties/create_update_property_view.dart';
+import 'package:training_note_app/views/tenants/create_update_tenant_view.dart';
+import 'package:training_note_app/views/tenants/tenant_list_view.dart';
 import '../../services/auth/auth_bloc/auth_bloc.dart';
 import '../../services/auth/auth_bloc/auth_states.dart';
 import '../../services/crud_services/crud_bloc/crud_states.dart';
 import '../../utilities/dialogs/loading_functions.dart';
 import '../../utilities/dialogs/log_out_dialog.dart';
-import 'properties_list.dart';
+import 'property_list_view.dart';
 import 'property_info_view.dart';
 import 'property_payments_view.dart';
 
@@ -62,24 +64,48 @@ class _PropertiesViewBuilderState extends State<PropertiesViewBuilder> {
             currentPage(context: context);
           }
           if (state is CrudStatePropertiesView) {
-            return PropertiesList(
-              state: state,
+            return AnimatedSwitcher(
+              duration: const Duration(seconds: 1),
+              child: PropertyListView(
+                state: state,
+              ),
             );
           }
           if (state is CrudStateGetProperty) {
-            return CreateEditPropertyView(
+            return CreateUpdatePropertyView(
+              state: state,
+            );
+          }
+          if (state is CrudStateGetTenant) {
+            return CreateUpdateTenantView(
               state: state,
             );
           }
           if (state is CrudStatePropertyInfo) {
-            return PropertyInfoView(
-              state: state,
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: PropertyInfoView(
+                key: const Key('1'),
+                state: state,
+              ),
+              // transitionBuilder: (child, animation) => SizeTransition(
+              //   sizeFactor: animation,
+              // ),
             );
           }
           if (state is CrudStatePaymentHistory) {
-            return PropertyPaymentsView(
-              state: state,
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: PropertyPaymentsView(
+                key: const Key('1'),
+                state: state,
+              ),
+              // transitionBuilder: (child, animation) =>
+              //     ScaleTransition(scale: animation),
             );
+          }
+          if (state is CrudStateTenantsView) {
+            return TenantListView(state: state);
           }
           return const Scaffold();
         },

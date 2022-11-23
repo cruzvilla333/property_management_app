@@ -71,3 +71,17 @@ class PaymentExceedsRequiredAmount implements Exception {
     return 'Payment Exceeds Required Amount';
   }
 }
+
+class CouldNotCreateTenantException extends CloudStorageException {
+  @override
+  String toString() {
+    return 'Could not create tenant';
+  }
+}
+
+class CouldNotGetAllTenantsException extends CloudStorageException {
+  @override
+  String toString() {
+    return 'Could not get all tenants';
+  }
+}

@@ -3,11 +3,75 @@ import 'package:training_note_app/services/crud_services/cloud/cloud_property.da
 import 'package:training_note_app/services/crud_services/cloud/cloud_property_payment.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_storage_constants.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_storage_exceptions.dart';
+import 'package:training_note_app/services/crud_services/cloud/crud_creations.dart';
+
+import 'cloud_tenant.dart';
+
+abstract class FirebaseCloudObject {
+  const FirebaseCloudObject();
+}
 
 class FirebaseCloudStorage {
   final collections = FirebaseFirestore.instance;
   late final payments = collections.collection(paymentsCollection);
   late final properties = collections.collection(propertiesCollection);
+  late final tenants = collections.collection(tenantsCollection);
+
+  Future<void> deleteTenant({required String tenantId}) async {
+    try {
+      await properties.doc(tenantId).delete();
+    } catch (e) {
+      throw CouldNotDeletePropertyException();
+    }
+  }
+
+  Future<void> updateTenant({required CloudTenant tenant}) async {
+    try {
+      tenants.doc(tenant.tenantId).update({
+        tenantFirstNameFieldName: tenant.firstName,
+        tenantLastNameFieldName: tenant.lastName,
+        sexFieldName: tenant.sex,
+        ageFieldName: tenant.age,
+        propertyIdFieldName: tenant.propertyId,
+      });
+    } catch (e) {
+      throw CouldNotUpdatePropertyException();
+    }
+  }
+
+  Future<CloudTenant> createTenant({
+    required String firstName,
+    required String lastName,
+    required int age,
+    required String sex,
+    required String ownerUserId,
+    propertyId = '',
+  }) async {
+    return await tryCreateTenant(
+        ownerUserId: ownerUserId,
+        tenants: tenants,
+        firstName: firstName,
+        lastName: lastName,
+        age: age,
+        sex: sex);
+  }
+
+  Future<Iterable<CloudTenant>> getPropertyTenants({
+    required String propertyId,
+  }) async {
+    try {
+      return await tenants
+          .where(
+            propertyIdFieldName,
+            isEqualTo: propertyId,
+          )
+          .get()
+          .then((value) =>
+              value.docs.map((doc) => CloudTenant.fromSnapshot(doc)));
+    } catch (e) {
+      throw CouldNotGetAllTenantsException();
+    }
+  }
 
   Future<void> deleteProperty({required String documentId}) async {
     try {
@@ -30,25 +94,11 @@ class FirebaseCloudStorage {
     required int paymentAmount,
     required String paymentMethod,
   }) async {
-    try {
-      final date = DateTime.now();
-      final payment = await payments.add({
-        propertyIdFieldName: propertyId,
-        paymentAmountFieldName: paymentAmount,
-        paymentMethodFieldName: paymentMethod,
-        paymentDateFieldName: date,
-      });
-      final newPayment = await payment.get();
-      return CloudPropertyPayment(
-        paymentDate: date,
-        documentId: newPayment.id,
+    return await tryCreatePayment(
+        payments: payments,
         propertyId: propertyId,
         paymentAmount: paymentAmount,
-        paymentMethod: paymentMethod,
-      );
-    } catch (e) {
-      throw CouldNotCreatePaymentException();
-    }
+        paymentMethod: paymentMethod);
   }
 
   Future<Iterable<CloudPropertyPayment>> getPropertyPayments({
@@ -142,6 +192,14 @@ class FirebaseCloudStorage {
                 return CloudProperty.fromSnapshot(doc);
               }).where((property) => property.ownerUserId == ownerUserId));
 
+  Stream<Iterable<CloudTenant>> tenantStream({required String ownerUserId}) =>
+      tenants
+          .orderBy(tenantFirstNameFieldName, descending: true)
+          .snapshots()
+          .map((event) => event.docs.map((doc) {
+                return CloudTenant.fromSnapshot(doc);
+              }).where((tenant) => tenant.ownerUserId == ownerUserId));
+
   Stream<Iterable<CloudPropertyPayment>> paymentStream(
           {required String propertyId}) =>
       payments.orderBy(paymentDateFieldName, descending: true).snapshots().map(
@@ -149,23 +207,6 @@ class FirebaseCloudStorage {
               .map((doc) => CloudPropertyPayment.fromSnapshot(doc))
               .where((payment) => payment.propertyId == propertyId));
 
-  // Future<void> adjustMoneyDue({
-  //   required Map<String, dynamic> data,
-  //   required String propertyId,
-  // }) async {
-  //   final currDate = DateTime.now();
-  //   final propertyDate =
-  //       (data[propertyCurrentDateFieldName] as Timestamp).toDate();
-  //   final months = ((currDate.year - propertyDate.year) * 12) -
-  //       (propertyDate.month - currDate.month);
-
-  //   await updatePropertyField(
-  //     propertyId: propertyId,
-  //     moneyDue: (data[moneyDueFieldName] as int) +
-  //         ((data[monthlyPriceFieldName] as int) * months),
-  //     currentDate: currDate,
-  //   );
-  // }
   Future<void> adjustMoneyDue({
     required CloudProperty property,
   }) async {
@@ -218,56 +259,18 @@ class FirebaseCloudStorage {
     }
   }
 
-  // Future<CloudProperty> createEmptyProperty(
-  //     {required String ownerUserId}) async {
-  //   try {
-  //     final document = await properties.add({
-  //       ownerUserIdFieldName: ownerUserId,
-  //       titleFieldName: '',
-  //       addressFieldName: '',
-  //       monthlyPriceFieldName: 0,
-  //       moneyDueFieldName: 0,
-  //     });
-  //     final newProperty = await document.get();
-  //     return CloudProperty(
-  //       documentId: newProperty.id,
-  //       ownerUserId: ownerUserId,
-  //       title: '',
-  //       address: '',
-  //       monthlyPrice: 0,
-  //     );
-  //   } catch (e) {
-  //     throw CouldNotCreatePropertyException();
-  //   }
-  // }
-
   Future<CloudProperty> createProperty({
     required String ownerUserId,
     required String title,
     required String address,
     required int monthlyPrice,
   }) async {
-    try {
-      final document = await properties.add({
-        ownerUserIdFieldName: ownerUserId,
-        titleFieldName: title,
-        addressFieldName: address,
-        monthlyPriceFieldName: monthlyPrice,
-        moneyDueFieldName: monthlyPrice,
-        propertyCurrentDateFieldName: DateTime.now(),
-      });
-      final newNote = await document.get();
-      return CloudProperty(
-        documentId: newNote.id,
+    return await tryCreateProperty(
+        properties: properties,
         ownerUserId: ownerUserId,
         title: title,
         address: address,
-        monthlyPrice: monthlyPrice,
-        moneyDue: monthlyPrice,
-      );
-    } catch (e) {
-      throw CouldNotCreatePropertyException();
-    }
+        monthlyPrice: monthlyPrice);
   }
 
   static final FirebaseCloudStorage _shared =

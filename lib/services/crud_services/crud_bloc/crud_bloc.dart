@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
+import 'package:training_note_app/services/crud_services/cloud/cloud_tenant.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_events.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.dart';
 import '../../../utilities/navigation/navigation_utilities.dart';
@@ -14,6 +15,7 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
     on<CrudEventPropertiesView>(
       (event, emit) async {
         emit(const CrudStateLoading(text: 'Getting properties'));
+        navigationStack.clear();
         navigationStack.push(event);
         final currProperties =
             await storageProvider.getProperties(ownerUserId: user().id);
@@ -23,6 +25,15 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
         final properties =
             storageProvider.propertyStream(ownerUserId: user().id);
         emit(CrudStatePropertiesView(properties: properties));
+      },
+    );
+    on<CrudEventTenantsView>(
+      (event, emit) async {
+        emit(const CrudStateLoading(text: 'Getting tenants'));
+        navigationStack.clear();
+        navigationStack.push(event);
+        final tenants = storageProvider.tenantStream(ownerUserId: user().id);
+        emit(CrudStateTenantsView(tenants: tenants));
       },
     );
     on<CrudEventLoading>((event, emit) {
@@ -36,6 +47,16 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
                 : 'Creating property...'));
         navigationStack.push(event);
         emit(CrudStateGetProperty(property: event.property));
+      },
+    );
+    on<CrudEventGetTenant>(
+      (event, emit) async {
+        emit(CrudStateLoading(
+            text: event.tenant != null
+                ? 'Getting tenant...'
+                : 'Creating tenant...'));
+        navigationStack.push(event);
+        emit(CrudStateGetTenant(tenant: event.tenant));
       },
     );
     on<CrudEventCreateOrUpdateProperty>(
@@ -52,6 +73,27 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
             );
           } else {
             await storageProvider.updateProperty(property: property);
+          }
+        } on Exception catch (e) {
+          emit(CrudStateCreateOrUpdateProperty(exception: e));
+        }
+      },
+    );
+    on<CrudEventCreateOrUpdateTenant>(
+      (event, emit) async {
+        try {
+          emit(const CrudStateLoading(text: 'Creating tenant...'));
+          CloudTenant tenant = event.tenant;
+          if (tenant.tenantId.isEmpty) {
+            tenant = await storageProvider.createTenant(
+              ownerUserId: user().id,
+              firstName: event.tenant.firstName,
+              lastName: event.tenant.lastName,
+              sex: event.tenant.sex,
+              age: event.tenant.age,
+            );
+          } else {
+            await storageProvider.updateTenant(tenant: tenant);
           }
         } on Exception catch (e) {
           emit(CrudStateCreateOrUpdateProperty(exception: e));

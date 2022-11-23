@@ -1,4 +1,5 @@
 const ownerUserIdFieldName = 'user_id';
+const tenantsCollection = 'tenants';
 const titleFieldName = 'title';
 const propertiesCollection = 'properties';
 const paymentsCollection = 'payments';
@@ -10,3 +11,7 @@ const paymentAmountFieldName = 'payment_amount';
 const paymentMethodFieldName = 'payment_method';
 const paymentDateFieldName = 'payment_date';
 const propertyCurrentDateFieldName = 'current_date';
+const tenantFirstNameFieldName = 'first_name';
+const tenantLastNameFieldName = 'last_name';
+const ageFieldName = 'age';
+const sexFieldName = 'sex';

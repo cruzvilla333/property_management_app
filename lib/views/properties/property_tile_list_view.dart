@@ -4,12 +4,11 @@ import 'package:training_note_app/designs/colors/app_colors.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_property.dart';
 
 import '../../constants/regular_expressions.dart';
-import '../../enums/pop_up_actions.dart';
 
-typedef CallBack = void Function(CloudProperty note);
+typedef CallBack = void Function(CloudProperty property);
 
-class PropertiesListView extends StatelessWidget {
-  const PropertiesListView({
+class PropertyTileListView extends StatelessWidget {
+  const PropertyTileListView({
     super.key,
     required this.properties,
     required this.onTap,
@@ -30,7 +29,11 @@ class PropertiesListView extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: ListTile(
-            tileColor: Colors.white,
+            trailing: const Icon(
+              Icons.house,
+              size: 100,
+            ),
+            tileColor: mainAppTileColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),

@@ -10,7 +10,7 @@ import 'package:training_note_app/services/crud_services/crud_bloc/crud_bloc.dar
 import 'package:training_note_app/utilities/routes/app_routes.dart';
 import 'package:training_note_app/views/forgot_password_view.dart';
 import 'package:training_note_app/views/login_view.dart';
-import 'package:training_note_app/views/properties/properties_view_builder.dart';
+import 'package:training_note_app/views/properties/main_app_bloc_builder.dart';
 import 'package:training_note_app/views/register_view.dart';
 import 'package:training_note_app/views/verify_email_view.dart';
 

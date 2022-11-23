@@ -12,6 +12,8 @@ class Stack<E> {
 
   E pop() => _list.removeLast();
 
+  void clear() => _list.clear();
+
   E get peek => _list.last;
 
   bool get isEmpty => _list.isEmpty;
@@ -37,6 +39,11 @@ void currentPage({required BuildContext context}) {
     context.read<CrudBloc>().add(navigator);
   }
 }
+
+const navigationRoute = {
+  0: CrudEventPropertiesView(),
+  1: CrudEventTenantsView(),
+};
 
 // void shiftToPage({
 //   required BuildContext context,

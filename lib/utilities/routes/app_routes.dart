@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:training_note_app/views/forgot_password_view.dart';
 import 'package:training_note_app/views/login_view.dart';
-import 'package:training_note_app/views/properties/properties_view_builder.dart';
+import 'package:training_note_app/views/properties/main_app_bloc_builder.dart';
 import 'package:training_note_app/views/register_view.dart';
 import 'package:training_note_app/views/verify_email_view.dart';
 

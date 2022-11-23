@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_note_app/designs/colors/app_colors.dart';
 import 'package:training_note_app/designs/icons/icons_designs.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_property_payment.dart';
@@ -7,9 +6,7 @@ import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.d
 import 'package:training_note_app/services/crud_services/crud_utilities.dart';
 import '../../constants/regular_expressions.dart';
 import '../../helpers/loading/loading_overlay.dart';
-import '../../services/crud_services/crud_bloc/crud_bloc.dart';
-import '../../services/crud_services/crud_bloc/crud_events.dart';
-import '../../utilities/dialogs/delete_dialog.dart';
+
 import '../../utilities/navigation/navigation_utilities.dart';
 
 class PropertyPaymentsView extends StatefulWidget {
@@ -38,7 +35,7 @@ class _PropertyPaymentsViewState extends State<PropertyPaymentsView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: mainAppBarColor,
+        backgroundColor: mainAppBackGroundColor,
         title: Text(
           'Payment history',
           style: TextStyle(color: mainAppTextColor),
@@ -66,6 +63,7 @@ class _PropertyPaymentsViewState extends State<PropertyPaymentsView> {
                       return Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: ListTile(
+                          tileColor: Colors.white,
                           shape: RoundedRectangleBorder(
                             side:
                                 const BorderSide(color: Colors.black, width: 1),
