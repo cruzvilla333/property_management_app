@@ -53,6 +53,11 @@ class CrudStateDeleteProperty extends CrudState {
       : super(exception: exception);
 }
 
+class CrudStateDeleteTenant extends CrudState {
+  const CrudStateDeleteTenant({Exception? exception})
+      : super(exception: exception);
+}
+
 class CrudStateDeletePayment extends CrudState {
   const CrudStateDeletePayment({Exception? exception})
       : super(exception: exception);

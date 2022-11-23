@@ -9,14 +9,14 @@ import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
 import 'package:training_note_app/views/properties/create_update_property_view.dart';
 import 'package:training_note_app/views/tenants/create_update_tenant_view.dart';
 import 'package:training_note_app/views/tenants/tenant_list_view.dart';
-import '../../services/auth/auth_bloc/auth_bloc.dart';
-import '../../services/auth/auth_bloc/auth_states.dart';
-import '../../services/crud_services/crud_bloc/crud_states.dart';
-import '../../utilities/dialogs/loading_functions.dart';
-import '../../utilities/dialogs/log_out_dialog.dart';
-import 'property_list_view.dart';
-import 'property_info_view.dart';
-import 'property_payments_view.dart';
+import '../services/auth/auth_bloc/auth_bloc.dart';
+import '../services/auth/auth_bloc/auth_states.dart';
+import '../services/crud_services/crud_bloc/crud_states.dart';
+import '../utilities/dialogs/loading_functions.dart';
+import '../utilities/dialogs/log_out_dialog.dart';
+import 'properties/property_list_view.dart';
+import 'properties/property_info_view.dart';
+import 'properties/property_payments_view.dart';
 
 class PropertiesViewBuilder extends StatefulWidget {
   const PropertiesViewBuilder({super.key});

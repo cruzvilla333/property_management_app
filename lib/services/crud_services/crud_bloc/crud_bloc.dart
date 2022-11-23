@@ -112,6 +112,15 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
       }
       emit(const CrudStateDisableLoading());
     });
+    on<CrudEventDeleteTenant>((event, emit) async {
+      emit(const CrudStateLoading(text: 'Deleting tenant'));
+      try {
+        await storageProvider.deleteTenant(tenantId: event.tenant.tenantId);
+      } on Exception catch (e) {
+        emit(CrudStateDeleteTenant(exception: e));
+      }
+      emit(const CrudStateDisableLoading());
+    });
     on<CrudEventPropertyInfo>(
       (event, emit) {
         navigationStack.push(event);

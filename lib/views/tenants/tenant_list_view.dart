@@ -65,10 +65,11 @@ class TenantListView extends StatelessWidget {
               if (snapshot.hasData) {
                 final allTenants = snapshot.data as Iterable<CloudTenant>;
                 return TenantTileListView(
-                  tenants: allTenants,
-                  onTap: (tenant) {},
-                  onLongPress: (tenant) {},
-                );
+                    tenants: allTenants,
+                    onTap: (tenant) {},
+                    onLongPress: (tenant) => context.read<CrudBloc>().add(
+                          CrudEventGetTenant(tenant: tenant),
+                        ));
               } else {
                 return const LoadingOverlay();
               }

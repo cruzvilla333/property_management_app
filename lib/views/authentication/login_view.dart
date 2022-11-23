@@ -11,8 +11,8 @@ import 'package:training_note_app/utilities/dialogs/loading_functions.dart';
 import 'package:training_note_app/utilities/routes/app_routes.dart';
 import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
 
-import '../designs/colors/app_colors.dart';
-import '../designs/textfields/textfield_designs.dart';
+import '../../designs/colors/app_colors.dart';
+import '../../designs/textfields/textfield_designs.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});

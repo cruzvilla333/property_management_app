@@ -76,6 +76,11 @@ class CrudEventDeleteProperty extends CrudEvent {
   const CrudEventDeleteProperty({required this.property});
 }
 
+class CrudEventDeleteTenant extends CrudEvent {
+  final CloudTenant tenant;
+  const CrudEventDeleteTenant({required this.tenant});
+}
+
 class CrudEventDeletePayment extends CrudEvent {
   final CloudPropertyPayment payment;
   const CrudEventDeletePayment({required this.payment});

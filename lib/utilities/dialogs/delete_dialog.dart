@@ -16,6 +16,20 @@ Future<bool> showDeletePropertyDialog(
   ).then((value) => value ?? false);
 }
 
+Future<bool> showDeleteTenantDialog(
+  BuildContext context,
+) {
+  return showGenericDialog<bool>(
+    context: context,
+    title: 'Delete tenant',
+    content: 'Are you sure you want to delete this tenant?',
+    optionsBuilder: () => {
+      'Delete': true,
+      'Cancel': false,
+    },
+  ).then((value) => value ?? false);
+}
+
 Future<bool> showDeletePaymentDialog(
   BuildContext context,
 ) {

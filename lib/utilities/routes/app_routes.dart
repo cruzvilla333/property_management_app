@@ -1,9 +1,9 @@
 import 'package:go_router/go_router.dart';
-import 'package:training_note_app/views/forgot_password_view.dart';
-import 'package:training_note_app/views/login_view.dart';
-import 'package:training_note_app/views/properties/main_app_bloc_builder.dart';
-import 'package:training_note_app/views/register_view.dart';
-import 'package:training_note_app/views/verify_email_view.dart';
+import 'package:training_note_app/views/authentication/forgot_password_view.dart';
+import 'package:training_note_app/views/authentication/login_view.dart';
+import 'package:training_note_app/views/main_app_bloc_builder.dart';
+import 'package:training_note_app/views/authentication/register_view.dart';
+import 'package:training_note_app/views/authentication/verify_email_view.dart';
 
 const loginPage = 'login';
 const passwordResetPage = 'password_reset';

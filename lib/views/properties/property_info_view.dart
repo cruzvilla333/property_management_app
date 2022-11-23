@@ -19,11 +19,11 @@ class PropertyInfoView extends StatefulWidget {
   State<PropertyInfoView> createState() => _PropertyInfoViewState();
 }
 
-const List<Text> fruits = <Text>[Text('Cash'), Text('Zelle'), Text('Check')];
+const List<Text> methods = <Text>[Text('Cash'), Text('Zelle'), Text('Check')];
 
 class _PropertyInfoViewState extends State<PropertyInfoView> {
-  final List<bool> _selectedFruits = <bool>[true, false, false];
-  String _paymentMethod = fruits[0].data!;
+  final List<bool> _selectedMethod = <bool>[true, false, false];
+  String _paymentMethod = methods[0].data!;
   bool vertical = false;
   late final CloudProperty _property;
   late final TextEditingController _paymentController;
@@ -117,10 +117,10 @@ class _PropertyInfoViewState extends State<PropertyInfoView> {
                   direction: vertical ? Axis.vertical : Axis.horizontal,
                   onPressed: (int index) {
                     setState(() {
-                      for (int i = 0; i < _selectedFruits.length; i++) {
-                        _selectedFruits[i] = i == index;
-                        _paymentMethod = fruits[i].data!;
+                      for (int i = 0; i < _selectedMethod.length; i++) {
+                        _selectedMethod[i] = i == index;
                       }
+                      _paymentMethod = methods[index].data!;
                     });
                   },
                   borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -132,8 +132,8 @@ class _PropertyInfoViewState extends State<PropertyInfoView> {
                     minHeight: 40.0,
                     minWidth: 80.0,
                   ),
-                  isSelected: _selectedFruits,
-                  children: fruits,
+                  isSelected: _selectedMethod,
+                  children: methods,
                 ),
                 const SizedBox(height: 20),
                 SizedBox(

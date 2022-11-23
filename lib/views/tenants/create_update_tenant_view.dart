@@ -6,6 +6,7 @@ import 'package:training_note_app/services/crud_services/cloud/cloud_tenant.dart
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_bloc.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_events.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.dart';
+import 'package:training_note_app/services/crud_services/crud_utilities.dart';
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
 import 'package:training_note_app/utilities/navigation/navigation_utilities.dart';
 
@@ -17,7 +18,11 @@ class CreateUpdateTenantView extends StatefulWidget {
   State<CreateUpdateTenantView> createState() => _CreateUpdateTenantViewState();
 }
 
+const List<Text> sexes = <Text>[Text('male'), Text('female')];
+
 class _CreateUpdateTenantViewState extends State<CreateUpdateTenantView> {
+  List<bool> _possibleSexes = <bool>[true, false];
+  String _selectedSex = sexes[0].data!;
   late final CloudTenant? _tenant;
   late final TextEditingController _firstNameController;
   late final TextEditingController _lastNameController;
@@ -36,6 +41,10 @@ class _CreateUpdateTenantViewState extends State<CreateUpdateTenantView> {
     _firstNameController.text = widget.state.tenant?.firstName ?? '';
     _lastNameController.text = widget.state.tenant?.lastName ?? '';
     _sexController.text = widget.state.tenant?.sex ?? '';
+    String currentSex = widget.state.tenant?.sex ?? 'male';
+    _possibleSexes =
+        currentSex == 'male' ? <bool>[true, false] : <bool>[false, true];
+    _selectedSex = widget.state.tenant?.sex ?? 'male';
     super.initState();
   }
 
@@ -68,11 +77,11 @@ class _CreateUpdateTenantViewState extends State<CreateUpdateTenantView> {
                 ? IconButton(
                     color: mainAppIconColor,
                     onPressed: () async {
-                      // final deleted = await attemptPropertyDeletion(
-                      //     context: context, property: _property!);
-                      // if (deleted == true) {
-                      //   lastPage(context: context);
-                      // }
+                      final deleted = await attemptTenantDeletion(
+                          context: context, tenant: _tenant!);
+                      if (deleted == true) {
+                        lastPage(context: context);
+                      }
                     },
                     icon: const Icon(Icons.delete))
                 : const SizedBox(height: 0, width: 0),
@@ -86,7 +95,7 @@ class _CreateUpdateTenantViewState extends State<CreateUpdateTenantView> {
                       firstName: _firstNameController.text,
                       lastName: _lastNameController.text,
                       age: int.parse(_ageController.text),
-                      sex: _sexController.text,
+                      sex: _selectedSex,
                     );
                     context.read<CrudBloc>().add(CrudEventCreateOrUpdateTenant(
                           tenant: tenant,
@@ -108,6 +117,8 @@ class _CreateUpdateTenantViewState extends State<CreateUpdateTenantView> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextFormField(
                       validator: (value) {
@@ -160,22 +171,27 @@ class _CreateUpdateTenantViewState extends State<CreateUpdateTenantView> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'This field needs value';
-                        }
-                        return null;
+                    ToggleButtons(
+                      onPressed: (int index) {
+                        setState(() {
+                          for (int i = 0; i < _possibleSexes.length; i++) {
+                            _possibleSexes[i] = i == index;
+                          }
+                          _selectedSex = sexes[index].data!;
+                        });
                       },
-                      controller: _sexController,
-                      keyboardType: TextInputType.number,
-                      maxLines: null,
-                      decoration: const InputDecoration(
-                        hintText: 'Sex...',
-                        labelText: 'Sex',
-                        border: OutlineInputBorder(),
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      selectedBorderColor: Colors.red,
+                      selectedColor: Colors.black,
+                      fillColor: Colors.white,
+                      color: mainAppTextColor,
+                      constraints: const BoxConstraints(
+                        minHeight: 40.0,
+                        minWidth: 80.0,
                       ),
-                    )
+                      isSelected: _possibleSexes,
+                      children: sexes,
+                    ),
                   ],
                 ),
               ),

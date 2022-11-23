@@ -6,10 +6,10 @@ import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
 import 'package:training_note_app/utilities/dialogs/loading_functions.dart';
 import 'package:training_note_app/utilities/dialogs/password_reset_email_sent_dialog.dart';
 
-import '../designs/textfields/textfield_designs.dart';
-import '../services/auth/auth_bloc/auth_bloc.dart';
-import '../services/auth/auth_bloc/auth_events.dart';
-import '../services/auth/auth_bloc/auth_states.dart';
+import '../../designs/textfields/textfield_designs.dart';
+import '../../services/auth/auth_bloc/auth_bloc.dart';
+import '../../services/auth/auth_bloc/auth_events.dart';
+import '../../services/auth/auth_bloc/auth_states.dart';
 
 class ForgotPasswordView extends StatefulWidget {
   const ForgotPasswordView({super.key});

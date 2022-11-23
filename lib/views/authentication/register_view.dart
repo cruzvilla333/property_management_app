@@ -6,11 +6,11 @@ import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/utilities/dialogs/error_dialog.dart';
 import 'package:training_note_app/utilities/routes/app_routes.dart';
 import 'package:training_note_app/utilities/routes/auth_route_handling.dart';
-import '../designs/textfields/textfield_designs.dart';
-import '../services/auth/auth_bloc/auth_bloc.dart';
-import '../services/auth/auth_bloc/auth_states.dart';
-import '../designs/colors/app_colors.dart';
-import '../utilities/dialogs/loading_functions.dart';
+import '../../designs/textfields/textfield_designs.dart';
+import '../../services/auth/auth_bloc/auth_bloc.dart';
+import '../../services/auth/auth_bloc/auth_states.dart';
+import '../../designs/colors/app_colors.dart';
+import '../../utilities/dialogs/loading_functions.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});

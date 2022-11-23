@@ -19,9 +19,9 @@ class FirebaseCloudStorage {
 
   Future<void> deleteTenant({required String tenantId}) async {
     try {
-      await properties.doc(tenantId).delete();
+      await tenants.doc(tenantId).delete();
     } catch (e) {
-      throw CouldNotDeletePropertyException();
+      throw CouldNotDeleteTenantException();
     }
   }
 
@@ -35,7 +35,7 @@ class FirebaseCloudStorage {
         propertyIdFieldName: tenant.propertyId,
       });
     } catch (e) {
-      throw CouldNotUpdatePropertyException();
+      throw CouldNotUpdateTenantException();
     }
   }
 

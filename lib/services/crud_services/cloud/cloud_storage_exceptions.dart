@@ -37,10 +37,24 @@ class CouldNotUpdatePropertyException extends CloudStorageException {
   }
 }
 
+class CouldNotUpdateTenantException extends CloudStorageException {
+  @override
+  String toString() {
+    return 'Could not update tenant';
+  }
+}
+
 class CouldNotDeletePropertyException extends CloudStorageException {
   @override
   String toString() {
     return 'Could not delete property';
+  }
+}
+
+class CouldNotDeleteTenantException extends CloudStorageException {
+  @override
+  String toString() {
+    return 'Could not delete tenant';
   }
 }
 
