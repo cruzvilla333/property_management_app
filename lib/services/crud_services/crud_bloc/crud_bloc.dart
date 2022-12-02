@@ -127,7 +127,7 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
     on<CrudEventDeleteProperty>((event, emit) async {
       emit(const CrudStateLoading(text: 'Deleting property'));
       try {
-        storageProvider.deleteAllPayments(
+        storageProvider.deleteAllPropertyPayments(
             propertyId: event.property.propertyId);
         await storageProvider.deleteProperty(
             documentId: event.property.propertyId);

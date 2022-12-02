@@ -142,11 +142,13 @@ class FirebaseCloudStorage {
     }
   }
 
-  Future<void> deleteAllPayments({required String propertyId}) async {
+  Future<void> deleteAllPropertyPayments({required String propertyId}) async {
     try {
       await payments.get().then((value) async {
         for (var document in value.docs) {
-          await payments.doc(document.id).delete();
+          if (document[propertyIdFieldName] == propertyId) {
+            await payments.doc(document.id).delete();
+          }
         }
       });
     } catch (e) {
