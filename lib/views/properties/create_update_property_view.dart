@@ -4,6 +4,7 @@ import 'package:training_note_app/constants/regular_expressions.dart';
 import 'package:training_note_app/designs/colors/app_colors.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_property.dart';
+import 'package:training_note_app/services/crud_services/cloud/cloud_tenant.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_bloc.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_events.dart';
 import 'package:training_note_app/services/crud_services/crud_bloc/crud_states.dart';
@@ -23,14 +24,25 @@ class CreateUpdatePropertyView extends StatefulWidget {
 
 class _CreateUpdatePropertyViewState extends State<CreateUpdatePropertyView> {
   late final CloudProperty? _property;
+  late final List<CloudTenant> _availableTenants;
   late final TextEditingController _titleController;
   late final TextEditingController _addressController;
   late final TextEditingController _monthlyPriceController;
   late final TextEditingController _moneyDueController;
+  final _mainTenant = TextEditingController();
+  late final List<CloudTenant> _currentTenants;
+  final List<CloudTenant> _removedTenants = [];
+
+  final inputTextFieldBorder = const OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+  );
   final _updateOrCreatePropertyForm = GlobalKey<FormState>();
   @override
   void initState() {
+    _mainTenant.text = 'No current tenant';
     _property = widget.state.property;
+    _availableTenants = widget.state.availableTenants ?? [];
+    _currentTenants = widget.state.currentTenants;
     _titleController = TextEditingController();
     _addressController = TextEditingController();
     _monthlyPriceController = TextEditingController();
@@ -66,6 +78,7 @@ class _CreateUpdatePropertyViewState extends State<CreateUpdatePropertyView> {
         }
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: mainAppBarColor,
           title: Text(
@@ -90,7 +103,7 @@ class _CreateUpdatePropertyViewState extends State<CreateUpdatePropertyView> {
                 onPressed: () {
                   if (_updateOrCreatePropertyForm.currentState!.validate()) {
                     final property = CloudProperty(
-                      documentId: _property?.documentId ?? '',
+                      propertyId: _property?.propertyId ?? '',
                       ownerUserId: user().id,
                       title: _titleController.text,
                       address: _addressController.text,
@@ -103,7 +116,11 @@ class _CreateUpdatePropertyViewState extends State<CreateUpdatePropertyView> {
                         .read<CrudBloc>()
                         .add(CrudEventCreateOrUpdateProperty(
                           property: property,
+                          context: context,
+                          removedTenants: _removedTenants,
+                          currentTenants: _currentTenants,
                         ));
+
                     lastPage(context: context);
                   }
                 },
@@ -121,7 +138,18 @@ class _CreateUpdatePropertyViewState extends State<CreateUpdatePropertyView> {
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      'Main information',
+                      style: TextStyle(
+                        color: mainAppTextColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
                     TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -132,10 +160,10 @@ class _CreateUpdatePropertyViewState extends State<CreateUpdatePropertyView> {
                       controller: _titleController,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Title...',
                         labelText: 'Title',
-                        border: OutlineInputBorder(),
+                        border: inputTextFieldBorder,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -149,10 +177,19 @@ class _CreateUpdatePropertyViewState extends State<CreateUpdatePropertyView> {
                       controller: _addressController,
                       keyboardType: TextInputType.streetAddress,
                       maxLines: null,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Address...',
                         labelText: 'Address',
-                        border: OutlineInputBorder(),
+                        border: inputTextFieldBorder,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'Financial information',
+                      style: TextStyle(
+                        color: mainAppTextColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -166,10 +203,10 @@ class _CreateUpdatePropertyViewState extends State<CreateUpdatePropertyView> {
                       controller: _monthlyPriceController,
                       keyboardType: TextInputType.number,
                       maxLines: null,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Monthly price...',
                         labelText: 'Monthly price',
-                        border: OutlineInputBorder(),
+                        border: inputTextFieldBorder,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -185,16 +222,78 @@ class _CreateUpdatePropertyViewState extends State<CreateUpdatePropertyView> {
                             controller: _moneyDueController,
                             keyboardType: TextInputType.number,
                             maxLines: null,
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               hintText: 'Money due...',
                               labelText: 'Money due',
-                              border: OutlineInputBorder(),
+                              border: inputTextFieldBorder,
+                              filled: true,
+                              fillColor: mainAppTextFieldColor,
                             ),
                           )
-                        : const SizedBox(
-                            height: 0,
-                            width: 0,
+                        : const SizedBox(),
+                    const SizedBox(height: 20),
+                    Text(
+                      'Tenant information',
+                      style: TextStyle(
+                        color: mainAppTextColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        const SizedBox(width: 15),
+                        Text(
+                          'Current tenants',
+                          style: TextStyle(
+                            color: mainAppTextColor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
                           ),
+                        ),
+                        PopupMenuButton(
+                          icon: Icon(
+                            Icons.add,
+                            color: mainAppIconColor,
+                          ),
+                          onSelected: (tenant) => setState(() {
+                            _currentTenants.add(tenant);
+                            _availableTenants.remove(tenant);
+                          }),
+                          itemBuilder: (context) => _availableTenants
+                              .where((tenant) =>
+                                  tenant.fullName != _mainTenant.text)
+                              .map(
+                                (tenant) => PopupMenuItem(
+                                  value: tenant,
+                                  child: Text(tenant.fullName),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ],
+                    ),
+                    ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: _currentTenants.length,
+                      itemBuilder: (context, index) {
+                        final tenant = _currentTenants.elementAt(index);
+                        return ListTile(
+                          title: Text(tenant.fullName),
+                          trailing: IconButton(
+                            onPressed: () => setState(() {
+                              _currentTenants.remove(tenant);
+                              _availableTenants.add(tenant);
+                              if (tenant.tenantId.isNotEmpty) {
+                                _removedTenants.add(tenant);
+                              }
+                            }),
+                            icon: const Icon(Icons.close),
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),

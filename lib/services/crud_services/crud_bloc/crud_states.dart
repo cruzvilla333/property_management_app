@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart' show immutable;
+import 'package:flutter/material.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_property.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_property_payment.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_tenant.dart';
@@ -34,7 +35,13 @@ class CrudStateLoading extends CrudState {
 
 class CrudStateGetProperty extends CrudState {
   final CloudProperty? property;
-  const CrudStateGetProperty({required this.property, Exception? exception})
+  final List<CloudTenant>? availableTenants;
+  final List<CloudTenant> currentTenants;
+  const CrudStateGetProperty(
+      {required this.property,
+      Exception? exception,
+      this.availableTenants,
+      required this.currentTenants})
       : super(exception: exception);
 }
 

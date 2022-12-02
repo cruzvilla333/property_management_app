@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:training_note_app/services/crud_services/cloud/cloud_property.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_property_payment.dart';
@@ -33,9 +34,14 @@ class CrudEventGetTenant extends CrudEvent {
 
 class CrudEventCreateOrUpdateProperty extends CrudEvent {
   final CloudProperty property;
-
+  final BuildContext? context;
+  final List<CloudTenant>? currentTenants;
+  final List<CloudTenant>? removedTenants;
   const CrudEventCreateOrUpdateProperty({
     required this.property,
+    this.context,
+    this.currentTenants,
+    this.removedTenants,
   });
 }
 

@@ -4,7 +4,7 @@ import 'package:training_note_app/services/crud_services/cloud/cloud_storage_exc
 import 'package:training_note_app/services/crud_services/cloud/firebase_cloud_storage.dart';
 
 class CloudProperty extends FirebaseCloudObject {
-  String documentId;
+  String propertyId;
   String ownerUserId;
   String title;
   String address;
@@ -12,7 +12,7 @@ class CloudProperty extends FirebaseCloudObject {
   int moneyDue;
   DateTime? currentDate;
   CloudProperty(
-      {required this.documentId,
+      {required this.propertyId,
       required this.ownerUserId,
       required this.title,
       required this.address,
@@ -21,7 +21,7 @@ class CloudProperty extends FirebaseCloudObject {
 
   CloudProperty.fromSnapshot(
       QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
-      : documentId = snapshot.id,
+      : propertyId = snapshot.id,
         ownerUserId = snapshot.data()[ownerUserIdFieldName] as String,
         title = snapshot.data()[titleFieldName] as String,
         address = snapshot.data()[addressFieldName] as String,

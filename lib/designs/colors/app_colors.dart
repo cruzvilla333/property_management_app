@@ -6,6 +6,7 @@ const houseIcon = Color.fromARGB(206, 0, 0, 0);
 Color mainAppBackGroundColor = Colors.grey.shade300;
 MaterialColor mainAppColor = Colors.blue;
 Color mainAppButtonBackgroundColor = Colors.white;
+Color mainAppTextFieldColor = Colors.white;
 Color mainAppBarColor = Colors.white;
 Color mainAppTextColor = Colors.black;
 Color mainAppIconColor = Colors.black;

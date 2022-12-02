@@ -21,6 +21,8 @@ class CloudTenant extends FirebaseCloudObject {
     this.propertyId = '',
   });
 
+  String get fullName => '$firstName $lastName';
+
   CloudTenant.fromSnapshot(QueryDocumentSnapshot<Map<String, dynamic>> snapshot)
       : tenantId = snapshot.id,
         propertyId = snapshot.data()[propertyIdFieldName] as String,

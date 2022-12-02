@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_tenant.dart';
@@ -22,8 +23,7 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
         for (CloudProperty property in currProperties) {
           await storageProvider.adjustMoneyDue(property: property);
         }
-        final properties =
-            storageProvider.propertyStream(ownerUserId: user().id);
+        final properties = storageProvider.propertyStream();
         emit(CrudStatePropertiesView(properties: properties));
       },
     );
@@ -32,7 +32,7 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
         emit(const CrudStateLoading(text: 'Getting tenants'));
         navigationStack.clear();
         navigationStack.push(event);
-        final tenants = storageProvider.tenantStream(ownerUserId: user().id);
+        final tenants = storageProvider.tenantStream();
         emit(CrudStateTenantsView(tenants: tenants));
       },
     );
@@ -45,8 +45,18 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
             text: event.property != null
                 ? 'Getting property...'
                 : 'Creating property...'));
+        final availableTenants = await storageProvider.getTenantsWhere();
+        Iterable<CloudTenant> currentTenants = [];
+        if (event.property != null) {
+          currentTenants = await storageProvider.getTenantsWhere(
+              where: event.property!.propertyId);
+        }
         navigationStack.push(event);
-        emit(CrudStateGetProperty(property: event.property));
+        emit(CrudStateGetProperty(
+          property: event.property,
+          availableTenants: availableTenants.toList(),
+          currentTenants: currentTenants.toList(),
+        ));
       },
     );
     on<CrudEventGetTenant>(
@@ -64,7 +74,7 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
         try {
           emit(const CrudStateLoading(text: 'Creating property...'));
           CloudProperty property = event.property;
-          if (property.documentId.isEmpty) {
+          if (property.propertyId.isEmpty) {
             property = await storageProvider.createProperty(
               ownerUserId: user().id,
               title: event.property.title,
@@ -73,6 +83,20 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
             );
           } else {
             await storageProvider.updateProperty(property: property);
+          }
+          if (event.context != null) {
+            if (event.removedTenants != null) {
+              for (CloudTenant tenant in event.removedTenants!) {
+                tenant.propertyId = '';
+                await storageProvider.updateTenant(tenant: tenant);
+              }
+            }
+            if (event.currentTenants != null) {
+              for (CloudTenant tenant in event.currentTenants!) {
+                tenant.propertyId = property.propertyId;
+                await storageProvider.updateTenant(tenant: tenant);
+              }
+            }
           }
         } on Exception catch (e) {
           emit(CrudStateCreateOrUpdateProperty(exception: e));
@@ -104,9 +128,9 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
       emit(const CrudStateLoading(text: 'Deleting property'));
       try {
         storageProvider.deleteAllPayments(
-            propertyId: event.property.documentId);
+            propertyId: event.property.propertyId);
         await storageProvider.deleteProperty(
-            documentId: event.property.documentId);
+            documentId: event.property.propertyId);
       } on Exception catch (e) {
         emit(CrudStateDeleteProperty(exception: e));
       }
@@ -136,7 +160,7 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
           } else {
             event.property.makePayment(amount: event.amount);
             storageProvider.createPayment(
-              propertyId: event.property.documentId,
+              propertyId: event.property.propertyId,
               paymentAmount: event.amount,
               paymentMethod: event.paymentMethod,
             );
@@ -156,7 +180,7 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
         emit(const CrudStateLoading(text: 'Getting payment history'));
         try {
           final payments = storageProvider.paymentStream(
-              propertyId: event.property.documentId);
+              propertyId: event.property.propertyId);
           navigationStack.push(event);
           emit(CrudStatePaymentHistory(payments: payments));
         } on Exception catch (e) {
@@ -168,7 +192,7 @@ class CrudBloc extends Bloc<CrudEvent, CrudState> {
       emit(const CrudStateLoading(text: 'Deleting payment'));
       try {
         await storageProvider.deletePayment(
-            documentId: event.payment.documentId);
+            documentId: event.payment.paymentId);
       } on Exception catch (e) {
         emit(CrudStateDeletePayment(exception: e));
       }

@@ -22,7 +22,7 @@ Future<CloudPropertyPayment> tryCreatePayment({
     final newPayment = await payment.get();
     return CloudPropertyPayment(
       paymentDate: date,
-      documentId: newPayment.id,
+      paymentId: newPayment.id,
       propertyId: propertyId,
       paymentAmount: paymentAmount,
       paymentMethod: paymentMethod,
@@ -83,7 +83,7 @@ Future<CloudProperty> tryCreateProperty({
     });
     final newNote = await document.get();
     return CloudProperty(
-      documentId: newNote.id,
+      propertyId: newNote.id,
       ownerUserId: ownerUserId,
       title: title,
       address: address,

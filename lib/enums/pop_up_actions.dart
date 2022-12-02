@@ -1,4 +1,6 @@
-enum MenuAction { logout }
+enum MenuAction {
+  logout,
+}
 
 enum PropertyInfoAction { paymentHistory }
 

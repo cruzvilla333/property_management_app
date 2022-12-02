@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:training_note_app/services/auth/auth_tools.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_property.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_property_payment.dart';
 import 'package:training_note_app/services/crud_services/cloud/cloud_storage_constants.dart';
@@ -64,6 +65,21 @@ class FirebaseCloudStorage {
           .where(
             propertyIdFieldName,
             isEqualTo: propertyId,
+          )
+          .get()
+          .then((value) =>
+              value.docs.map((doc) => CloudTenant.fromSnapshot(doc)));
+    } catch (e) {
+      throw CouldNotGetAllTenantsException();
+    }
+  }
+
+  Future<Iterable<CloudTenant>> getTenantsWhere({String where = ''}) async {
+    try {
+      return await tenants
+          .where(
+            propertyIdFieldName,
+            isEqualTo: where,
           )
           .get()
           .then((value) =>
@@ -140,7 +156,7 @@ class FirebaseCloudStorage {
 
   Future<void> updateProperty({required CloudProperty property}) async {
     try {
-      properties.doc(property.documentId).update({
+      properties.doc(property.propertyId).update({
         titleFieldName: property.title,
         addressFieldName: property.address,
         monthlyPriceFieldName: property.monthlyPrice,
@@ -183,22 +199,19 @@ class FirebaseCloudStorage {
     }
   }
 
-  Stream<Iterable<CloudProperty>> propertyStream(
-          {required String ownerUserId}) =>
-      properties
-          .orderBy(moneyDueFieldName, descending: true)
-          .snapshots()
-          .map((event) => event.docs.map((doc) {
-                return CloudProperty.fromSnapshot(doc);
-              }).where((property) => property.ownerUserId == ownerUserId));
+  Stream<Iterable<CloudProperty>> propertyStream() => properties
+      .orderBy(moneyDueFieldName, descending: true)
+      .snapshots()
+      .map((event) => event.docs.map((doc) {
+            return CloudProperty.fromSnapshot(doc);
+          }).where((property) => property.ownerUserId == user().id));
 
-  Stream<Iterable<CloudTenant>> tenantStream({required String ownerUserId}) =>
-      tenants
-          .orderBy(tenantFirstNameFieldName, descending: true)
-          .snapshots()
-          .map((event) => event.docs.map((doc) {
-                return CloudTenant.fromSnapshot(doc);
-              }).where((tenant) => tenant.ownerUserId == ownerUserId));
+  Stream<Iterable<CloudTenant>> tenantStream() => tenants
+      .orderBy(tenantFirstNameFieldName, descending: true)
+      .snapshots()
+      .map((event) => event.docs.map((doc) {
+            return CloudTenant.fromSnapshot(doc);
+          }).where((tenant) => tenant.ownerUserId == user().id));
 
   Stream<Iterable<CloudPropertyPayment>> paymentStream(
           {required String propertyId}) =>
@@ -217,7 +230,7 @@ class FirebaseCloudStorage {
 
     if (months > 0) {
       await updatePropertyField(
-        propertyId: property.documentId,
+        propertyId: property.propertyId,
         moneyDue: property.moneyDue + (property.monthlyPrice * months),
         currentDate: currDate,
       );
@@ -231,7 +244,7 @@ class FirebaseCloudStorage {
       final property = await properties.doc(documentId).get();
       final owner = property.data()!;
       return CloudProperty(
-        documentId: property.id,
+        propertyId: property.id,
         ownerUserId: owner[ownerUserIdFieldName],
         title: owner[titleFieldName],
         address: owner[addressFieldName],
