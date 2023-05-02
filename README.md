@@ -1,4 +1,4 @@
-# training_note_app
+# property_management_app
 
 A new Flutter project.
 
